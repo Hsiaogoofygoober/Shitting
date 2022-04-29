@@ -70,7 +70,7 @@ namespace StarterAssets
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
-
+		private Animator _animator;
 		private const float _threshold = 0.01f;
 
 		private void Awake()
@@ -86,7 +86,7 @@ namespace StarterAssets
 		{
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
-
+			_animator = GetComponent<Animator>();
 			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
@@ -94,6 +94,19 @@ namespace StarterAssets
 
 		private void Update()
 		{
+			if (_input.move != Vector2.zero && !_input.sprint)
+			{
+				_animator.SetFloat("Speed", 0.5f, 0.1f, Time.deltaTime);
+			}
+			else if (_input.sprint && _input.move != Vector2.zero)
+			{
+
+				_animator.SetFloat("Speed", 1.0f, 0.1f, Time.deltaTime);
+			}
+			else
+			{
+				_animator.SetFloat("Speed", 0);
+			}
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
@@ -103,8 +116,9 @@ namespace StarterAssets
 		{
 			CameraRotation();
 		}
+     
 
-		private void GroundedCheck()
+        private void GroundedCheck()
 		{
 			// set sphere position, with offset
 			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
@@ -181,6 +195,10 @@ namespace StarterAssets
 		{
 			if (Grounded)
 			{
+				_animator.SetBool("IsLoopingDown", true);
+				_animator.SetBool("IsJumping", false);
+				_animator.SetBool("IsLoopingUp", false);
+				_animator.SetBool("IsMoving", true);
 				// reset the fall timeout timer
 				_fallTimeoutDelta = FallTimeout;
 
@@ -193,6 +211,8 @@ namespace StarterAssets
 				// Jump
 				if (_input.jump && _jumpTimeoutDelta <= 0.0f)
 				{
+					_animator.SetBool("IsJumping", true);
+					
 					// the square root of H * -2 * G = how much velocity needed to reach desired height
 					_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
 				}
@@ -205,6 +225,8 @@ namespace StarterAssets
 			}
 			else
 			{
+				_animator.SetBool("IsLoopingUp", true);
+				_animator.SetBool("IsLoopingDown", false);
 				// reset the jump timeout timer
 				_jumpTimeoutDelta = JumpTimeout;
 
