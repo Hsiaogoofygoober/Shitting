@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Cinemachine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -73,6 +74,11 @@ namespace StarterAssets
 		private Animator _animator;
 		private const float _threshold = 0.01f;
 
+		// aimming
+		[SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
+		[SerializeField] private float normalSensitivity;
+		[SerializeField] private float aimSensitivity;
+
 		private void Awake()
 		{
 			// get a reference to our main camera
@@ -111,6 +117,7 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
+			Aimming();
 		}
 
 		private void LateUpdate()
@@ -270,6 +277,19 @@ namespace StarterAssets
 		{
 			Sensitivity = newSensitivity;
 		
+		}
+		private void Aimming() 
+		{
+			if (_input.aim)
+			{
+				aimVirtualCamera.gameObject.SetActive(true);
+				SetSensitivity(aimSensitivity);
+			}
+			else
+			{
+				aimVirtualCamera.gameObject.SetActive(false);
+				SetSensitivity(normalSensitivity);
+			}
 		}
 	}
 }

@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         Debug.LogFormat("載入{0}人的場景",
             PhotonNetwork.CurrentRoom.PlayerCount);
-        PhotonNetwork.LoadLevel("Room for " +
+        PhotonNetwork.LoadLevel("GameScene" +
             PhotonNetwork.CurrentRoom.PlayerCount);
     }
     // Update is called once per frame

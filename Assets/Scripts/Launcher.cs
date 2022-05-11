@@ -107,7 +107,7 @@ namespace Com.FPSGaming
                 
                 Debug.Log("我是第一個進入遊戲室的玩家");
                 Debug.Log("我得主動做載入場景 'SampleScene' 的動作");
-                PhotonNetwork.LoadLevel("SampleScene");
+                PhotonNetwork.LoadLevel("GameScene");
             }
             //else if(PhotonNetwork.CurrentRoom.PlayerCount <= 4)
             //{
