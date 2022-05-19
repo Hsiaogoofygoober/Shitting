@@ -104,16 +104,14 @@ namespace Com.FPSGaming
             Debug.Log("PUN 呼叫 OnJoinedRoom(), 已成功進入遊戲室中.");
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {
-                
                 Debug.Log("我是第一個進入遊戲室的玩家");
                 Debug.Log("我得主動做載入場景 'GameScene' 的動作");
-                PhotonNetwork.LoadLevel("GameScene");
+                PhotonNetwork.LoadLevel(1);
             }
-            //else if(PhotonNetwork.CurrentRoom.PlayerCount <= 4)
-            //{
-            //    PhotonNetwork.LoadLevel("SampleScene");
-            //}
+            else if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+            {
+                Debug.Log("我是第二個進入遊戲室的玩家");
+            }
         }
-
     }
 }
