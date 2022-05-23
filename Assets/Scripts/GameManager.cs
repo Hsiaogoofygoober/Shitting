@@ -59,6 +59,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
+        Debug.LogFormat("{0} 進入遊戲室", newPlayer.NickName);
+
         if (PhotonNetwork.IsMasterClient)
         {
             Debug.LogFormat("我是 Master Client 嗎? {0}",
