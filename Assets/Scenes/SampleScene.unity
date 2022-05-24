@@ -2025,8 +2025,8 @@ MonoBehaviour:
   roomNameText: {fileID: 1239043345}
   roomListContent: {fileID: 1744203227}
   roomListItemPrefab: {fileID: 1039829643560610722, guid: 4472a19a969143340ae2651d17aad3d0, type: 3}
-  playerListContent: {fileID: 510912462240517700, guid: ed4117e8759fd8742a5fc9288f352160, type: 3}
-  PlayerListItemPrefab: {fileID: 8961407586160927979, guid: ed4117e8759fd8742a5fc9288f352160, type: 3}
+  playerListContent: {fileID: 406231591}
+  PlayerListItemPrefab: {fileID: 5909080029098157321, guid: a83e9b6e45ab20f4795cd18ef86ef683, type: 3}
   startGameButton: {fileID: 951822660}
 --- !u!1 &1041517721
 GameObject:
