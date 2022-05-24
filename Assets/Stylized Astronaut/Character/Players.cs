@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class Player : MonoBehaviour {
+public class Players : MonoBehaviour {
 
 		private Animator anim;
 		private CharacterController controller;
@@ -11,7 +11,9 @@ public class Player : MonoBehaviour {
 		private Vector3 moveDirection = Vector3.zero;
 		public float gravity = 20.0f;
 
-		void Start () {
+    public string NickName { get; internal set; }
+
+    void Start () {
 			controller = GetComponent <CharacterController>();
 			anim = gameObject.GetComponentInChildren<Animator>();
 		}

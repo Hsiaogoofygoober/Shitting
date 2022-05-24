@@ -38,6 +38,7 @@ namespace Com.FPSGaming
         void Awake()
         {
             // 確保所有連線的玩家均載入相同的遊戲場景
+            PhotonNetwork.JoinLobby();
             PhotonNetwork.AutomaticallySyncScene = true;
         }
 
@@ -67,17 +68,21 @@ namespace Com.FPSGaming
             {
                 // 未連線, 嘗試與 Photon Cloud 連線
                 PhotonNetwork.GameVersion = gameVersion;
-                PhotonNetwork.ConnectUsingSettings();
+                isConnecting = PhotonNetwork.ConnectUsingSettings();
             }
         }
 
         public override void OnConnectedToMaster()
         {
             Debug.Log("PUN 呼叫 OnConnectedToMaster(), 已連上 Photon Cloud.");
-
+            if (isConnecting)
+            {
+            // #Critical: The first we try to do is to join a potential existing room. If there is, good, else, we'll be called back with OnJoinRandomFailed()
+                PhotonNetwork.JoinRandomRoom(null, maxPlayersPerRoom, MatchmakingMode.FillRoom, TypedLobby.Default, null);
+                isConnecting = false;
+            }
             // 確認已連上 Photon Cloud
             // 隨機加入一個遊戲室
-            PhotonNetwork.JoinRandomRoom();
         }
         public override void OnDisconnected(DisconnectCause cause)
         {
@@ -96,24 +101,19 @@ namespace Com.FPSGaming
             {
                 MaxPlayers = maxPlayersPerRoom
             });
+            Debug.Log("PUN , 創建遊戲室成功.");
         }
         public override void OnJoinedRoom()
         {
             waitingLabel.SetActive(true);
             progressLabel.SetActive(false);
             Debug.Log("PUN 呼叫 OnJoinedRoom(), 已成功進入遊戲室中.");
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {
-                
                 Debug.Log("我是第一個進入遊戲室的玩家");
-                Debug.Log("我得主動做載入場景 'SampleScene' 的動作");
-                PhotonNetwork.LoadLevel("GameScene");
+                Debug.Log("我得主動做載入場景 'GameScene' 的動作");
+                PhotonNetwork.LoadLevel(1);
             }
-            //else if(PhotonNetwork.CurrentRoom.PlayerCount <= 4)
-            //{
-            //    PhotonNetwork.LoadLevel("SampleScene");
-            //}
         }
-
     }
 }
