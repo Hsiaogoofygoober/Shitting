@@ -1,5 +1,4 @@
 using Photon.Pun;
-using Photon.Pun.Demo.PunBasics;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,27 +11,27 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        if (playerPrefab == null)
-        {
-            Debug.LogError("playerPrefab 遺失, 請在 Game Manager 重新設定",
-                this);
-        }
-        else
-        {
-            if (PlayerManager.LocalPlayerInstance == null)
-            {
-                Debug.LogFormat("我們從 {0} 動態生成玩家角色",
-                    SceneManagerHelper.ActiveSceneName);
+        //if (playerPrefab == null)
+        //{
+        //    Debug.LogError("playerPrefab 遺失, 請在 Game Manager 重新設定",
+        //        this);
+        //}
+        //else
+        //{
+        //    if (PlayerManager.LocalPlayerInstance == null)
+        //    {
+        //        Debug.LogFormat("我們從 {0} 動態生成玩家角色",
+        //            SceneManagerHelper.ActiveSceneName);
 
-                PhotonNetwork.Instantiate(this.playerPrefab.name,
-                    new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
-            }
-            else
-            {
-                Debug.LogFormat("忽略場景載入 for {0}",
-                    SceneManagerHelper.ActiveSceneName);
-            }
-        }
+        //        PhotonNetwork.Instantiate(this.playerPrefab.name,
+        //            new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+        //    }
+        //    else
+        //    {
+        //        Debug.LogFormat("忽略場景載入 for {0}",
+        //            SceneManagerHelper.ActiveSceneName);
+        //    }
+        //}
     }
     // Start is called before the first frame update
     public override void OnLeftRoom()
