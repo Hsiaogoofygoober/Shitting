@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Cinemachine;
+using Photon.Pun;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -55,6 +56,8 @@ namespace StarterAssets
 		[Tooltip("How far in degrees can you move the camera down")]
 		public float BottomClamp = -90.0f;
 
+		PhotonView PV;
+
 		// cinemachine
 		private float _cinemachineTargetPitch;
 		[SerializeField] private GameObject gun;
@@ -86,10 +89,12 @@ namespace StarterAssets
 			{
 				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
 			}
+			PV = GetComponent<PhotonView>();
 		}
 
 		private void Start()
 		{
+			
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 			_animator = GetComponentInChildren<Animator>();
@@ -101,6 +106,9 @@ namespace StarterAssets
 
 		private void Update()
 		{
+			if (!PV.IsMine) {
+				return;
+			}
 			if (_input.move != Vector2.zero && !_input.sprint)
 			{
 				_animator.SetFloat("Speed", 0.5f, 0.1f, Time.deltaTime);

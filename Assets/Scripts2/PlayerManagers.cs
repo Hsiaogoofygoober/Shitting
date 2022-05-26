@@ -13,6 +13,7 @@ public class PlayerManagers : MonoBehaviour
 	void Awake()
 	{
 		PV = GetComponent<PhotonView>();
+		
 	}
 
 	void Start()
@@ -27,12 +28,12 @@ public class PlayerManagers : MonoBehaviour
 	{
 		Debug.Log("Instantiated Player Controller");
 		//Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-		//controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), spawnpoint.position, spawnpoint.rotation, 0, new object[] { PV.ViewID });
+		PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Player"),Vector3.zero,Quaternion.identity);
 	}
 
-	//public void Die()
-	//{
-	//	PhotonNetwork.Destroy(controller);
-	//	CreateController();
-	//}
+	/*public void Die()
+	{
+		PhotonNetwork.Destroy(controller);
+		CreateController();
+	}*/
 }
