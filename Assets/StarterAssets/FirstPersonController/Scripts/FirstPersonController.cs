@@ -94,7 +94,11 @@ namespace StarterAssets
 
 		private void Start()
 		{
-			
+			if (!PV.IsMine) 
+			{
+				Destroy(GetComponentInChildren<Camera>().gameObject);
+
+			}
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 			_animator = GetComponentInChildren<Animator>();
