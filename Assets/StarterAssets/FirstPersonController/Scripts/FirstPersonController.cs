@@ -96,8 +96,12 @@ namespace StarterAssets
 		{
 			if (!PV.IsMine) 
 			{
+				Debug.Log(GetComponentInChildren<CinemachineVirtualCamera>().gameObject);
 				Destroy(GetComponentInChildren<Camera>().gameObject);
-
+				Destroy(GetComponentInChildren<CinemachineVirtualCamera>().gameObject);
+				Debug.Log(aimVirtualCamera);
+				Destroy(aimVirtualCamera);
+				Debug.Log("is not mine");
 			}
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
