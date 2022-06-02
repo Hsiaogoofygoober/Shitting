@@ -76,7 +76,7 @@ namespace StarterAssets
 		private GameObject _mainCamera;
 		private Animator _animator;
 		private const float _threshold = 0.01f;
-
+		[SerializeField] private CinemachineVirtualCamera playerFollowCamera;
 		// aimming
 		[SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
 		[SerializeField] private float normalSensitivity;
@@ -98,7 +98,7 @@ namespace StarterAssets
 			{
 				Debug.Log(GetComponentInChildren<CinemachineVirtualCamera>().gameObject);
 				Destroy(GetComponentInChildren<Camera>().gameObject);
-				Destroy(GetComponentInChildren<CinemachineVirtualCamera>().gameObject);
+				Destroy(playerFollowCamera);
 				Debug.Log(aimVirtualCamera);
 				Destroy(aimVirtualCamera);
 				Debug.Log("is not mine");
@@ -138,6 +138,10 @@ namespace StarterAssets
 
 		private void LateUpdate()
 		{
+			if (!PV.IsMine)
+			{
+				return;
+			}
 			CameraRotation();
 		}
      
@@ -299,7 +303,7 @@ namespace StarterAssets
 			if (_input.aim)
 			{
 				aimVirtualCamera.gameObject.SetActive(true);
-				SetSensitivity(aimSensitivity);
+				SetSensitivity(normalSensitivity*aimSensitivity);
 			}
 			else
 			{

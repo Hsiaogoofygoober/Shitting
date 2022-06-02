@@ -96,9 +96,10 @@ MonoBehaviour:
   TopClamp: 90
   BottomClamp: -90
   gun: {fileID: 5014336597929731456}
+  playerFollowCamera: {fileID: 4327787885690698274}
   aimVirtualCamera: {fileID: 4327787885862135951}
-  normalSensitivity: 1
-  aimSensitivity: 0.5
+  normalSensitivity: 0.5
+  aimSensitivity: 0.3
 --- !u!114 &6837152431155922379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1089,7 +1090,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8762286023885395323, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.7015591
+      value: 1.7777778
       objectReference: {fileID: 0}
     - target: {fileID: 8762286024517199034, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: Damping.x
@@ -1182,7 +1183,7 @@ PrefabInstance:
       objectReference: {fileID: 9003827619895006823}
     - target: {fileID: 8762286023885395323, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.7015591
+      value: 1.7777778
       objectReference: {fileID: 0}
     - target: {fileID: 8762286024517199034, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: Damping.x
@@ -1198,6 +1199,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
+--- !u!114 &4327787885690698274 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8762286023885395323, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
+  m_PrefabInstance: {fileID: 5014336599003639641}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4327787885690698275 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8762286023885395322, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
@@ -1261,6 +1273,106 @@ PrefabInstance:
     - target: {fileID: 95340733316770424, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeLayers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[0].Name
+      value: AnimationPar
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[0].Type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[1].Name
+      value: Speed
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[1].Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[2].Name
+      value: IsJumping
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[2].Type
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[3].Name
+      value: IsLoopingUp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[3].Type
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[4].Name
+      value: IsLoopingDown
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[4].Type
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[5].Name
+      value: IsMoving
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[5].Type
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[6].Name
+      value: IsFlipping
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[6].Type
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[7].Name
+      value: IsLooping
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[7].Type
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[1].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[2].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[3].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[4].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[5].SynchronizeType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[6].SynchronizeType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4395194531124427340, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
+      propertyPath: m_SynchronizeParameters.Array.data[7].SynchronizeType
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 95340733316770424, guid: 2abf19653d633114faedf3b60dc6c39f, type: 3}
