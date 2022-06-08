@@ -14,7 +14,7 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 	[RequireComponent(typeof(PlayerInput))]
 #endif
-	public class FirstPersonController : MonoBehaviour
+	public class FirstPersonController : MonoBehaviour,IDamageable
 	{
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
@@ -58,6 +58,8 @@ namespace StarterAssets
 
 		PhotonView PV;
 
+		PlayerManagers playerManagers;
+
 		// cinemachine
 		private float _cinemachineTargetPitch;
 		[SerializeField] private GameObject gun;
@@ -66,6 +68,8 @@ namespace StarterAssets
 		private float _rotationVelocity;
 		private float _verticalVelocity;
 		private float _terminalVelocity = 53.0f;
+		const float maxHealth = 100f;
+		float currentHealth = maxHealth;
 
 		// timeout deltatime
 		private float _jumpTimeoutDelta;
@@ -90,6 +94,8 @@ namespace StarterAssets
 				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
 			}
 			PV = GetComponent<PhotonView>();
+
+			playerManagers = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManagers>();
 		}
 
 		private void Start()
@@ -310,6 +316,29 @@ namespace StarterAssets
 				aimVirtualCamera.gameObject.SetActive(false);
 				SetSensitivity(normalSensitivity);
 			}
+		}
+		public void TakeDamage(float damage) 
+		{
+			PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);
+		}
+
+		[PunRPC]
+		void RPC_TakeDameage(float damage) 
+		{
+			if (!PV.IsMine)
+				return;
+			
+			currentHealth -= damage;
+			if (currentHealth <= 0) 
+			{
+				Die();
+			}
+			
+		}
+
+		void Die() 
+		{
+			playerManagers.Die();
 		}
 	}
 }

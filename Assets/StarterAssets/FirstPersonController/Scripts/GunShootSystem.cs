@@ -17,7 +17,7 @@ public class GunShootSystem : MonoBehaviour
 
     //bullet 
     public GameObject bullet;
-
+    //public float damage = 10;
     //bullet force
     public float shootForce, upwardForce;
 
