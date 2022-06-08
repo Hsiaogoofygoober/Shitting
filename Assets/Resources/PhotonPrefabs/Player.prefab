@@ -14,8 +14,6 @@ GameObject:
   - component: {fileID: 6837152431155922379}
   - component: {fileID: 1057292155356345159}
   - component: {fileID: 3603476400721669943}
-  - component: {fileID: 503558510148137418}
-  - component: {fileID: 6511336838757518383}
   - component: {fileID: 5014336599247899425}
   - component: {fileID: 6107199464922073108}
   - component: {fileID: 7005641293260207849}
@@ -237,47 +235,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &503558510148137418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3603476400721669947}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: 6511336838757518383}
-  - {fileID: 7005641293260207849}
-  - {fileID: 5407669848065577663}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!114 &6511336838757518383
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3603476400721669947}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!114 &5014336599247899425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324,7 +281,6 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 6511336838757518383}
   - {fileID: 7005641293260207849}
   - {fileID: 5407669848065577663}
   sceneViewId: 0
