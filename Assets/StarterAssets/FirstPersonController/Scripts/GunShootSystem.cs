@@ -18,6 +18,7 @@ public class GunShootSystem : MonoBehaviour
 
     //bullet 
     public GameObject bullet;
+    
     //public float damage = 10;
     //bullet force
     public float shootForce, upwardForce;
@@ -44,6 +45,7 @@ public class GunShootSystem : MonoBehaviour
     //public GameObject muzzleFlash;
     public TextMeshProUGUI ammunitionDisplay;
 
+
     //bug fixing :D
     public bool allowInvoke = true;
 
@@ -65,7 +67,7 @@ public class GunShootSystem : MonoBehaviour
             ammunitionDisplay.SetText("ammo left: \n" + bulletsLeft / bulletsPerTap + " / " + magazineSize / bulletsPerTap);
     }
 
-    
+
     private void MyInput()
     {
         //Check if allowed to hold down button and take corresponding input
@@ -150,6 +152,7 @@ public class GunShootSystem : MonoBehaviour
         if (bulletsShot < bulletsPerTap && bulletsLeft > 0)
             Invoke("Shoot", timeBetweenShots);
     }
+    
     private void ResetShot()
     {
         //Allow shooting and invoking again

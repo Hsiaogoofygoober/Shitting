@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Cinemachine;
 using Photon.Pun;
+using UnityEngine.UI;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -86,6 +87,10 @@ namespace StarterAssets
 		[SerializeField] private float normalSensitivity;
 		[SerializeField] private float aimSensitivity;
 
+		// health
+		[SerializeField] Image healthbarImage;
+		[SerializeField] GameObject ui;
+
 		private void Awake()
 		{
 			// get a reference to our main camera
@@ -102,12 +107,12 @@ namespace StarterAssets
 		{
 			if (!PV.IsMine) 
 			{
-				Debug.Log(GetComponentInChildren<CinemachineVirtualCamera>().gameObject);
+
 				Destroy(GetComponentInChildren<Camera>().gameObject);
 				Destroy(playerFollowCamera);
-				Debug.Log(aimVirtualCamera);
 				Destroy(aimVirtualCamera);
-				Debug.Log("is not mine");
+				Destroy(ui);
+				
 			}
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
@@ -328,7 +333,10 @@ namespace StarterAssets
 			if (!PV.IsMine)
 				return;
 			
+			
 			currentHealth -= damage;
+			healthbarImage.fillAmount = currentHealth / maxHealth;
+
 			if (currentHealth <= 0) 
 			{
 				Die();

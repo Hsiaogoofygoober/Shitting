@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 4883303769824214941}
   - component: {fileID: 7648908556616629438}
   - component: {fileID: 2484611345789266870}
-  - component: {fileID: -4297349930693712656}
-  - component: {fileID: -8811248297182019417}
+  - component: {fileID: 1834412750327105240}
+  - component: {fileID: 276839046857517540}
   m_Layer: 6
   m_Name: BulletProjectile
   m_TagString: Untagged
@@ -129,7 +129,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-4297349930693712656
+--- !u!114 &1834412750327105240
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,11 +148,11 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: -8811248297182019417}
+  - {fileID: 276839046857517540}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &-8811248297182019417
+--- !u!114 &276839046857517540
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
