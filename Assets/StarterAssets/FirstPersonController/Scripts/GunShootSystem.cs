@@ -1,7 +1,8 @@
-
+using Photon.Pun;
 using UnityEngine;
 using TMPro;
 using StarterAssets;
+using System.IO;
 /// Thanks for downloading my projectile gun script! :D
 /// Feel free to use it in any project you like!
 /// 
@@ -17,7 +18,8 @@ public class GunShootSystem : MonoBehaviour
 
     //bullet 
     public GameObject bullet;
-
+    
+    //public float damage = 10;
     //bullet force
     public float shootForce, upwardForce;
 
@@ -43,6 +45,7 @@ public class GunShootSystem : MonoBehaviour
     //public GameObject muzzleFlash;
     public TextMeshProUGUI ammunitionDisplay;
 
+
     //bug fixing :D
     public bool allowInvoke = true;
 
@@ -64,7 +67,7 @@ public class GunShootSystem : MonoBehaviour
             ammunitionDisplay.SetText("ammo left: \n" + bulletsLeft / bulletsPerTap + " / " + magazineSize / bulletsPerTap);
     }
 
-    
+
     private void MyInput()
     {
         //Check if allowed to hold down button and take corresponding input
@@ -113,7 +116,7 @@ public class GunShootSystem : MonoBehaviour
         Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last direction
 
         //Instantiate bullet/projectile
-        GameObject currentBullet = Instantiate(bullet, attackPoint.position, Quaternion.identity); //store instantiated bullet in currentBullet
+        GameObject currentBullet = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "BulletProjectile"), attackPoint.position, Quaternion.identity); //store instantiated bullet in currentBullet
         //Rotate bullet to shoot direction
         currentBullet.transform.forward = directionWithSpread.normalized;
 
@@ -149,6 +152,7 @@ public class GunShootSystem : MonoBehaviour
         if (bulletsShot < bulletsPerTap && bulletsLeft > 0)
             Invoke("Shoot", timeBetweenShots);
     }
+    
     private void ResetShot()
     {
         //Allow shooting and invoking again

@@ -5,13 +5,14 @@ using UnityEngine;
 public class BulletProjectile : MonoBehaviour
 {
     Rigidbody rb;
+    float damage = 10;
     
     void Start()
 
     {
 
         rb = GetComponent<Rigidbody>();
-
+        
         StartCoroutine(Predict());
 
     }
@@ -63,8 +64,9 @@ public class BulletProjectile : MonoBehaviour
     {
 
         //if (other.CompareTag("Target"))
-           
-            Destroy(gameObject);
+        
+        other.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
+        Destroy(gameObject);
 
     }
     

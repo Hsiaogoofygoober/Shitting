@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Cinemachine;
 using Photon.Pun;
+using UnityEngine.UI;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -14,7 +15,7 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 	[RequireComponent(typeof(PlayerInput))]
 #endif
-	public class FirstPersonController : MonoBehaviour
+	public class FirstPersonController : MonoBehaviour,IDamageable
 	{
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
@@ -58,6 +59,8 @@ namespace StarterAssets
 
 		PhotonView PV;
 
+		PlayerManagers playerManagers;
+
 		// cinemachine
 		private float _cinemachineTargetPitch;
 		[SerializeField] private GameObject gun;
@@ -66,6 +69,8 @@ namespace StarterAssets
 		private float _rotationVelocity;
 		private float _verticalVelocity;
 		private float _terminalVelocity = 53.0f;
+		const float maxHealth = 100f;
+		float currentHealth = maxHealth;
 
 		// timeout deltatime
 		private float _jumpTimeoutDelta;
@@ -76,11 +81,15 @@ namespace StarterAssets
 		private GameObject _mainCamera;
 		private Animator _animator;
 		private const float _threshold = 0.01f;
-
+		[SerializeField] private CinemachineVirtualCamera playerFollowCamera;
 		// aimming
 		[SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
 		[SerializeField] private float normalSensitivity;
 		[SerializeField] private float aimSensitivity;
+
+		// health
+		[SerializeField] Image healthbarImage;
+		[SerializeField] GameObject ui;
 
 		private void Awake()
 		{
@@ -90,18 +99,20 @@ namespace StarterAssets
 				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
 			}
 			PV = GetComponent<PhotonView>();
+
+			playerManagers = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManagers>();
 		}
 
 		private void Start()
 		{
 			if (!PV.IsMine) 
 			{
-				Debug.Log(GetComponentInChildren<CinemachineVirtualCamera>().gameObject);
+
 				Destroy(GetComponentInChildren<Camera>().gameObject);
-				Destroy(GetComponentInChildren<CinemachineVirtualCamera>().gameObject);
-				Debug.Log(aimVirtualCamera);
+				Destroy(playerFollowCamera);
 				Destroy(aimVirtualCamera);
-				Debug.Log("is not mine");
+				Destroy(ui);
+				
 			}
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
@@ -138,6 +149,10 @@ namespace StarterAssets
 
 		private void LateUpdate()
 		{
+			if (!PV.IsMine)
+			{
+				return;
+			}
 			CameraRotation();
 		}
      
@@ -210,7 +225,7 @@ namespace StarterAssets
 				// move
 				inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
 			}
-
+	
 			// move the player
 			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 		}
@@ -299,13 +314,39 @@ namespace StarterAssets
 			if (_input.aim)
 			{
 				aimVirtualCamera.gameObject.SetActive(true);
-				SetSensitivity(aimSensitivity);
+				SetSensitivity(normalSensitivity*aimSensitivity);
 			}
 			else
 			{
 				aimVirtualCamera.gameObject.SetActive(false);
 				SetSensitivity(normalSensitivity);
 			}
+		}
+		public void TakeDamage(float damage) 
+		{
+			PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);
+		}
+
+		[PunRPC]
+		void RPC_TakeDameage(float damage) 
+		{
+			if (!PV.IsMine)
+				return;
+			
+			
+			currentHealth -= damage;
+			healthbarImage.fillAmount = currentHealth / maxHealth;
+
+			if (currentHealth <= 0) 
+			{
+				Die();
+			}
+			
+		}
+
+		void Die() 
+		{
+			playerManagers.Die();
 		}
 	}
 }
