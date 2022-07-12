@@ -5,17 +5,30 @@ using System.IO;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
-	public static RoomManager Instance;
+	public static RoomManager instance;
 
+	//public static RoomManager Instance{
+	//	get
+	//	{
+	//		return instance ?? (instance = GameObject.FindObjectOfType(typeof(RoomManager)) as RoomManager);
+	//	}
+	//}
+
+	public static bool isHave = true;
 	void Awake()
 	{
-		if (Instance)
+		if (instance == null)
 		{
-			Destroy(gameObject);
-			return;
+			instance = this;
 		}
-		DontDestroyOnLoad(gameObject);
-		Instance = this;
+		else {
+			Destroy(gameObject);
+		}
+		if (isHave == true)
+		{
+			DontDestroyOnLoad(gameObject);
+			isHave = false;	
+		}
 	}
 
 	public override void OnEnable()
@@ -35,6 +48,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		if (scene.buildIndex == 1) // We're in the game scene
 		{
 			PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
+		}
+		else if (scene.buildIndex == 0) 
+		{
+			Destroy(instance);	
 		}
 	}
 }

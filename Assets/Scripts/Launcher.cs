@@ -11,7 +11,7 @@ namespace Com.FPSGaming
     {
         [Tooltip("遊戲室玩家人數上限. 當遊戲室玩家人數已滿額, 新玩家只能新開遊戲室來進行遊戲.")]
         [SerializeField]
-        private byte maxPlayersPerRoom = 4;
+        private byte maxPlayersPerRoom = 2;
 
         [Tooltip("顯示/隱藏 遊戲玩家名稱與 Play 按鈕")]
         [SerializeField]
@@ -45,7 +45,7 @@ namespace Com.FPSGaming
         void Start()
         {   
             playerNumber = PhotonNetwork.CountOfPlayers;
-            playersOnMaster.GetComponent<Text>().text = "Player On Server : " + playerNumber;
+            //playersOnMaster.GetComponent<Text>().text = "Player On Server : " + playerNumber;
             progressLabel.SetActive(false);
             waitingLabel.SetActive(false);
             controlPanel.SetActive(true);
@@ -108,10 +108,11 @@ namespace Com.FPSGaming
             waitingLabel.SetActive(true);
             progressLabel.SetActive(false);
             Debug.Log("PUN 呼叫 OnJoinedRoom(), 已成功進入遊戲室中.");
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            if (PhotonNetwork.CurrentRoom.PlayerCount == maxPlayersPerRoom)
             {
                 Debug.Log("我是第一個進入遊戲室的玩家");
                 Debug.Log("我得主動做載入場景 'GameScene' 的動作");
+                PhotonNetwork.CurrentRoom.IsOpen = false;
                 PhotonNetwork.LoadLevel(1);
             }
         }

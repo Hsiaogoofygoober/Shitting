@@ -344,9 +344,9 @@ namespace StarterAssets
 			
 		}
 
-		void Die() 
-		{
-			playerManagers.Die();
+		void Die()
+        {
+            playerManagers.Die(); 
 		}
 	}
 }

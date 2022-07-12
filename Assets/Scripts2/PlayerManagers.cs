@@ -10,10 +10,14 @@ public class PlayerManagers : MonoBehaviour
 
 	GameObject controller;
 
+	public float minx;
+	public float maxx;
+	public float miny;
+	public float maxy;
+
 	void Awake()
 	{
 		PV = GetComponent<PhotonView>();
-		
 	}
 
 	void Start()
@@ -27,13 +31,15 @@ public class PlayerManagers : MonoBehaviour
 	void CreateController()
 	{
 		Debug.Log("Instantiated Player Controller");
-        //Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
-       controller =  PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Player"),Vector3.zero,Quaternion.identity,0, new object[] { PV.ViewID });
+		//Transform spawnpoint = SpawnManager.Instance.GetSpawnpoint();
+		//Vector3 randomPosition = new Vector3(Random.Range(minx, maxx), 1, Random.Range(miny, maxy));
+		controller =  PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Player"), Vector3.zero, Quaternion.identity, 0, new object[] { PV.ViewID });
 	}
 
 	public void Die()
 	{
-		PhotonNetwork.Destroy(controller);
-		
+		PhotonNetwork.LeaveRoom();
+		Debug.Log("Leave Room");
+		PhotonNetwork.LoadLevel(2);
 	}
 }
