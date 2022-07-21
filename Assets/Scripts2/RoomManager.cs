@@ -2,20 +2,22 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
 using System.IO;
+using Photon.Realtime;
 
 public class RoomManager : MonoBehaviourPunCallbacks
 {
-	public static RoomManager Instance;
+	public static RoomManager instance;
+
 
 	void Awake()
 	{
-		if (Instance)
+		if (instance)
 		{
 			Destroy(gameObject);
 			return;
 		}
 		DontDestroyOnLoad(gameObject);
-		Instance = this;
+		instance = this;
 	}
 
 	public override void OnEnable()
@@ -36,5 +38,27 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		{
 			PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
 		}
+	}
+
+	public override void OnPlayerEnteredRoom(Player other)
+	{
+		Debug.LogFormat("{0} 進入遊戲室", other.NickName);
+		if (PhotonNetwork.IsMasterClient)
+		{
+			Debug.LogFormat("我是 Master Client 嗎? {0}",
+				PhotonNetwork.IsMasterClient);
+			LoadArena();
+		}
+	}
+
+	void LoadArena()
+	{
+		if (!PhotonNetwork.IsMasterClient)
+		{
+			Debug.LogError("我不是 Master Client, 不做載入場景的動作");
+		}
+		Debug.LogFormat("載入{0}人的場景",
+			PhotonNetwork.CurrentRoom.PlayerCount);
+		PhotonNetwork.LoadLevel(1);
 	}
 }
