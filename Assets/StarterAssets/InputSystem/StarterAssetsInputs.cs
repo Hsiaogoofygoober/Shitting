@@ -15,6 +15,7 @@ namespace StarterAssets
 		public bool aim;
 		public bool shoot;
 		public bool reload;
+		
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -60,6 +61,7 @@ namespace StarterAssets
 		{
 			ReloadInput(value.isPressed);
 		}
+		
 #else
 	// old input sys if we do decide to have it (most likely wont)...
 #endif
@@ -96,6 +98,7 @@ namespace StarterAssets
 		{
 			reload = newReloadState;
 		}
+		
 
 #if !UNITY_IOS || !UNITY_ANDROID
 

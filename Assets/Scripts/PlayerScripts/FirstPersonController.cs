@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using Cinemachine;
+using System.Collections;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Photon.Pun;
 using UnityEngine.UI;
+using Photon.Realtime;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 #endif
@@ -15,7 +18,7 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 	[RequireComponent(typeof(PlayerInput))]
 #endif
-	public class FirstPersonController : MonoBehaviour,IDamageable
+	public class FirstPersonController : MonoBehaviourPunCallbacks,IDamageable
 	{
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
@@ -91,6 +94,16 @@ namespace StarterAssets
 		[SerializeField] Image healthbarImage;
 		[SerializeField] GameObject ui;
 
+		// item
+		[SerializeField] Item[] items;
+		int itemIndex;
+		int previousItemIndex = -1;
+
+		// switch gun
+		
+		public InputActionReference action_view;
+		private float scrolling_value;
+
 		private void Awake()
 		{
 			// get a reference to our main camera
@@ -101,18 +114,23 @@ namespace StarterAssets
 			PV = GetComponent<PhotonView>();
 
 			playerManagers = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManagers>();
+
+			action_view.action.performed += _x => scrolling_value = _x.action.ReadValue<float>();
 		}
 
 		private void Start()
 		{
-			if (!PV.IsMine) 
+			if (PV.IsMine) 
 			{
-
+				EquiptItem(0);
+				
+			}
+            else 
+			{
 				Destroy(GetComponentInChildren<Camera>().gameObject);
 				Destroy(playerFollowCamera);
 				Destroy(aimVirtualCamera);
 				Destroy(ui);
-				
 			}
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
@@ -141,6 +159,20 @@ namespace StarterAssets
 			{
 				_animator.SetFloat("Speed", 0);
 			}
+            if (scrolling_value < 0)
+            {
+				if (itemIndex >= items.Length - 1) 
+				{
+					EquiptItem(0);
+				}
+                else 
+				{
+					EquiptItem(itemIndex + 1);
+				}
+				
+            }
+
+			ControllShoot();
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
@@ -156,8 +188,14 @@ namespace StarterAssets
 			CameraRotation();
 		}
      
+		private void ControllShoot() 
+		{
+			
+				items[itemIndex].Use();
+			
+		}
 
-        private void GroundedCheck()
+		private void GroundedCheck()
 		{
 			// set sphere position, with offset
 			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
@@ -322,7 +360,36 @@ namespace StarterAssets
 				SetSensitivity(normalSensitivity);
 			}
 		}
-		public void TakeDamage(float damage) 
+
+		private void EquiptItem(int _index) 
+		{
+			itemIndex = _index;
+			items[itemIndex].itemGameObject.SetActive(true);
+
+			if (previousItemIndex != -1) 
+			{
+				items[previousItemIndex].itemGameObject.SetActive(false);			
+			}
+
+			previousItemIndex = itemIndex;
+
+            if (PV.IsMine) 
+			{
+				Hashtable hash = new Hashtable();
+				hash.Add("itemIndex", itemIndex);
+				PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+			}
+			
+		}
+
+        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        {
+			if (!PV.IsMine && targetPlayer == PV.Owner)
+			{
+				EquiptItem((int)changedProps["itemIndex"]);
+			}
+        }
+        public void TakeDamage(float damage) 
 		{
 			PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);
 		}
