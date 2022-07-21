@@ -6,8 +6,9 @@ using StarterAssets;
 using UnityEngine;
 using TMPro;
 
-public class Pistol : Gun
+public class ShotGun : Gun
 {
+    private const int shotgun = 5;
     private StarterAssetsInputs starterAssetsInputs;
     //bullet 
     public GameObject bullet;
@@ -100,28 +101,46 @@ public class Pistol : Gun
         Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
 
         //Calculate spread
-        float x = Random.Range(-spread, spread);
-        float y = Random.Range(-spread, spread);
+        
 
         //Calculate new direction with spread
-        Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last direction
+        Vector3[] directionWithSpread = new Vector3[shotgun];
+        for(int i = 10; i < shotgun; i++) 
+        {
+            float x = Random.Range(-spread, spread);
+            float y = Random.Range(-spread, spread);
+            directionWithSpread[i] = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last direction
+        }
+         
 
         //Instantiate bullet/projectile
-        GameObject currentBullet = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bullet.name), attackPoint.position, Quaternion.identity); //store instantiated bullet in currentBullet
-        //Rotate bullet to shoot direction
-        currentBullet.transform.forward = directionWithSpread.normalized;
+        GameObject[] currentBullet = new  GameObject[shotgun];
+        for(int i = 0; i < shotgun; i++) 
+        {
+            currentBullet[i] = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bullet.name), attackPoint.position, Quaternion.identity); //store instantiated bullet in currentBullet
+            Debug.Log("ammo");                                                                                                                        //Rotate bullet to shoot direction
+            currentBullet[i].transform.forward = directionWithSpread[i].normalized;
+        }
+       
 
         //Add forces to bullet
         if (starterAssetsInputs.aim)
         {
-            currentBullet.GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
+            //currentBullet.GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
         }
         else
         {
-            currentBullet.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
+            for(int i = 0; i < shotgun; i++) 
+            {
+                currentBullet[i].GetComponent<Rigidbody>().AddForce(directionWithSpread[i].normalized * shootForce, ForceMode.Impulse);
+                Debug.Log("shoot");
+            }
         }
-
-        currentBullet.GetComponent<Rigidbody>().AddForce(fpsCam.transform.up * upwardForce, ForceMode.Impulse);
+        /*for (int i = 0; i < 10; i++)
+        {
+            currentBullet[i].GetComponent<Rigidbody>().AddForce(fpsCam.transform.up * upwardForce, ForceMode.Impulse);
+        }*/
+        
 
         //Instantiate muzzle flash, if you have one
         //if (muzzleFlash != null)
