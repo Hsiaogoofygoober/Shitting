@@ -22,7 +22,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         Instance = this;
     }
-
+    
     void Start()
     {
         Debug.Log("Connecting to Master");
@@ -86,6 +86,7 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void StartGame()
     {
+        PhotonNetwork.CurrentRoom.IsVisible = false;
         PhotonNetwork.LoadLevel(1);
     }
 
@@ -100,6 +101,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinRoom(info.Name);
         MenuManager.Instance.OpenMenu("loading");
     }
+    
 
     public override void OnLeftRoom()
     {
