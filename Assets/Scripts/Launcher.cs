@@ -103,17 +103,19 @@ namespace Com.FPSGaming
             });
             Debug.Log("PUN , 創建遊戲室成功.");
         }
+
+
         public override void OnJoinedRoom()
         {
             waitingLabel.SetActive(true);
             progressLabel.SetActive(false);
-            Debug.Log("PUN 呼叫 OnJoinedRoom(), 已成功進入遊戲室中.");
+            Debug.Log("PUN 呼叫 OnJoinedRoom(), 已成功進入遊戲室中." + " " + PhotonNetwork.CurrentRoom.PlayerCount);
             if (PhotonNetwork.CurrentRoom.PlayerCount == maxPlayersPerRoom)
             {
+                PhotonNetwork.CurrentRoom.IsOpen = false;    
                 Debug.Log("我是第一個進入遊戲室的玩家");
                 Debug.Log("我得主動做載入場景 'GameScene' 的動作");
-                PhotonNetwork.CurrentRoom.IsOpen = false;
-                PhotonNetwork.LoadLevel(1);
+                PhotonNetwork.LoadLevel(1);    
             }
         }
     }
