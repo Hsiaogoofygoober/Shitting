@@ -26,7 +26,7 @@ public class PlayerManagers : MonoBehaviour
 	void CreateController()
 	{
 		Debug.Log("Instantiated Player Controller");
-		Vector3 spawnPoint = new Vector3(Random.Range(113f, 163f), 21f, Random.Range(86f, 578f));
+		Vector3 spawnPoint = new Vector3(Random.Range(-213f, 287f), Random.Range(-155f, 345f), 80f);
 
         controller =  PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Player"), spawnPoint, Quaternion.identity , 0, new object[] { PV.ViewID });
 	}

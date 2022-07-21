@@ -9,6 +9,8 @@ namespace Com.FPSGaming
 {
     public class Launcher : MonoBehaviourPunCallbacks
     {
+        public static Launcher instance;
+
         [Tooltip("遊戲室玩家人數上限. 當遊戲室玩家人數已滿額, 新玩家只能新開遊戲室來進行遊戲.")]
         [SerializeField]
         private byte maxPlayersPerRoom = 2;
@@ -37,15 +39,13 @@ namespace Com.FPSGaming
 
         void Awake()
         {
+            instance = this;
             // 確保所有連線的玩家均載入相同的遊戲場景
-            PhotonNetwork.JoinLobby();
-            PhotonNetwork.AutomaticallySyncScene = true;
         }
 
         void Start()
-        {   
-            playerNumber = PhotonNetwork.CountOfPlayers;
-            //playersOnMaster.GetComponent<Text>().text = "Player On Server : " + playerNumber;
+        {
+            PhotonNetwork.ConnectUsingSettings();
             progressLabel.SetActive(false);
             waitingLabel.SetActive(false);
             controlPanel.SetActive(true);
@@ -74,6 +74,8 @@ namespace Com.FPSGaming
 
         public override void OnConnectedToMaster()
         {
+            PhotonNetwork.JoinLobby();
+            PhotonNetwork.AutomaticallySyncScene = true;
             Debug.Log("PUN 呼叫 OnConnectedToMaster(), 已連上 Photon Cloud.");
             if (isConnecting)
             {
@@ -113,8 +115,6 @@ namespace Com.FPSGaming
             if (PhotonNetwork.CurrentRoom.PlayerCount == maxPlayersPerRoom)
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;    
-                Debug.Log("我是第一個進入遊戲室的玩家");
-                Debug.Log("我得主動做載入場景 'GameScene' 的動作");
                 PhotonNetwork.LoadLevel(1);    
             }
         }
