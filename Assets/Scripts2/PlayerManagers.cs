@@ -36,6 +36,6 @@ public class PlayerManagers : MonoBehaviour
 		PhotonNetwork.LeaveRoom();
 		Debug.Log("Leave Room");
 		Destroy(RoomManager.instance.gameObject);
-		PhotonNetwork.LoadLevel(0);
+		PhotonNetwork.LoadLevel(2);
 	}
 }
