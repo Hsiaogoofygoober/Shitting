@@ -34,7 +34,7 @@ namespace Com.FPSGaming
         private Text playerUI;
         // 遊戲版本的編碼, 可讓 Photon Server 做同款遊戲不同版本的區隔.
         string gameVersion = "1";
-        bool isConnecting;
+        bool isConnecting = false;
         static int playerNumber = 0;
 
         void Awake()
