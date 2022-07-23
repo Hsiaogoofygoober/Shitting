@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using Photon.Pun;
 using System.IO;
 using StarterAssets;
@@ -43,6 +44,12 @@ public class ShotGun : Gun
     //bug fixing :D
     public bool allowInvoke = true;
 
+    // aimming
+    [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
+    [SerializeField] private float normalSensitivity;
+    [SerializeField] private float aimSensitivity;
+    public float Sensitivity = 1f;
+
     private void Awake()
     {
         starterAssetsInputs = GetComponentInParent<StarterAssetsInputs>();
@@ -53,12 +60,31 @@ public class ShotGun : Gun
     }
     public override void Use()
     {
+        Aimming();
         MyInput();
 
         //Set ammo display, if it exists :D
         if (ammunitionDisplay != null)
             ammunitionDisplay.SetText("ammo left: \n" + bulletsLeft / bulletsPerTap + " / " + magazineSize / bulletsPerTap);
 
+    }
+    public void SetSensitivity(float newSensitivity)
+    {
+        Sensitivity = newSensitivity;
+
+    }
+    private void Aimming()
+    {
+        if (starterAssetsInputs.aim)
+        {
+            aimVirtualCamera.gameObject.SetActive(true);
+            SetSensitivity(normalSensitivity * aimSensitivity);
+        }
+        else
+        {
+            aimVirtualCamera.gameObject.SetActive(false);
+            SetSensitivity(normalSensitivity);
+        }
     }
     private void MyInput()
     {
@@ -105,16 +131,25 @@ public class ShotGun : Gun
 
         //Calculate new direction with spread
         Vector3[] directionWithSpread = new Vector3[shotgun];
-        for(int i = 10; i < shotgun; i++) 
+        for(int i = 0; i < shotgun; i++) 
         {
             float x = Random.Range(-spread, spread);
             float y = Random.Range(-spread, spread);
             directionWithSpread[i] = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last direction
         }
-         
+
+        Vector3[] directionWithlittleSpread = new Vector3[shotgun];
+        for (int i = 0; i < shotgun; i++)
+        {
+            float x = Random.Range(-spread/2, spread/2);
+            float y = Random.Range(-spread/2, spread/2);
+            directionWithlittleSpread[i] = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last direction
+        }
+
 
         //Instantiate bullet/projectile
         GameObject[] currentBullet = new  GameObject[shotgun];
+        
         for(int i = 0; i < shotgun; i++) 
         {
             currentBullet[i] = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bullet.name), attackPoint.position, Quaternion.identity); //store instantiated bullet in currentBullet
@@ -126,7 +161,11 @@ public class ShotGun : Gun
         //Add forces to bullet
         if (starterAssetsInputs.aim)
         {
-            //currentBullet.GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
+            for (int i = 0; i < shotgun; i++)
+            {
+                currentBullet[i].GetComponent<Rigidbody>().AddForce(directionWithlittleSpread[i].normalized * shootForce, ForceMode.Impulse);
+            }
+            
         }
         else
         {
@@ -136,10 +175,10 @@ public class ShotGun : Gun
                 Debug.Log("shoot");
             }
         }
-        /*for (int i = 0; i < 10; i++)
+        for (int i = 0; i < shotgun; i++)
         {
             currentBullet[i].GetComponent<Rigidbody>().AddForce(fpsCam.transform.up * upwardForce, ForceMode.Impulse);
-        }*/
+        }
         
 
         //Instantiate muzzle flash, if you have one

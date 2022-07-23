@@ -2,6 +2,7 @@
 using Cinemachine;
 using System.Collections;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using UnityEngine.Animations.Rigging;
 using Photon.Pun;
 using UnityEngine.UI;
 using Photon.Realtime;
@@ -99,8 +100,12 @@ namespace StarterAssets
 		int itemIndex;
 		int previousItemIndex = -1;
 
+		//switch weapon rigging
+		TwoBoneIKConstraint constraint;
+		public RigBuilder rigBuilder;
+
 		// switch gun
-		
+
 		public InputActionReference action_view;
 		private float scrolling_value;
 
@@ -120,10 +125,12 @@ namespace StarterAssets
 
 		private void Start()
 		{
+			constraint = GetComponentInChildren<TwoBoneIKConstraint>();
 			if (PV.IsMine) 
 			{
 				EquiptItem(0);
-				
+				constraint.data.target = GameObject.FindWithTag("weaponHold").transform;
+				rigBuilder.Build();
 			}
             else 
 			{
@@ -159,6 +166,7 @@ namespace StarterAssets
 			{
 				_animator.SetFloat("Speed", 0);
 			}
+
             if (scrolling_value < 0)
             {
 				if (itemIndex >= items.Length - 1) 
@@ -169,14 +177,16 @@ namespace StarterAssets
 				{
 					EquiptItem(itemIndex + 1);
 				}
-				
-            }
+				constraint.data.target = GameObject.FindWithTag("weaponHold").transform;
+				rigBuilder.Build();
+				Debug.Log(constraint.data.target);
+			}
 
 			ControllShoot();
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
-			Aimming();
+			//Aimming();
 		}
 
 		private void LateUpdate()
@@ -363,6 +373,7 @@ namespace StarterAssets
 
 		private void EquiptItem(int _index) 
 		{
+			
 			itemIndex = _index;
 			items[itemIndex].itemGameObject.SetActive(true);
 

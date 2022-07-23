@@ -50,7 +50,7 @@ MonoBehaviour:
   bullet: {fileID: 4883303769824214939, guid: dba74736d878f0d4589046cc03b8e119, type: 3}
   shootForce: 50
   upwardForce: 0
-  timeBetweenShooting: 1
+  timeBetweenShooting: 0.1
   spread: 0
   reloadTime: 0
   timeBetweenShots: 3
@@ -419,7 +419,7 @@ MonoBehaviour:
   itemInfo: {fileID: 11400000, guid: 5794e843bcae2874c9f68676c1b217df, type: 2}
   itemGameObject: {fileID: 3388591678535844660}
   bullet: {fileID: 6872205951191845803, guid: 530abc75ae22f144c92d6601410e6400, type: 3}
-  shootForce: 50
+  shootForce: 100
   upwardForce: 10
   timeBetweenShooting: 2
   spread: 10
@@ -433,6 +433,10 @@ MonoBehaviour:
   attackPoint: {fileID: 9047868229876104584}
   ammunitionDisplay: {fileID: 5014336599252029986}
   allowInvoke: 1
+  aimVirtualCamera: {fileID: 4327787885862135951}
+  normalSensitivity: 0.5
+  aimSensitivity: 0.3
+  Sensitivity: 1
 --- !u!1 &3603476400721669947
 GameObject:
   m_ObjectHideFlags: 0
@@ -537,6 +541,7 @@ MonoBehaviour:
   items:
   - {fileID: 3237160457324993521}
   - {fileID: 8567083992433360854}
+  rigBuilder: {fileID: 5014336599522272682}
   action_view: {fileID: -5596592579885351912, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
 --- !u!114 &6837152431155922379
 MonoBehaviour:
@@ -742,7 +747,7 @@ GameObject:
   - component: {fileID: 4500375191836619663}
   m_Layer: 8
   m_Name: w
-  m_TagString: Untagged
+  m_TagString: weaponHold
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1046,7 +1051,7 @@ MonoBehaviour:
     m_Root: {fileID: 8645308065996150953}
     m_Mid: {fileID: 8639574906097487421}
     m_Tip: {fileID: 8639079169633693477}
-    m_Target: {fileID: 6006893549946528270}
+    m_Target: {fileID: 0}
     m_Hint: {fileID: 0}
     m_TargetPositionWeight: 1
     m_TargetRotationWeight: 1
@@ -1578,7 +1583,7 @@ GameObject:
   - component: {fileID: 1301498716549996919}
   m_Layer: 8
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: weaponHold
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
