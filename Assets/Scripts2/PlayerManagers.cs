@@ -10,6 +10,8 @@ public class PlayerManagers : MonoBehaviour
 
 	GameObject controller;
 
+	CheckWinner CW;
+
 	void Awake()
 	{
 		PV = GetComponent<PhotonView>();
@@ -33,8 +35,17 @@ public class PlayerManagers : MonoBehaviour
 
 	public void Die()
 	{
+		PlayerPrefs.SetInt("Status", 0);
 		PhotonNetwork.LeaveRoom();
 		Debug.Log("Leave Room");
+		Destroy(RoomManager.instance.gameObject);
+		PhotonNetwork.LoadLevel(2);
+	}
+
+	public void Win() 
+	{
+		PlayerPrefs.SetInt("Status", 1);
+		PhotonNetwork.LeaveRoom();
 		Destroy(RoomManager.instance.gameObject);
 		PhotonNetwork.LoadLevel(2);
 	}

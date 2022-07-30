@@ -91,6 +91,8 @@ namespace StarterAssets
 		[SerializeField] Image healthbarImage;
 		[SerializeField] GameObject ui;
 
+		private bool isWinner = false;
+
 		private void Awake()
 		{
 			// get a reference to our main camera
@@ -145,6 +147,10 @@ namespace StarterAssets
 			GroundedCheck();
 			Move();
 			Aimming();
+			if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+			{
+				playerManagers.Win();
+			}
 		}
 
 		private void LateUpdate()
@@ -346,7 +352,7 @@ namespace StarterAssets
 
 		void Die()
         {
-            playerManagers.Die(); 
+            playerManagers.Die();
 		}
 	}
 }
