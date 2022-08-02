@@ -186,6 +186,10 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
+			if (PhotonNetwork.CurrentRoom.PlayerCount == 1) 
+			{
+				playerManagers.Win();
+			}
 			//Aimming();
 		}
 
