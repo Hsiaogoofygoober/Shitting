@@ -91,7 +91,6 @@ namespace StarterAssets
 		[SerializeField] Image healthbarImage;
 		[SerializeField] GameObject ui;
 
-		private bool isWinner = false;
 
 		private void Awake()
 		{
@@ -116,6 +115,8 @@ namespace StarterAssets
 				Destroy(ui);
 				
 			}
+			
+
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 			_animator = GetComponentInChildren<Animator>();

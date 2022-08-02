@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,14 +7,16 @@ public class BulletProjectile : MonoBehaviour
 {
     Rigidbody rb;
     float damage = 10;
-    
+
+    PhotonView pv;
+
     void Start()
 
     {
 
-        rb
-            = GetComponent<Rigidbody>();
-        
+        rb = GetComponent<Rigidbody>();
+        pv = GetComponent<PhotonView>();
+
         StartCoroutine(Predict());
 
     }
@@ -67,6 +70,8 @@ public class BulletProjectile : MonoBehaviour
         //if (other.CompareTag("Target"))
         
         other.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
+        BulletProjectile bullet = gameObject.GetComponent<BulletProjectile>();
+        Debug.Log(bullet.pv.Owner.NickName);
         Destroy(gameObject);
 
     }
