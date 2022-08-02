@@ -11,7 +11,8 @@ public class BulletProjectile : MonoBehaviour
 
     {
 
-        rb = GetComponent<Rigidbody>();
+        rb
+            = GetComponent<Rigidbody>();
         
         StartCoroutine(Predict());
 
