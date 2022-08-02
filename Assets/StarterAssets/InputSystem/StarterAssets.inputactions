@@ -76,6 +76,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Pick",
+                    "type": "PassThrough",
+                    "id": "5aa69d60-807a-4194-ab1f-1660b3ac10a5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Drop",
+                    "type": "PassThrough",
+                    "id": "e319825b-038e-451f-9780-f0cac75a6e0e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -329,6 +347,28 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "SwitchGun",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b46f208a-7ef9-4652-a098-506c2615d068",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Pick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "13a1b06f-34e4-4b34-b4a4-a5db83aa0637",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Drop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

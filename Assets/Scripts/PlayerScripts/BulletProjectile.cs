@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class BulletProjectile : MonoBehaviour
 {
     Rigidbody rb;
     float damage = 10;
-    
+    PhotonView PV;
+
     void Start()
 
     {
@@ -67,6 +69,7 @@ public class BulletProjectile : MonoBehaviour
         //if (other.CompareTag("Target"))
         
         other.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
+        
         Destroy(gameObject);
 
     }

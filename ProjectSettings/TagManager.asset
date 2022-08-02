@@ -6,6 +6,9 @@ TagManager:
   tags:
   - CinemachineTarget
   - weaponHold
+  - weapon
+  - ItemHolder
+  - test
   layers:
   - Default
   - TransparentFX

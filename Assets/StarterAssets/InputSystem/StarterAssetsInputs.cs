@@ -15,7 +15,9 @@ namespace StarterAssets
 		public bool aim;
 		public bool shoot;
 		public bool reload;
-		
+		public bool pick;
+		public bool drop;
+
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -61,7 +63,14 @@ namespace StarterAssets
 		{
 			ReloadInput(value.isPressed);
 		}
-		
+		public void OnPick(InputValue value)
+		{
+			PickInput(value.isPressed);
+		}
+		public void OnDrop(InputValue value)
+		{
+			DropInput(value.isPressed);
+		}
 #else
 	// old input sys if we do decide to have it (most likely wont)...
 #endif
@@ -98,7 +107,15 @@ namespace StarterAssets
 		{
 			reload = newReloadState;
 		}
-		
+		public void PickInput(bool newPickState)
+		{
+			pick = newPickState;
+		}
+		public void DropInput(bool newDropState)
+		{
+			drop = newDropState;
+		}
+
 
 #if !UNITY_IOS || !UNITY_ANDROID
 
