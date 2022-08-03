@@ -1,9 +1,14 @@
 ﻿using UnityEngine;
 using Cinemachine;
+using System.Collections;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+using UnityEngine.Animations.Rigging;
 using Photon.Pun;
 using UnityEngine.UI;
+using Photon.Realtime;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
+
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -15,7 +20,7 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 	[RequireComponent(typeof(PlayerInput))]
 #endif
-	public class FirstPersonController : MonoBehaviour,IDamageable
+	public class FirstPersonController : MonoBehaviourPunCallbacks,IDamageable
 	{
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
@@ -57,6 +62,8 @@ namespace StarterAssets
 		[Tooltip("How far in degrees can you move the camera down")]
 		public float BottomClamp = -90.0f;
 
+		public string killer = "";
+
 		PhotonView PV;
 
 		PlayerManagers playerManagers;
@@ -82,6 +89,7 @@ namespace StarterAssets
 		private Animator _animator;
 		private const float _threshold = 0.01f;
 		[SerializeField] private CinemachineVirtualCamera playerFollowCamera;
+
 		// aimming
 		[SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
 		[SerializeField] private float normalSensitivity;
@@ -91,8 +99,37 @@ namespace StarterAssets
 		[SerializeField] Image healthbarImage;
 		[SerializeField] GameObject ui;
 
-		public string killer = "";
-		public string victim = "";
+		// item
+		[SerializeField] Item[] items;
+		int itemIndex;
+		int previousItemIndex = -1;
+
+		// switch weapon rigging
+		TwoBoneIKConstraint constraint;
+		public RigBuilder rigBuilder;
+
+		// switch gun
+		public InputActionReference action_view;
+		private float scrolling_value;
+		
+
+		// pick up and drop down
+		public Rigidbody gunRb;
+		public BoxCollider gunColl;
+		public Transform player, fpsCam, itemHolder;
+		public Item gunItem;
+		public Camera playerCam;
+		private GameObject weapon;
+		private bool isHoldingWeapon;
+		public float pickUpRange;
+		public float dropForwardForce, dropUpwardForce;
+		private int equipIndex = 0;
+		public bool equipped;
+		public static bool slotFull;
+		
+		public InputActionReference PickUpRef;
+		public InputActionReference DropDownRef;
+
 		private void Awake()
 		{
 			// get a reference to our main camera
@@ -101,23 +138,37 @@ namespace StarterAssets
 				_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
 			}
 			PV = GetComponent<PhotonView>();
-
+			//Debug.Log(GameObject.FindWithTag("MainCamera").transform);
 			playerManagers = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManagers>();
+
+			action_view.action.performed += _x => scrolling_value = _x.action.ReadValue<float>();
+			isHoldingWeapon = false;
 		}
 
 		private void Start()
 		{
-			if (!PV.IsMine) 
+			constraint = GetComponentInChildren<TwoBoneIKConstraint>();
+			if (PV.IsMine) 
 			{
-
+                //EquiptItem(0);
+                if (isHoldingWeapon)
+                {
+					constraint.data.target = GameObject.FindWithTag("weaponHold").transform;
+				}
+				
+				rigBuilder.Build();
+				itemHolder = GameObject.FindWithTag("ItemHolder").transform;
+			}
+            else 
+			{
 				Destroy(GetComponentInChildren<Camera>().gameObject);
 				Destroy(playerFollowCamera);
 				Destroy(aimVirtualCamera);
 				Destroy(ui);
-				
 			}
-			
 
+			
+			
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 			_animator = GetComponentInChildren<Animator>();
@@ -145,14 +196,32 @@ namespace StarterAssets
 			{
 				_animator.SetFloat("Speed", 0);
 			}
+
+            if (scrolling_value < 0 && items[0] != null && items[1] != null)
+            {
+				if (itemIndex >= items.Length - 1) 
+				{
+					EquiptItem(0);
+				}
+                else 
+				{
+					EquiptItem(itemIndex + 1);
+				}
+                if (isHoldingWeapon)
+                {
+					constraint.data.target = GameObject.FindWithTag("weaponHold").transform;
+					rigBuilder.Build();
+					Debug.Log(constraint.data.target);
+				}
+				
+				
+			}
+			ControllPickAndDrop();
+			ControllShoot();
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
-			Aimming();
-			if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-			{
-				playerManagers.Win();
-			}
+			//Aimming();
 		}
 
 		private void LateUpdate()
@@ -164,8 +233,18 @@ namespace StarterAssets
 			CameraRotation();
 		}
      
+		private void ControllShoot() 
+		{
 
-        private void GroundedCheck()
+            if (items[itemIndex] != null)
+            {
+				items[itemIndex].Use();
+			}
+			
+			
+		}
+
+		private void GroundedCheck()
 		{
 			// set sphere position, with offset
 			Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z);
@@ -317,26 +396,157 @@ namespace StarterAssets
 			Sensitivity = newSensitivity;
 		
 		}
-		private void Aimming() 
+
+
+		private void EquiptItem(int _index) 
 		{
-			if (_input.aim)
+			
+			itemIndex = _index;
+			items[itemIndex].itemGameObject.SetActive(true);
+
+			if (previousItemIndex != -1 && items[0] != null && items[1] != null) 
 			{
-				aimVirtualCamera.gameObject.SetActive(true);
-				SetSensitivity(normalSensitivity*aimSensitivity);
+				items[previousItemIndex].itemGameObject.SetActive(false);			
 			}
-			else
+
+			previousItemIndex = itemIndex;
+
+            if (PV.IsMine) 
 			{
-				aimVirtualCamera.gameObject.SetActive(false);
-				SetSensitivity(normalSensitivity);
+				Hashtable hash = new Hashtable();
+				hash.Add("itemIndex", itemIndex);
+				PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
 			}
+			
 		}
 
-		public void TakeDamage(float damage) 
+		private void ControllPickAndDrop()
+		{
+			Ray ray = playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //Just a ray through the middle of your current view
+			RaycastHit hit;
+
+			
+			if (_input.pick)
+			{
+				Debug.Log("hit E");
+				if (Physics.Raycast(ray, out hit))
+                {
+					Debug.Log(hit.collider.gameObject);
+					
+                    if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("weapon"))
+                    {
+						Debug.Log("is weapon");
+						weapon = hit.rigidbody.gameObject;
+						PickUp(weapon);
+					}
+					
+				}
+				
+			}
+			else if (_input.drop) 
+			{
+				Drop(weapon);
+			}
+
+			/*if (PV.IsMine)
+			{
+				Hashtable hash = new Hashtable();
+				hash.Add("itemIndex", itemIndex);
+				PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+				Debug.Log(hash);
+			}*/
+
+		} 
+
+		private void PickUp(GameObject weapon)
+		{
+			equipped = true;
+			slotFull = true;
+			isHoldingWeapon = true;
+            //Make weapon a child of the camera and move it to default position
+            if (PV.IsMine) 
+			{
+				itemHolder = GameObject.Find("ItemHolder").transform;
+			}
+			//Make Rigidbody kinematic and BoxCollider a trigger
+
+			
+            if (equipIndex < 2)
+            {
+				weapon.GetComponent<Rigidbody>().isKinematic = true;
+				weapon.GetComponentInChildren<BoxCollider>().isTrigger = true;
+				weapon.transform.SetParent(itemHolder);
+				weapon.transform.localPosition = Vector3.zero;
+				weapon.transform.localRotation = Quaternion.Euler(Vector3.zero);
+				weapon.transform.localScale = Vector3.one;
+				items[equipIndex++] = weapon.GetComponent<Item>();
+				//EquiptItem(equipIndex);
+			}
+            
+			
+			
+			constraint.data.target = GameObject.FindWithTag("weaponHold").transform;
+			rigBuilder.Build();
+			Debug.Log(constraint.data.target);
+			
+
+			//Enable script
+			//gunScript.enabled = true;
+		}
+
+		private void Drop(GameObject weapon)
+		{
+			equipped = false;
+			slotFull = false;
+			isHoldingWeapon = false;
+            //Set parent to null
+
+            if (equipIndex > 0)
+            {
+				weapon.transform.SetParent(null);
+
+				//Make Rigidbody not kinematic and BoxCollider normal
+				items[--equipIndex] = null;
+				weapon.GetComponent<Rigidbody>().isKinematic = false;
+				weapon.GetComponentInChildren<BoxCollider>().isTrigger = false;
+
+				//Gun carries momentum of player
+				weapon.GetComponent<Rigidbody>().velocity = player.GetComponent<CharacterController>().velocity;
+
+				//AddForce
+				weapon.GetComponent<Rigidbody>().AddForce(fpsCam.forward * dropForwardForce, ForceMode.Impulse);
+				weapon.GetComponent<Rigidbody>().AddForce(fpsCam.up * dropUpwardForce, ForceMode.Impulse);
+
+				float random = Random.Range(-1f, 1f);
+				weapon.GetComponent<Rigidbody>().AddTorque(new Vector3(random, random, random) * 10);
+				//EquiptItem(equipIndex);
+			}
+			
+			
+
+			constraint.data.target = null;
+			rigBuilder.Build();
+			Debug.Log(constraint.data.target);
+			
+		}
+
+		public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        {
+			if (!PV.IsMine && targetPlayer == PV.Owner)
+			{
+				EquiptItem((int)changedProps["itemIndex"]);
+			}
+        }
+        public void TakeDamage(float damage) 
 		{
 			PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);
 		}
 
+		
+		
 		[PunRPC]
+
+		
 		void RPC_TakeDameage(float damage) 
 		{
 			if (!PV.IsMine)
@@ -349,13 +559,14 @@ namespace StarterAssets
 			if (currentHealth <= 0) 
 			{
 				Die();
+
 			}
 			
 		}
 
 		void Die()
         {
-            playerManagers.Die();
+            playerManagers.Die(); 
 		}
 	}
 }
