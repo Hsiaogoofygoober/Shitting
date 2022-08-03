@@ -91,7 +91,8 @@ namespace StarterAssets
 		[SerializeField] Image healthbarImage;
 		[SerializeField] GameObject ui;
 
-
+		public string killer = "";
+		public string victim = "";
 		private void Awake()
 		{
 			// get a reference to our main camera
@@ -329,6 +330,7 @@ namespace StarterAssets
 				SetSensitivity(normalSensitivity);
 			}
 		}
+
 		public void TakeDamage(float damage) 
 		{
 			PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);

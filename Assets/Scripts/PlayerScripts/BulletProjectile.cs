@@ -64,11 +64,12 @@ public class BulletProjectile : MonoBehaviour
 
     void OnTriggerEnterFixed(Collider other)
     {
+        BulletProjectile bullet = gameObject.GetComponent<BulletProjectile>();
         if (other.gameObject.tag == "Player")
         {
-            //other.gameObject.GetComponent<FirstPersonController>().hitmessage
-            BulletProjectile bullet = gameObject.GetComponent<BulletProjectile>();
-            pv.RPC("RPC_SendMessage", RpcTarget.Others, bullet.pv.Owner.NickName, other.gameObject.GetComponent<playerName>().name);
+
+            other.gameObject.GetComponent<FirstPersonController>().killer = bullet.pv.Owner.NickName;
+            //pv.RPC("RPC_SendMessage", RpcTarget.Others, bullet.pv.Owner.NickName, other.gameObject.GetComponent<playerName>().name);
             //CallRpcSendMessageToOthers(pv.GetComponent<playerName>().name, other.gameObject.GetComponent<playerName>().name);
             Debug.Log("·F§A®Q" + other.gameObject.GetComponent<playerName>().name);
         }
@@ -82,12 +83,12 @@ public class BulletProjectile : MonoBehaviour
         Destroy(gameObject);
     }
 
-    [PunRPC]
-    void RPC_SendMessage(string msg1, string msg2, Collider other, PhotonMessageInfo info) 
-    {
-        if (pv.GetComponent<playerName>().name != msg2)
-            return;
+    //[PunRPC]
+    //void RPC_SendMessage(string msg1, string msg2, Collider other, PhotonMessageInfo info) 
+    //{
+    //    if (pv.GetComponent<playerName>().name != msg2)
+    //        return;
         
-        other.GetComponent<FirstPersonController>().killer = msg1;
-    } 
+    //    other.GetComponent<FirstPersonController>().killer = msg1;
+    //} 
 }
