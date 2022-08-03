@@ -1,24 +1,26 @@
-using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class BulletProjectile : MonoBehaviour
 {
     Rigidbody rb;
     float damage = 10;
-    public PhotonView pv;
+    PhotonView PV;
+
     void Start()
 
     {
 
-        rb = GetComponent<Rigidbody>();
-        pv = GetComponent<PhotonView>();
-
+        rb
+            = GetComponent<Rigidbody>();
+        
         StartCoroutine(Predict());
 
     }
     void FixedUpdate()
+
     {
 
         StartCoroutine(Predict());
@@ -54,23 +56,23 @@ public class BulletProjectile : MonoBehaviour
             yield return 0;
 
             OnTriggerEnterFixed(hit2.collider);
+            
+
         }
+
     }
 
     void OnTriggerEnterFixed(Collider other)
+
     {
 
         //if (other.CompareTag("Target"))
-        if (other.gameObject.tag == "Bullet") {
-            BulletProjectile bullet = other.gameObject.GetComponent<BulletProjectile>();
-            Debug.Log(bullet.pv.Owner.NickName);
-        }
-            
+        
         other.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
+        
         Destroy(gameObject);
+
     }
+    
 
-
-    //[PunRPC]
-    //public void
 }

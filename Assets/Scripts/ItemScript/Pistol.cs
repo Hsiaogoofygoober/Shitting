@@ -44,16 +44,22 @@ public class Pistol : Gun
 
     private void Awake()
     {
-        starterAssetsInputs = GetComponentInParent<StarterAssetsInputs>();
-        Debug.Log("Awake");
+        
+       
+     
+        //fpsCam = FindParentWithTag(gameObject, "MainCamera").GetComponent<Camera>();
         //make sure magazine is full
         bulletsLeft = magazineSize;
         readyToShoot = true;
     }
+
+    
+
     public override void Use()
     {
+        fpsCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         MyInput();
-
+        
         //Set ammo display, if it exists :D
         if (ammunitionDisplay != null)
             ammunitionDisplay.SetText("ammo left: \n" + bulletsLeft / bulletsPerTap + " / " + magazineSize / bulletsPerTap);
@@ -62,7 +68,7 @@ public class Pistol : Gun
     private void MyInput()
     {
         //Check if allowed to hold down button and take corresponding input
-
+        starterAssetsInputs = GetComponentInParent<StarterAssetsInputs>();
         shooting = starterAssetsInputs.shoot;
 
 
