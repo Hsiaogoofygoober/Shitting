@@ -7,15 +7,15 @@ public class BulletProjectile : MonoBehaviour
 {
     Rigidbody rb;
     float damage = 10;
-    PhotonView PV;
+    PhotonView pv;
 
     void Start()
 
     {
 
-        rb
-            = GetComponent<Rigidbody>();
-        
+        rb = GetComponent<Rigidbody>();
+        pv = GetComponent<PhotonView>();
+
         StartCoroutine(Predict());
 
     }
@@ -65,7 +65,8 @@ public class BulletProjectile : MonoBehaviour
     void OnTriggerEnterFixed(Collider other)
 
     {
-
+        if (other.gameObject.tag == "Bullet")
+            Debug.Log(other.gameObject);
         //if (other.CompareTag("Target"))
         
         other.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
