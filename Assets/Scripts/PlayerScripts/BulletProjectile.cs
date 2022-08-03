@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using StarterAssets;
 
 public class BulletProjectile : MonoBehaviour
 {
     Rigidbody rb;
     float damage = 10;
     PhotonView pv;
-
     void Start()
 
     {
@@ -63,17 +63,31 @@ public class BulletProjectile : MonoBehaviour
     }
 
     void OnTriggerEnterFixed(Collider other)
-
     {
-        if (other.gameObject.tag == "Bullet")
-            Debug.Log(other.gameObject);
+        if (other.gameObject.tag == "Player")
+        {
+            //other.gameObject.GetComponent<FirstPersonController>().hitmessage
+            BulletProjectile bullet = gameObject.GetComponent<BulletProjectile>();
+            pv.RPC("RPC_SendMessage", RpcTarget.Others, bullet.pv.Owner.NickName, other.gameObject.GetComponent<playerName>().name);
+            //CallRpcSendMessageToOthers(pv.GetComponent<playerName>().name, other.gameObject.GetComponent<playerName>().name);
+            Debug.Log("·F§A®Q" + other.gameObject.GetComponent<playerName>().name);
+        }
+
         //if (other.CompareTag("Target"))
+
         
+        //Debug.Log(bullet.pv.Owner.NickName);
         other.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
         
         Destroy(gameObject);
-
     }
-    
 
+    [PunRPC]
+    void RPC_SendMessage(string msg1, string msg2, Collider other, PhotonMessageInfo info) 
+    {
+        if (pv.GetComponent<playerName>().name != msg2)
+            return;
+        
+        other.GetComponent<FirstPersonController>().killer = msg1;
+    } 
 }

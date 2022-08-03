@@ -128,6 +128,9 @@ namespace StarterAssets
 		public InputActionReference PickUpRef;
 		public InputActionReference DropDownRef;
 
+		public string killer = "";
+		public string victim = "";
+
 		private void Awake()
 		{
 			// get a reference to our main camera
@@ -540,10 +543,9 @@ namespace StarterAssets
 
 			if (currentHealth <= 0) 
 			{
+				Debug.Log(killer + " 殺了妳!!!");
 				Die();
-
 			}
-			
 		}
 
 		void Die()
