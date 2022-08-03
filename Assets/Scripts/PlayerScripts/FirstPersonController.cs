@@ -108,6 +108,7 @@ namespace StarterAssets
 
 		public InputActionReference action_view;
 		private float scrolling_value;
+		private string gotHit = "";
 
 		private void Awake()
 		{
@@ -404,6 +405,8 @@ namespace StarterAssets
 				EquiptItem((int)changedProps["itemIndex"]);
 			}
         }
+
+
         public void TakeDamage(float damage) 
 		{
 			PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);
@@ -419,8 +422,16 @@ namespace StarterAssets
 			currentHealth -= damage;
 			healthbarImage.fillAmount = currentHealth / maxHealth;
 
+			
+			//BulletProjectile bullet = gameObject.GetComponent<BulletProjectile>();
+			//if (!bullet.pv.IsMine)
+			//{
+			//	gotHit.Replace(gotHit, bullet.pv.Owner.NickName);
+			//}                                                      
+
 			if (currentHealth <= 0) 
 			{
+				//Debug.Log("去你嗎 " + gotHit);
 				Die();
 			}
 			

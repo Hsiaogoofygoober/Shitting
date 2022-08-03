@@ -10,8 +10,6 @@ public class PlayerManagers : MonoBehaviour
 
 	GameObject controller;
 
-	CheckWinner CW;
-
 	void Awake()
 	{
 		PV = GetComponent<PhotonView>();
