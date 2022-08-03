@@ -306,6 +306,7 @@ MonoBehaviour:
   CinemachineCameraTarget: {fileID: 9003827619895006816}
   TopClamp: 90
   BottomClamp: -90
+  killer: 
   gun: {fileID: 0}
   playerFollowCamera: {fileID: 4327787885690698274}
   aimVirtualCamera: {fileID: 4327787885862135951}

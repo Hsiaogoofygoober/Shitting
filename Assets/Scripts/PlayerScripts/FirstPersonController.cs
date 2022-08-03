@@ -62,6 +62,8 @@ namespace StarterAssets
 		[Tooltip("How far in degrees can you move the camera down")]
 		public float BottomClamp = -90.0f;
 
+		public string killer = "";
+
 		PhotonView PV;
 
 		PlayerManagers playerManagers;
@@ -121,7 +123,7 @@ namespace StarterAssets
 		private bool isHoldingWeapon;
 		public float pickUpRange;
 		public float dropForwardForce, dropUpwardForce;
-
+		private int equipIndex = 0;
 		public bool equipped;
 		public static bool slotFull;
 		
@@ -195,7 +197,7 @@ namespace StarterAssets
 				_animator.SetFloat("Speed", 0);
 			}
 
-            if (scrolling_value < 0)
+            if (scrolling_value < 0 && items[0] != null && items[1] != null)
             {
 				if (itemIndex >= items.Length - 1) 
 				{
@@ -402,7 +404,7 @@ namespace StarterAssets
 			itemIndex = _index;
 			items[itemIndex].itemGameObject.SetActive(true);
 
-			if (previousItemIndex != -1) 
+			if (previousItemIndex != -1 && items[0] != null && items[1] != null) 
 			{
 				items[previousItemIndex].itemGameObject.SetActive(false);			
 			}
@@ -468,14 +470,21 @@ namespace StarterAssets
 			}
 			//Make Rigidbody kinematic and BoxCollider a trigger
 
-			weapon.GetComponent<Rigidbody>().isKinematic = true;
-			weapon.GetComponentInChildren<BoxCollider>().isTrigger = true;
-			weapon.transform.SetParent(itemHolder);
-			weapon.transform.localPosition = Vector3.zero;
-			weapon.transform.localRotation = Quaternion.Euler(Vector3.zero);
-			weapon.transform.localScale = Vector3.one;
-			items[0] = weapon.GetComponent<Item>();
-
+			
+            if (equipIndex < 2)
+            {
+				weapon.GetComponent<Rigidbody>().isKinematic = true;
+				weapon.GetComponentInChildren<BoxCollider>().isTrigger = true;
+				weapon.transform.SetParent(itemHolder);
+				weapon.transform.localPosition = Vector3.zero;
+				weapon.transform.localRotation = Quaternion.Euler(Vector3.zero);
+				weapon.transform.localScale = Vector3.one;
+				items[equipIndex++] = weapon.GetComponent<Item>();
+				//EquiptItem(equipIndex);
+			}
+            
+			
+			
 			constraint.data.target = GameObject.FindWithTag("weaponHold").transform;
 			rigBuilder.Build();
 			Debug.Log(constraint.data.target);
@@ -490,34 +499,35 @@ namespace StarterAssets
 			equipped = false;
 			slotFull = false;
 			isHoldingWeapon = false;
-			//Set parent to null
-			weapon.transform.SetParent(null);
+            //Set parent to null
+
+            if (equipIndex > 0)
+            {
+				weapon.transform.SetParent(null);
+
+				//Make Rigidbody not kinematic and BoxCollider normal
+				items[--equipIndex] = null;
+				weapon.GetComponent<Rigidbody>().isKinematic = false;
+				weapon.GetComponentInChildren<BoxCollider>().isTrigger = false;
+
+				//Gun carries momentum of player
+				weapon.GetComponent<Rigidbody>().velocity = player.GetComponent<CharacterController>().velocity;
+
+				//AddForce
+				weapon.GetComponent<Rigidbody>().AddForce(fpsCam.forward * dropForwardForce, ForceMode.Impulse);
+				weapon.GetComponent<Rigidbody>().AddForce(fpsCam.up * dropUpwardForce, ForceMode.Impulse);
+
+				float random = Random.Range(-1f, 1f);
+				weapon.GetComponent<Rigidbody>().AddTorque(new Vector3(random, random, random) * 10);
+				//EquiptItem(equipIndex);
+			}
 			
-
-			//Make Rigidbody not kinematic and BoxCollider normal
-			items[0] = null;
-			weapon.GetComponent<Rigidbody>().isKinematic = false;
-			weapon.GetComponentInChildren<BoxCollider>().isTrigger = false;
-
-			//Gun carries momentum of player
-			weapon.GetComponent<Rigidbody>().velocity = player.GetComponent<CharacterController>().velocity;
-			//rb.velocity = player.GetComponent<Rigidbody>().velocity;
-
-			//AddForce
-			weapon.GetComponent<Rigidbody>().AddForce(fpsCam.forward * dropForwardForce, ForceMode.Impulse);
-			weapon.GetComponent<Rigidbody>().AddForce(fpsCam.up * dropUpwardForce, ForceMode.Impulse);
-			//gunRb.AddForce(fpsCam.forward * dropForwardForce, ForceMode.Impulse);
-			//gunRb.AddForce(fpsCam.up * dropUpwardForce, ForceMode.Impulse);
-			//Add random rotation
-			float random = Random.Range(-1f, 1f);
-			weapon.GetComponent<Rigidbody>().AddTorque(new Vector3(random, random, random) * 10);
-			//gunRb.AddTorque(new Vector3(random, random, random) * 10);
+			
 
 			constraint.data.target = null;
 			rigBuilder.Build();
 			Debug.Log(constraint.data.target);
-			//Disable script
-			//gunScript.enabled = false;
+			
 		}
 
 		public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using StarterAssets;
 
 public class BulletProjectile : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class BulletProjectile : MonoBehaviour
 
         rb
             = GetComponent<Rigidbody>();
-        
+
         StartCoroutine(Predict());
 
     }
@@ -56,7 +57,7 @@ public class BulletProjectile : MonoBehaviour
             yield return 0;
 
             OnTriggerEnterFixed(hit2.collider);
-            
+
 
         }
 
@@ -67,12 +68,21 @@ public class BulletProjectile : MonoBehaviour
     {
 
         //if (other.CompareTag("Target"))
+        if (other.CompareTag("Player"))
+        {
+            other.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
+            BulletProjectile bullet = gameObject.GetComponent<BulletProjectile>();
+            other.gameObject.GetComponent<FirstPersonController>().killer = bullet.PV.Owner.NickName;
+            Debug.Log(bullet.PV.Owner.NickName);
+        }
         
-        other.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
-        
+
         Destroy(gameObject);
 
+
     }
+
+    
     
 
 }
