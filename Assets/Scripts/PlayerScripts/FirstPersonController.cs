@@ -446,6 +446,14 @@ namespace StarterAssets
 				Drop(weapon);
 			}
 
+			/*if (PV.IsMine)
+			{
+				Hashtable hash = new Hashtable();
+				hash.Add("itemIndex", itemIndex);
+				PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+				Debug.Log(hash);
+			}*/
+
 		} 
 
 		private void PickUp(GameObject weapon)
@@ -523,8 +531,12 @@ namespace StarterAssets
 		{
 			PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);
 		}
+
+		
 		
 		[PunRPC]
+
+		
 		void RPC_TakeDameage(float damage) 
 		{
 			if (!PV.IsMine)
