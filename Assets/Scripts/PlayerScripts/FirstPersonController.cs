@@ -592,32 +592,26 @@ namespace StarterAssets
             PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);
         }
 
+		
+		
+		[PunRPC]
+		void RPC_TakeDameage(float damage) 
+		{
+			if (!PV.IsMine)
+				return;
+			
+			
+			currentHealth -= damage;
+			healthbarImage.fillAmount = currentHealth / maxHealth;
 
-
-        [PunRPC]
-
-        void RPC_SychronizeWeapon()
-        {
-            if (PV.IsMine)
-                return;
-
-        }
-        void RPC_TakeDameage(float damage)
-        {
-            if (!PV.IsMine)
-                return;
-
-
-            currentHealth -= damage;
-            healthbarImage.fillAmount = currentHealth / maxHealth;
-
-            if (currentHealth <= 0)
-            {
-                Die();
-
-            }
-
-        }
+			if (currentHealth <= 0) 
+			{
+				Debug.Log(killer + "殺了你!!!");
+				PlayerPrefs.SetString("killer", killer);
+				Die();
+			}
+			
+		}
 
         void Die()
         {
