@@ -221,10 +221,10 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
-			if (PhotonNetwork.CurrentRoom.PlayerCount == 1) 
-			{
-				playerManagers.Win();
-			}
+			//if (PhotonNetwork.CurrentRoom.PlayerCount == 1) 
+			//{
+			//	playerManagers.Win();
+			//}
 		}
 
 		private void LateUpdate()
