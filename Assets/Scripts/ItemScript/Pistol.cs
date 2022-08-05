@@ -38,25 +38,29 @@ public class Pistol : Gun
     //public GameObject muzzleFlash;
     public TextMeshProUGUI ammunitionDisplay;
 
+    PhotonView PV;
 
     //bug fixing :D
     public bool allowInvoke = true;
 
     private void Awake()
     {
-        
-       
-     
+
+
+        PV = GetComponent<PhotonView>();
         //fpsCam = FindParentWithTag(gameObject, "MainCamera").GetComponent<Camera>();
         //make sure magazine is full
         bulletsLeft = magazineSize;
         readyToShoot = true;
+        Debug.Log("gun id: " + PV.ViewID);
     }
 
     
 
     public override void Use()
     {
+        
+
         fpsCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         MyInput();
         

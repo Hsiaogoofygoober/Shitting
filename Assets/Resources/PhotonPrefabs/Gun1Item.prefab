@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 5187140097689536525}
   - component: {fileID: 2432864543948721024}
   - component: {fileID: 8494345477526159515}
-  - component: {fileID: 2681806194419717881}
-  - component: {fileID: 8167239172248797387}
+  - component: {fileID: 3589209487295581900}
+  - component: {fileID: 1124322659053000480}
   m_Layer: 8
   m_Name: Gun1Item
   m_TagString: weapon
@@ -81,7 +81,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &2681806194419717881
+--- !u!114 &3589209487295581900
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,14 +97,14 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 8167239172248797387}
+  - {fileID: 1124322659053000480}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &8167239172248797387
+--- !u!114 &1124322659053000480
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

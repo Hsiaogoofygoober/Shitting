@@ -81,7 +81,7 @@
                     "name": "Pick",
                     "type": "PassThrough",
                     "id": "5aa69d60-807a-4194-ab1f-1660b3ac10a5",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -90,7 +90,7 @@
                     "name": "Drop",
                     "type": "PassThrough",
                     "id": "e319825b-038e-451f-9780-f0cac75a6e0e",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false

@@ -9,11 +9,12 @@ public class BulletProjectile : MonoBehaviour
     Rigidbody rb;
     float damage = 10;
     PhotonView PV;
+    BulletProjectile bullet;
 
     void Start()
 
     {
-
+        bullet = gameObject.GetComponent<BulletProjectile>();
         rb
             = GetComponent<Rigidbody>();
 
@@ -71,7 +72,7 @@ public class BulletProjectile : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
-            BulletProjectile bullet = gameObject.GetComponent<BulletProjectile>();
+            
             other.gameObject.GetComponent<FirstPersonController>().killer = bullet.PV.Owner.NickName;
             Debug.Log(bullet.PV.Owner.NickName);
         }
