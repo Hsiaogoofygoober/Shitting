@@ -9,16 +9,16 @@ public class BulletProjectile : MonoBehaviour
     Rigidbody rb;
     float damage = 10;
     PhotonView PV;
+    BulletProjectile bullet;
+    int ownerID;
 
     void Start()
-
     {
-
-        rb
-            = GetComponent<Rigidbody>();
+        rb = this.gameObject.GetComponent<Rigidbody>();
+        PV = this.gameObject.GetComponent<PhotonView>();
+        bullet = gameObject.GetComponent<BulletProjectile>();
 
         StartCoroutine(Predict());
-
     }
     void FixedUpdate()
 
@@ -26,7 +26,6 @@ public class BulletProjectile : MonoBehaviour
 
         StartCoroutine(Predict());
         Destroy(gameObject, 3);
-
     }
 
     IEnumerator Predict()
@@ -57,32 +56,23 @@ public class BulletProjectile : MonoBehaviour
             yield return 0;
 
             OnTriggerEnterFixed(hit2.collider);
-
-
         }
-
     }
 
     void OnTriggerEnterFixed(Collider other)
 
     {
-
         //if (other.CompareTag("Target"))
         if (other.CompareTag("Player"))
         {
             other.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
-            BulletProjectile bullet = gameObject.GetComponent<BulletProjectile>();
             other.gameObject.GetComponent<FirstPersonController>().killer = bullet.PV.Owner.NickName;
-            Debug.Log(bullet.PV.Owner.NickName);
+            if (bullet.PV.Owner.NickName == "") 
+            {
+                Debug.Log("幹你娘耖機掰");
+            }
+            Debug.Log(bullet.PV.Owner.NickName + "是開槍的");
         }
-        
-
         Destroy(gameObject);
-
-
     }
-
-    
-    
-
 }

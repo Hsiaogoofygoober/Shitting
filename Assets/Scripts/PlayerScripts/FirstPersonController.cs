@@ -221,7 +221,10 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
-			//Aimming();
+			//if (PhotonNetwork.CurrentRoom.PlayerCount == 1) 
+			//{
+			//	playerManagers.Win();
+			//}
 		}
 
 		private void LateUpdate()
@@ -545,8 +548,6 @@ namespace StarterAssets
 		
 		
 		[PunRPC]
-
-		
 		void RPC_TakeDameage(float damage) 
 		{
 			if (!PV.IsMine)
@@ -558,8 +559,9 @@ namespace StarterAssets
 
 			if (currentHealth <= 0) 
 			{
+				Debug.Log(killer + "殺了你!!!");
+				PlayerPrefs.SetString("killer", killer);
 				Die();
-
 			}
 			
 		}
