@@ -130,6 +130,7 @@ namespace StarterAssets
 		public InputActionReference PickUpRef;
 		public InputActionReference DropDownRef;
 
+
 		private void Awake()
 		{
 			// get a reference to our main camera
@@ -235,7 +236,7 @@ namespace StarterAssets
 			}
 			CameraRotation();
 		}
-     
+		
 		private void ControllShoot() 
 		{
 
