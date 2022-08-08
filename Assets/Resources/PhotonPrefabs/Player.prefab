@@ -600,6 +600,7 @@ MonoBehaviour:
   TopClamp: 90
   BottomClamp: -90
   killer: 
+  PV: {fileID: 0}
   gun: {fileID: 0}
   playerFollowCamera: {fileID: 4327787885690698274}
   aimVirtualCamera: {fileID: 4327787885862135951}
@@ -616,13 +617,15 @@ MonoBehaviour:
   gunColl: {fileID: 0}
   player: {fileID: 4128057159008449921}
   fpsCam: {fileID: 5014336599036692602}
-  itemHolder: {fileID: 0}
+  itemHolder: {fileID: 6005335672077323142}
   gunItem: {fileID: 0}
   playerCam: {fileID: 5014336599036692605}
   pickUpRange: 10
   dropForwardForce: 1
   dropUpwardForce: 2
   equipped: 0
+  canPick: 1
+  canDrop: 1
   PickUpRef: {fileID: -6722303360145565273, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
   DropDownRef: {fileID: 6889210387038372656, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
   Mybag: {fileID: 2424158859462253342}
@@ -782,7 +785,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
   - {fileID: 7005641293260207849}

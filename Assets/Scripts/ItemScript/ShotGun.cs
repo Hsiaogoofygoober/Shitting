@@ -52,15 +52,18 @@ public class ShotGun : Gun
 
     private void Awake()
     {
-        starterAssetsInputs = GetComponentInParent<StarterAssetsInputs>();
-        Debug.Log("Awake");
+        
+        
         //make sure magazine is full
         bulletsLeft = magazineSize;
         readyToShoot = true;
     }
     public override void Use()
     {
-        Aimming();
+        fpsCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        starterAssetsInputs = GetComponentInParent<StarterAssetsInputs>();
+        aimVirtualCamera = gameObject.GetComponentInParent<CinemachineVirtualCamera>();
+        //Aimming();
         MyInput();
 
         //Set ammo display, if it exists :D
