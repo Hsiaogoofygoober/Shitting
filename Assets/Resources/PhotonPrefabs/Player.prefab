@@ -324,7 +324,7 @@ MonoBehaviour:
   gunColl: {fileID: 0}
   player: {fileID: 4128057159008449921}
   fpsCam: {fileID: 5014336599036692602}
-  itemHolder: {fileID: 0}
+  itemHolder: {fileID: 6005335672077323142}
   gunItem: {fileID: 0}
   playerCam: {fileID: 5014336599036692605}
   pickUpRange: 10

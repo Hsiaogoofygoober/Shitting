@@ -124,7 +124,6 @@ namespace StarterAssets
         private bool isHoldingWeapon;
         public float pickUpRange;
         public float dropForwardForce, dropUpwardForce;
-        private int equipIndex = 0;
         public bool equipped;
         public static bool slotFull;
         public bool canPick = true;
@@ -142,6 +141,7 @@ namespace StarterAssets
             PV = GetComponent<PhotonView>();
             //Debug.Log(GameObject.FindWithTag("MainCamera").transform);
             playerManagers = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManagers>();
+            fpsCam = _mainCamera.transform;
             Debug.Log("player owner : " + PV.Owner);
             action_view.action.performed += _x => scrolling_value = _x.action.ReadValue<float>();
             isHoldingWeapon = false;
@@ -159,7 +159,7 @@ namespace StarterAssets
                 }
 
                 rigBuilder.Build();
-                itemHolder = GameObject.FindWithTag("ItemHolder").transform;
+                //itemHolder = GameObject.FindWithTag("ItemHolder").transform;
             }
             else
             {
@@ -169,7 +169,7 @@ namespace StarterAssets
                 Destroy(ui);
             }
 
-            
+
 
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
@@ -182,7 +182,7 @@ namespace StarterAssets
 
         private void Update()
         {
-            
+
             if (!PV.IsMine)
             {
                 return;
@@ -205,11 +205,13 @@ namespace StarterAssets
             {
                 if (itemIndex >= items.Length - 1)
                 {
-                    EquiptItem(0,weapon);
+                    EquiptItem(0);
+                    Debug.Log("equip 0");
                 }
                 else
                 {
-                    EquiptItem(itemIndex + 1,weapon);
+                    EquiptItem(itemIndex + 1);
+                    Debug.Log("equip 1");
                 }
 
 
@@ -397,47 +399,65 @@ namespace StarterAssets
         }
 
 
-        private void EquiptItem(int _index, GameObject weapon)
+        private void EquiptItem(int _index,int weaponID)
         {
 
 
-            if (PV.IsMine)
+            GameObject weapon = PhotonView.Find(weaponID).gameObject;
+            
+            itemIndex = _index;
+            weapon.transform.SetParent(itemHolder);
+            weapon.transform.localPosition = Vector3.zero;
+            weapon.transform.localRotation = Quaternion.Euler(Vector3.zero);
+            weapon.transform.localScale = Vector3.one;
+            weapon.GetComponent<Rigidbody>().isKinematic = true;
+            weapon.GetComponentInChildren<BoxCollider>().enabled = false;
+           
+            items[itemIndex] = weapon.GetComponent<Item>();
+            equipped = true;
+
+            
+            items[itemIndex].itemGameObject.SetActive(true);
+
+            if (previousItemIndex != -1)
             {
-                itemIndex = _index;
-                weapon.GetComponent<Rigidbody>().isKinematic = true;
-                weapon.GetComponentInChildren<BoxCollider>().enabled = false;
-                weapon.transform.SetParent(itemHolder);
-                items[itemIndex] = weapon.GetComponent<Item>();
-
-                weapon.transform.localPosition = Vector3.zero;
-                weapon.transform.localRotation = Quaternion.Euler(Vector3.zero);
-                weapon.transform.localScale = Vector3.one;
-                items[itemIndex].itemGameObject.SetActive(true);
-
-                if (previousItemIndex != -1 && items[0] != null && items[1] != null)
-                {
-
-                    items[previousItemIndex].itemGameObject.SetActive(false);
-                }
-
-                previousItemIndex = itemIndex;
-
+                items[previousItemIndex].itemGameObject.SetActive(false);
                 
+            }
+            constraint.data.target = items[itemIndex].GetComponentInChildren<BoxCollider>().transform;
+            rigBuilder.Build();
+            previousItemIndex = itemIndex;
 
-                constraint.data.target = items[itemIndex].GetComponentInChildren<BoxCollider>().transform;
 
-                rigBuilder.Build();
-                Hashtable hash = new Hashtable();
-                hash.Add("itemIndex", itemIndex);
-                hash.Add("weapon", weapon.GetPhotonView().ViewID);
-               
-                Debug.Log(PhotonView.Find(weapon.GetPhotonView().ViewID));
-                Debug.Log(PhotonView.Find(gameObject.GetPhotonView().ViewID));
-                Debug.Log(hash);
-                PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
+        }
+
+        private void EquiptItem(int _index)
+        {
+
+            itemIndex = _index;
+            
+            items[itemIndex].itemGameObject.SetActive(true);
+
+            if (previousItemIndex != -1 && items[previousItemIndex] != null)
+            {
+
+                items[previousItemIndex].itemGameObject.SetActive(false);
             }
 
+            previousItemIndex = itemIndex;
 
+            constraint.data.target = items[itemIndex].GetComponentInChildren<BoxCollider>().transform;
+
+            rigBuilder.Build();
+            if (PV.IsMine)
+            {
+                Hashtable hash = new Hashtable();
+                hash.Add("itemIndex", itemIndex);
+                Debug.Log(hash);
+                PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+                
+            }
 
         }
 
@@ -446,10 +466,18 @@ namespace StarterAssets
             Ray ray = playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //Just a ray through the middle of your current view
             RaycastHit hit;
 
-
-            if (_input.pick && canPick)
+            if(items[0] != null && items[1] != null)
             {
-                
+                slotFull = true;
+            }
+            else
+            {
+                slotFull=false;
+            }
+
+            if (_input.pick && canPick && !slotFull)
+            {
+
                 Debug.Log("hit E");
                 if (Physics.Raycast(ray, out hit))
                 {
@@ -460,9 +488,11 @@ namespace StarterAssets
                         canPick = false;
                         Debug.Log("is weapon");
                         weapon = hit.rigidbody.gameObject;
-                        PickUp(weapon);
+                        //TakeDamage(10);
+                        PickWeapon(weapon.GetComponent<PhotonView>().ViewID);
+                        //PickUp(weapon);
                         Invoke("readyToPick", 0.1f);
-                        
+
                         Debug.Log("pick");
                     }
 
@@ -473,7 +503,7 @@ namespace StarterAssets
             {
                 canDrop = false;
                 Debug.Log("drop");
-                Drop(items[itemIndex].gameObject);
+                DropWeapon(itemIndex);
                 Invoke("readyToDrop", 1f);
             }
 
@@ -495,51 +525,45 @@ namespace StarterAssets
             canDrop = true;
         }
 
-        private void PickUp(GameObject weapon)
+
+        /*public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
         {
-            equipped = true;
-            slotFull = true;
-
-
-            //Make weapon a child of the camera and move it to default position
-            if (PV.IsMine)
+            if (!PV.IsMine && targetPlayer == PV.Owner)
             {
-                itemHolder = GameObject.Find("ItemHolder").transform;
-            }
-            //Make Rigidbody kinematic and BoxCollider a trigger
-
-
-
-
-            //canPick = true;
-            if (items[0] == null)
-            {
-                
-                EquiptItem(0, weapon);
-                
-            }
-            else if (items[1] == null)
-            {
-                
-                EquiptItem(1, weapon);
+                Debug.Log((int)changedProps["weapon"]);
+                Debug.Log(PhotonView.Find((int)changedProps["weapon"]));
+                EquiptItem((int)changedProps["itemIndex"],0);
 
             }
+        }*/
+        public void TakeDamage(float damage)
+        {
+            PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);
+        }
+        public void PickWeapon(int weaponID)
+        {
+            PV.RPC("RPC_PickWeapon", RpcTarget.All, weaponID);
         }
 
-        private void Drop(GameObject weapon)
+        public void DropWeapon(int itemIndex)
+        {
+            PV.RPC("RPC_DropWeapon", RpcTarget.All, itemIndex);
+        }
+
+        
+        [PunRPC]
+
+        void RPC_DropWeapon(int itemIndex)
         {
             equipped = false;
             slotFull = false;
             //Set parent to null
-
+            GameObject weapon = items[itemIndex].gameObject;
 
             items[itemIndex] = null;
             weapon.transform.SetParent(null);
 
             //Make Rigidbody not kinematic and BoxCollider normal
-
-
-
             weapon.GetComponent<Rigidbody>().isKinematic = false;
             weapon.GetComponentInChildren<BoxCollider>().enabled = true;
 
@@ -553,16 +577,21 @@ namespace StarterAssets
             float random = Random.Range(-1f, 1f);
             weapon.GetComponent<Rigidbody>().AddTorque(new Vector3(random, random, random) * 10);
             Debug.Log("here");
-
+            previousItemIndex = -1;
             Debug.Log("drop" + itemIndex);
-
+            
             if (itemIndex == 0 && items[1] != null)
             {
-                EquiptItem(1,weapon);
+                EquiptItem(1);
+                constraint.data.target = items[1].GetComponentInChildren<BoxCollider>().transform;
+                rigBuilder.Build();
             }
             else if (itemIndex == 1 && items[0] != null)
             {
-                EquiptItem(0,weapon);
+                
+                EquiptItem(0);
+                constraint.data.target = items[0].GetComponentInChildren<BoxCollider>().transform;
+                rigBuilder.Build();
             }
             else if (items[0] == null && items[1] == null)
             {
@@ -570,48 +599,55 @@ namespace StarterAssets
                 rigBuilder.Build();
                 Debug.Log(constraint.data.target);
             }
-
-
-
-
-
         }
 
-        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        [PunRPC]
+
+        void RPC_PickWeapon(int weaponID)
         {
-            if (!PV.IsMine && targetPlayer == PV.Owner)
+            if (PV.IsMine)
             {
-                Debug.Log((int)changedProps["weapon"]);
-                Debug.Log(PhotonView.Find((int)changedProps["weapon"]));
-                EquiptItem((int)changedProps["itemIndex"],PhotonView.Find((int)changedProps["weapon"]).gameObject);
-                
+                PhotonView.Find(weaponID).RequestOwnership();
+                Debug.Log("change owership");
             }
+            equipped = true;
+            
+            //itemHolder = GameObject.Find("ItemHolder").transform;
+            if (items[0] == null)
+            {
+                
+                EquiptItem(0, weaponID);
+                
+
+            }
+            else if (items[1] == null)
+            {
+
+                EquiptItem(1,weaponID);
+
+            }
+            
+            //weapon.GetPhotonView().RequestOwnership();
+
         }
-        public void TakeDamage(float damage)
+
+        [PunRPC]
+        void RPC_TakeDameage(float damage)
         {
-            PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);
+            if (!PV.IsMine)
+                return;
+
+            currentHealth -= damage;
+            healthbarImage.fillAmount = currentHealth / maxHealth;
+
+            if (currentHealth <= 0)
+            {
+                Debug.Log(killer + "殺了你!!!");
+                PlayerPrefs.SetString("killer", killer);
+                Die();
+            }
+
         }
-
-		
-		
-		[PunRPC]
-		void RPC_TakeDameage(float damage) 
-		{
-			if (!PV.IsMine)
-				return;
-			
-			
-			currentHealth -= damage;
-			healthbarImage.fillAmount = currentHealth / maxHealth;
-
-			if (currentHealth <= 0) 
-			{
-				Debug.Log(killer + "殺了你!!!");
-				PlayerPrefs.SetString("killer", killer);
-				Die();
-			}
-			
-		}
 
         void Die()
         {
