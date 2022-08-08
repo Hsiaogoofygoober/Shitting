@@ -6,7 +6,7 @@ public class BagControll : MonoBehaviour
 {
     [SerializeField]
     public GameObject mybag;
-    bool isOpen = false;
+    bool isOpen;
 
     void Update()
     {

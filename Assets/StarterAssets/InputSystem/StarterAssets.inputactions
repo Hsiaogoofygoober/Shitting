@@ -94,6 +94,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Openbag",
+                    "type": "PassThrough",
+                    "id": "6ebc41e6-d582-4347-a899-5e077bb3bcd6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press,Tap",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -369,6 +378,17 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "Drop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "eb47ec60-efdd-43eb-8108-d7b11d58f5fe",
+                    "path": "<Keyboard>/#(Z)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Openbag",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

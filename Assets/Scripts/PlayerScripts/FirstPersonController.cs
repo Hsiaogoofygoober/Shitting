@@ -130,6 +130,8 @@ namespace StarterAssets
 		public InputActionReference PickUpRef;
 		public InputActionReference DropDownRef;
 
+        [SerializeField]
+		public GameObject Mybag;
 
 		private void Awake()
 		{
@@ -213,10 +215,10 @@ namespace StarterAssets
 					constraint.data.target = GameObject.FindWithTag("weaponHold").transform;
 					rigBuilder.Build();
 					Debug.Log(constraint.data.target);
-				}
-				
-				
+				}	
 			}
+
+			Mybag.SetActive(_input.openbag);
 			ControllPickAndDrop();
 			ControllShoot();
 			JumpAndGravity();
@@ -227,6 +229,7 @@ namespace StarterAssets
 			//	playerManagers.Win();
 			//}
 		}
+
 
 		private void LateUpdate()
 		{
