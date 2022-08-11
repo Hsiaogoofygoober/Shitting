@@ -131,6 +131,9 @@ namespace StarterAssets
         public InputActionReference PickUpRef;
         public InputActionReference DropDownRef;
 
+        [SerializeField]
+        public GameObject Mybag;
+
         private void Awake()
         {
             // get a reference to our main camera
@@ -213,10 +216,8 @@ namespace StarterAssets
                     EquiptItem(itemIndex + 1);
                     Debug.Log("equip 1");
                 }
-
-
-
             }
+            Mybag.SetActive(_input.openbag);
             ControllPickAndDrop();
             ControllShoot();
             JumpAndGravity();
