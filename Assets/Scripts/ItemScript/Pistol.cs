@@ -62,6 +62,7 @@ public class Pistol : Gun
         
 
         fpsCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        
         MyInput();
         
         //Set ammo display, if it exists :D
@@ -73,9 +74,12 @@ public class Pistol : Gun
     {
         //Check if allowed to hold down button and take corresponding input
         starterAssetsInputs = GetComponentInParent<StarterAssetsInputs>();
-        shooting = starterAssetsInputs.shoot;
+        shooting = starterAssetsInputs.shootpertap;
 
-
+        if (starterAssetsInputs.shootpertap)
+        {
+            Debug.Log("tap");
+        }
         //Reloading 
         if (starterAssetsInputs.reload && bulletsLeft < magazineSize && !reloading) Reload();
         //Reload automatically when trying to shoot without ammo
@@ -124,14 +128,16 @@ public class Pistol : Gun
         //Add forces to bullet
         if (starterAssetsInputs.aim)
         {
-            currentBullet.GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
+            ShootWithoutSpread(currentBullet.GetPhotonView().ViewID, directionWithoutSpread);
+            //currentBullet.GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
         }
         else
         {
-            currentBullet.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
+            ShootWithSpread(currentBullet.GetPhotonView().ViewID, directionWithSpread);
+            //currentBullet.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
         }
 
-        currentBullet.GetComponent<Rigidbody>().AddForce(fpsCam.transform.up * upwardForce, ForceMode.Impulse);
+        //currentBullet.GetComponent<Rigidbody>().AddForce(fpsCam.transform.up * upwardForce, ForceMode.Impulse);
 
         //Instantiate muzzle flash, if you have one
         //if (muzzleFlash != null)
@@ -172,5 +178,29 @@ public class Pistol : Gun
         //Fill magazine
         bulletsLeft = magazineSize;
         reloading = false;
+    }
+    private void ShootWithoutSpread(int BulletID, Vector3 directionWithoutSpread)
+    {
+        PV.RPC("RPC_ShootWithoutSpread", RpcTarget.All, BulletID, directionWithoutSpread);
+    }
+    private void ShootWithSpread(int BulletID, Vector3 directionWithSpread)
+    {
+        PV.RPC("RPC_ShootWithoutSpread", RpcTarget.All, BulletID, directionWithSpread);
+    }
+
+    [PunRPC]
+
+    void RPC_ShootWithoutSpread(int BulletID, Vector3 directionWithoutSpread) 
+    {
+        Debug.Log("shoot " + BulletID);
+        PhotonView.Find(BulletID).GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
+    }
+
+    [PunRPC]
+
+    void RPC_ShootWithSpread(int BulletID, Vector3 directionWithSpread)
+    {
+        Debug.Log("shoot " + BulletID);
+        PhotonView.Find(BulletID).GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
     }
 }

@@ -341,6 +341,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 7279651425455901620, guid: 98650fe591900074ea487df1f1fa7609, type: 3}
+      propertyPath: sceneViewId
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 7592741461929652851, guid: 98650fe591900074ea487df1f1fa7609, type: 3}
       propertyPath: m_Name
       value: Gun2Item
@@ -1644,6 +1648,10 @@ PrefabInstance:
       propertyPath: sceneViewId
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2681806194419717881, guid: c74ecb3259c502b429f8752a5857ed00, type: 3}
+      propertyPath: ObservedComponents.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4945597679207230686, guid: c74ecb3259c502b429f8752a5857ed00, type: 3}
       propertyPath: m_IsKinematic
       value: 1
@@ -2204,7 +2212,7 @@ Transform:
   - {fileID: 115325124}
   - {fileID: 2040489912}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1713081348
 MonoBehaviour:

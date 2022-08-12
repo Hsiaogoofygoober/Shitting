@@ -94,6 +94,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Shootpertap",
+                    "type": "PassThrough",
+                    "id": "31f7da1b-80e9-40dd-beec-d04b64eed6ee",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -369,6 +378,17 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "Drop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9f7034d8-da49-4aae-a2b5-fa4e87b7c20f",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "SlowTap",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Shootpertap",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

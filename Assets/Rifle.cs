@@ -1,15 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using Cinemachine;
 using Photon.Pun;
 using System.IO;
 using StarterAssets;
 using UnityEngine;
 using TMPro;
 
-public class ShotGun : Gun
+public class Rifle : Gun
 {
-    private const int shotgun = 5;
     private StarterAssetsInputs starterAssetsInputs;
     //bullet 
     public GameObject bullet;
@@ -45,26 +43,25 @@ public class ShotGun : Gun
     //bug fixing :D
     public bool allowInvoke = true;
 
-    // aimming
-    [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
-    [SerializeField] private float normalSensitivity;
-    [SerializeField] private float aimSensitivity;
-    public float Sensitivity = 1f;
-
     private void Awake()
     {
-        
-        
+
+
+        PV = GetComponent<PhotonView>();
+        //fpsCam = FindParentWithTag(gameObject, "MainCamera").GetComponent<Camera>();
         //make sure magazine is full
         bulletsLeft = magazineSize;
         readyToShoot = true;
+        Debug.Log("gun id: " + PV.ViewID);
     }
+
+
+
     public override void Use()
     {
+
+
         fpsCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        starterAssetsInputs = GetComponentInParent<StarterAssetsInputs>();
-        aimVirtualCamera = gameObject.GetComponentInParent<CinemachineVirtualCamera>();
-        //Aimming();
         MyInput();
 
         //Set ammo display, if it exists :D
@@ -72,28 +69,10 @@ public class ShotGun : Gun
             ammunitionDisplay.SetText("ammo left: \n" + bulletsLeft / bulletsPerTap + " / " + magazineSize / bulletsPerTap);
 
     }
-    public void SetSensitivity(float newSensitivity)
-    {
-        Sensitivity = newSensitivity;
-
-    }
-    private void Aimming()
-    {
-        if (starterAssetsInputs.aim)
-        {
-            aimVirtualCamera.gameObject.SetActive(true);
-            SetSensitivity(normalSensitivity * aimSensitivity);
-        }
-        else
-        {
-            aimVirtualCamera.gameObject.SetActive(false);
-            SetSensitivity(normalSensitivity);
-        }
-    }
     private void MyInput()
     {
         //Check if allowed to hold down button and take corresponding input
-
+        starterAssetsInputs = GetComponentInParent<StarterAssetsInputs>();
         shooting = starterAssetsInputs.shoot;
 
 
@@ -131,61 +110,30 @@ public class ShotGun : Gun
         Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
 
         //Calculate spread
-        
+        float x = Random.Range(-spread, spread);
+        float y = Random.Range(-spread, spread);
 
         //Calculate new direction with spread
-        Vector3[] directionWithSpread = new Vector3[shotgun];
-        for(int i = 0; i < shotgun; i++) 
-        {
-            float x = Random.Range(-spread, spread);
-            float y = Random.Range(-spread, spread);
-            directionWithSpread[i] = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last direction
-        }
-
-        Vector3[] directionWithlittleSpread = new Vector3[shotgun];
-        for (int i = 0; i < shotgun; i++)
-        {
-            float x = Random.Range(-spread/2, spread/2);
-            float y = Random.Range(-spread/2, spread/2);
-            directionWithlittleSpread[i] = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last direction
-        }
-
+        Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last direction
 
         //Instantiate bullet/projectile
-        GameObject[] currentBullet = new  GameObject[shotgun];
-        
-        for(int i = 0; i < shotgun; i++) 
-        {
-            currentBullet[i] = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bullet.name), attackPoint.position, Quaternion.identity); //store instantiated bullet in currentBullet
-            Debug.Log("ammo");                                                                                                                        //Rotate bullet to shoot direction
-            currentBullet[i].transform.forward = directionWithSpread[i].normalized;
-        }
-       
+        GameObject currentBullet = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bullet.name), attackPoint.position, Quaternion.identity); //store instantiated bullet in currentBullet
+        //Rotate bullet to shoot direction
+        currentBullet.transform.forward = directionWithSpread.normalized;
 
         //Add forces to bullet
         if (starterAssetsInputs.aim)
         {
-            for (int i = 0; i < shotgun; i++)
-            {
-                ShootWithoutSpread(currentBullet[i].GetPhotonView().ViewID, directionWithoutSpread);
-                //currentBullet[i].GetComponent<Rigidbody>().AddForce(directionWithlittleSpread[i].normalized * shootForce, ForceMode.Impulse);
-            }
-            
+            ShootWithoutSpread(currentBullet.GetPhotonView().ViewID, directionWithoutSpread);
+            //currentBullet.GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
         }
         else
         {
-            for(int i = 0; i < shotgun; i++) 
-            {
-                ShootWithSpread(currentBullet[i].GetPhotonView().ViewID, directionWithSpread[i]);
-                //currentBullet[i].GetComponent<Rigidbody>().AddForce(directionWithSpread[i].normalized * shootForce, ForceMode.Impulse);
-                //Debug.Log("shoot");
-            }
+            ShootWithSpread(currentBullet.GetPhotonView().ViewID, directionWithSpread);
+            //currentBullet.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
         }
-        for (int i = 0; i < shotgun; i++)
-        {
-            currentBullet[i].GetComponent<Rigidbody>().AddForce(fpsCam.transform.up * upwardForce, ForceMode.Impulse);
-        }
-        
+
+        //currentBullet.GetComponent<Rigidbody>().AddForce(fpsCam.transform.up * upwardForce, ForceMode.Impulse);
 
         //Instantiate muzzle flash, if you have one
         //if (muzzleFlash != null)
@@ -235,6 +183,7 @@ public class ShotGun : Gun
     {
         PV.RPC("RPC_ShootWithoutSpread", RpcTarget.All, BulletID, directionWithSpread);
     }
+
     [PunRPC]
 
     void RPC_ShootWithoutSpread(int BulletID, Vector3 directionWithoutSpread)

@@ -309,6 +309,7 @@ MonoBehaviour:
   killer: 
   PV: {fileID: 0}
   gun: {fileID: 0}
+  currentHealth: 100
   playerFollowCamera: {fileID: 4327787885690698274}
   aimVirtualCamera: {fileID: 4327787885862135951}
   normalSensitivity: 0.5
@@ -373,6 +374,7 @@ MonoBehaviour:
   reload: 0
   pick: 0
   drop: 0
+  shootpertap: 0
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
@@ -1452,7 +1454,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8762286023885395322, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.08102295
+      value: 0.2700183
       objectReference: {fileID: 0}
     - target: {fileID: 8762286023885395322, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: m_LocalPosition.y
