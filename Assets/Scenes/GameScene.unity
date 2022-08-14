@@ -1748,7 +1748,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b488ad22c507316459c2c882ec61edd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisTool: {fileID: 11400000, guid: 0109a3220b106be419ab0cfd738f8a4c, type: 2}
+  thisTool: {fileID: 11400000, guid: fecafcc513c5b804c9c71e1d362b1286, type: 2}
   playerInventary: {fileID: 11400000, guid: 4c5473caa39f24a49af34a99fc8bf05b, type: 2}
 --- !u!114 &1047123228
 MonoBehaviour:

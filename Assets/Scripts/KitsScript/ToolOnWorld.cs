@@ -29,7 +29,5 @@ public class ToolOnWorld : MonoBehaviour
             }
         }
         InventoryManager.RefreshTool();
-        //playerInventary.toolList.Add(thisTool);
-        //InventoryManager.CreateNewTool(thisTool);
     }
 }
