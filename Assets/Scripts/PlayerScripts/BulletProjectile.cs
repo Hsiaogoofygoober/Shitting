@@ -7,7 +7,7 @@ using StarterAssets;
 public class BulletProjectile : MonoBehaviour
 {
     Rigidbody rb;
-    float damage = 10;
+    public float damage;
     PhotonView PV;
     BulletProjectile bullet;
     int ownerID;
@@ -74,5 +74,6 @@ public class BulletProjectile : MonoBehaviour
             Debug.Log(bullet.PV.Owner.NickName + "¬O¶}ºjªº");
         }
         Destroy(gameObject);
+        Debug.Log("should destroy");
     }
 }

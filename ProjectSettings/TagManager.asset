@@ -9,6 +9,9 @@ TagManager:
   - weapon
   - ItemHolder
   - test
+  - Aim
+  - weaponMessage
+  - SniperAim
   layers:
   - Default
   - TransparentFX

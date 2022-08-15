@@ -1,19 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using Photon.Pun;
 using System.IO;
 using StarterAssets;
 using UnityEngine;
-using Cinemachine;
 using TMPro;
 
-public class Rifle : Gun
+public class Sniper : Gun
 {
     private StarterAssetsInputs starterAssetsInputs;
     //bullet 
     public GameObject bullet;
 
-    //public float damage = 10;
     //bullet force
     public float shootForce, upwardForce;
 
@@ -30,7 +29,6 @@ public class Rifle : Gun
 
     //bools
     bool shooting, readyToShoot, reloading;
-
     //Reference
     public Camera fpsCam;
     public Transform attackPoint;
@@ -55,11 +53,12 @@ public class Rifle : Gun
 
 
         PV = GetComponent<PhotonView>();
-        //fpsCam = FindParentWithTag(gameObject, "MainCamera").GetComponent<Camera>();
+
         //make sure magazine is full
         bulletsLeft = magazineSize;
         readyToShoot = true;
-        Debug.Log("gun id: " + PV.ViewID);
+        //Debug.Log("gun id: " + PV.ViewID);
+
     }
 
 
@@ -67,22 +66,23 @@ public class Rifle : Gun
     public override void Use()
     {
 
-
+        
         if (fpsCam == null)
         {
             fpsCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
         }
         if (aimVirtualCamera == null)
         {
-            aimVirtualCamera = GameObject.FindWithTag("Aim");
+            aimVirtualCamera = GameObject.FindWithTag("SniperAim");
         }
         if (starterAssetsInputs == null)
         {
             starterAssetsInputs = GetComponentInParent<StarterAssetsInputs>();
         }
 
-        MyInput();
         Aimming();
+        MyInput();
+
         //Set ammo display, if it exists :D
         if (ammunitionDisplay == null)
         {
@@ -94,6 +94,7 @@ public class Rifle : Gun
         }
 
     }
+
     public void SetSensitivity(float newSensitivity)
     {
         Sensitivity = newSensitivity;
@@ -115,9 +116,12 @@ public class Rifle : Gun
     private void MyInput()
     {
         //Check if allowed to hold down button and take corresponding input
-        shooting = starterAssetsInputs.shoot;
+        shooting = starterAssetsInputs.shootpertap;
 
-
+        if (starterAssetsInputs.shootpertap)
+        {
+            Debug.Log("tap");
+        }
         //Reloading 
         if (starterAssetsInputs.reload && bulletsLeft < magazineSize && !reloading) Reload();
         //Reload automatically when trying to shoot without ammo
@@ -130,6 +134,7 @@ public class Rifle : Gun
             bulletsShot = 0;
 
             Shoot();
+
         }
     }
 
@@ -230,7 +235,7 @@ public class Rifle : Gun
 
     void RPC_ShootWithoutSpread(int BulletID, Vector3 directionWithoutSpread)
     {
-        Debug.Log("shoot " + BulletID);
+        //Debug.Log("shoot " + BulletID);
         PhotonView.Find(BulletID).GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
     }
 
@@ -238,7 +243,7 @@ public class Rifle : Gun
 
     void RPC_ShootWithSpread(int BulletID, Vector3 directionWithSpread)
     {
-        Debug.Log("shoot " + BulletID);
+        //Debug.Log("shoot " + BulletID);
         PhotonView.Find(BulletID).GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
     }
 }

@@ -385,7 +385,7 @@
                     "name": "",
                     "id": "9f7034d8-da49-4aae-a2b5-fa4e87b7c20f",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "SlowTap",
+                    "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "Shootpertap",

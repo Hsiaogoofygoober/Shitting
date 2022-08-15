@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using Photon.Pun;
 using System.IO;
 using StarterAssets;
@@ -29,7 +30,6 @@ public class Pistol : Gun
 
     //bools
     bool shooting, readyToShoot, reloading;
-
     //Reference
     public Camera fpsCam;
     public Transform attackPoint;
@@ -43,16 +43,23 @@ public class Pistol : Gun
     //bug fixing :D
     public bool allowInvoke = true;
 
+    // aimming
+    [SerializeField] private GameObject aimVirtualCamera;
+    [SerializeField] private float normalSensitivity;
+    [SerializeField] private float aimSensitivity;
+    public float Sensitivity = 1f;
+
     private void Awake()
     {
 
 
         PV = GetComponent<PhotonView>();
-        //fpsCam = FindParentWithTag(gameObject, "MainCamera").GetComponent<Camera>();
+        
         //make sure magazine is full
         bulletsLeft = magazineSize;
         readyToShoot = true;
         Debug.Log("gun id: " + PV.ViewID);
+        
     }
 
     
@@ -61,19 +68,55 @@ public class Pistol : Gun
     {
         
 
-        fpsCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        if(fpsCam == null)
+        {
+            fpsCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        }
+        if(aimVirtualCamera == null)
+        {
+            aimVirtualCamera = GameObject.FindWithTag("Aim");
+        }
+        if(starterAssetsInputs == null)
+        {
+            starterAssetsInputs = GetComponentInParent<StarterAssetsInputs>();
+        }
         
+        Aimming();
         MyInput();
-        
-        //Set ammo display, if it exists :D
-        if (ammunitionDisplay != null)
-            ammunitionDisplay.SetText("ammo left: \n" + bulletsLeft / bulletsPerTap + " / " + magazineSize / bulletsPerTap);
 
+        //Set ammo display, if it exists :D
+        if (ammunitionDisplay == null)
+        {
+            ammunitionDisplay = GameObject.FindWithTag("weaponMessage").GetComponent<TextMeshProUGUI>();
+        }
+        else
+        {
+            ammunitionDisplay.SetText("ammo left: \n" + bulletsLeft / bulletsPerTap + " / " + magazineSize / bulletsPerTap);
+        }
+
+    }
+
+    public void SetSensitivity(float newSensitivity)
+    {
+        Sensitivity = newSensitivity;
+
+    }
+    private void Aimming()
+    {
+        if (starterAssetsInputs.aim)
+        {
+            aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 20;
+            SetSensitivity(normalSensitivity * aimSensitivity);
+        }
+        else
+        {
+            aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 5;
+            SetSensitivity(normalSensitivity);
+        }
     }
     private void MyInput()
     {
         //Check if allowed to hold down button and take corresponding input
-        starterAssetsInputs = GetComponentInParent<StarterAssetsInputs>();
         shooting = starterAssetsInputs.shootpertap;
 
         if (starterAssetsInputs.shootpertap)
@@ -92,6 +135,7 @@ public class Pistol : Gun
             bulletsShot = 0;
 
             Shoot();
+            
         }
     }
 

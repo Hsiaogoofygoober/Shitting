@@ -9,7 +9,6 @@ using TMPro;
 
 public class ShotGun : Gun
 {
-    private const int shotgun = 5;
     private StarterAssetsInputs starterAssetsInputs;
     //bullet 
     public GameObject bullet;
@@ -22,6 +21,7 @@ public class ShotGun : Gun
     public float timeBetweenShooting, spread, reloadTime, timeBetweenShots;
     public int magazineSize, bulletsPerTap;
     public bool allowButtonHold;
+    public int ShotgunBulletPerTap;
 
     int bulletsLeft, bulletsShot;
 
@@ -46,30 +46,47 @@ public class ShotGun : Gun
     public bool allowInvoke = true;
 
     // aimming
-    [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
+    [SerializeField] private GameObject aimVirtualCamera;
     [SerializeField] private float normalSensitivity;
     [SerializeField] private float aimSensitivity;
     public float Sensitivity = 1f;
 
     private void Awake()
     {
-        
-        
+
+        PV = GetComponent<PhotonView>();
         //make sure magazine is full
         bulletsLeft = magazineSize;
         readyToShoot = true;
     }
     public override void Use()
-    {
-        fpsCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
-        starterAssetsInputs = GetComponentInParent<StarterAssetsInputs>();
-        aimVirtualCamera = gameObject.GetComponentInParent<CinemachineVirtualCamera>();
-        //Aimming();
+    { 
+        if (fpsCam == null)
+        {
+            fpsCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        }
+        if (aimVirtualCamera == null)
+        {
+            aimVirtualCamera = GameObject.FindWithTag("Aim");
+        }
+        if (starterAssetsInputs == null)
+        {
+            starterAssetsInputs = GetComponentInParent<StarterAssetsInputs>();
+        }
+
+        Aimming();
         MyInput();
 
         //Set ammo display, if it exists :D
-        if (ammunitionDisplay != null)
+        if(ammunitionDisplay == null)
+        {
+            ammunitionDisplay = GameObject.FindWithTag("weaponMessage").GetComponent<TextMeshProUGUI>();
+        }
+        else
+        {
             ammunitionDisplay.SetText("ammo left: \n" + bulletsLeft / bulletsPerTap + " / " + magazineSize / bulletsPerTap);
+        }
+            
 
     }
     public void SetSensitivity(float newSensitivity)
@@ -81,12 +98,12 @@ public class ShotGun : Gun
     {
         if (starterAssetsInputs.aim)
         {
-            aimVirtualCamera.gameObject.SetActive(true);
+            aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 20;
             SetSensitivity(normalSensitivity * aimSensitivity);
         }
         else
         {
-            aimVirtualCamera.gameObject.SetActive(false);
+            aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 5;
             SetSensitivity(normalSensitivity);
         }
     }
@@ -134,16 +151,16 @@ public class ShotGun : Gun
         
 
         //Calculate new direction with spread
-        Vector3[] directionWithSpread = new Vector3[shotgun];
-        for(int i = 0; i < shotgun; i++) 
+        Vector3[] directionWithSpread = new Vector3[ShotgunBulletPerTap];
+        for(int i = 0; i < ShotgunBulletPerTap; i++) 
         {
-            float x = Random.Range(-spread, spread);
+            float x = Random.Range(-2*spread, 2*spread);
             float y = Random.Range(-spread, spread);
             directionWithSpread[i] = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last direction
         }
 
-        Vector3[] directionWithlittleSpread = new Vector3[shotgun];
-        for (int i = 0; i < shotgun; i++)
+        Vector3[] directionWithlittleSpread = new Vector3[ShotgunBulletPerTap];
+        for (int i = 0; i < ShotgunBulletPerTap; i++)
         {
             float x = Random.Range(-spread/2, spread/2);
             float y = Random.Range(-spread/2, spread/2);
@@ -152,39 +169,40 @@ public class ShotGun : Gun
 
 
         //Instantiate bullet/projectile
-        GameObject[] currentBullet = new  GameObject[shotgun];
+        GameObject[] currentBullet = new  GameObject[ShotgunBulletPerTap];
         
-        for(int i = 0; i < shotgun; i++) 
+        for(int i = 0; i < ShotgunBulletPerTap; i++) 
         {
             currentBullet[i] = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bullet.name), attackPoint.position, Quaternion.identity); //store instantiated bullet in currentBullet
-            Debug.Log("ammo");                                                                                                                        //Rotate bullet to shoot direction
+            Debug.Log(currentBullet[i].GetComponent<PhotonView>().ViewID);                                                                                                                        //Rotate bullet to shoot direction
             currentBullet[i].transform.forward = directionWithSpread[i].normalized;
         }
-       
 
+        int[] bulletID = new int[ShotgunBulletPerTap];
         //Add forces to bullet
         if (starterAssetsInputs.aim)
         {
-            for (int i = 0; i < shotgun; i++)
+            for (int i = 0; i < ShotgunBulletPerTap; i++)
             {
-                ShootWithoutSpread(currentBullet[i].GetPhotonView().ViewID, directionWithoutSpread);
-                //currentBullet[i].GetComponent<Rigidbody>().AddForce(directionWithlittleSpread[i].normalized * shootForce, ForceMode.Impulse);
+                bulletID[i] = currentBullet[i].GetPhotonView().ViewID;
             }
+            ShootRPC(bulletID, directionWithlittleSpread);
             
+
         }
         else
         {
-            for(int i = 0; i < shotgun; i++) 
+            
+            for (int i = 0; i < ShotgunBulletPerTap; i++)
             {
-                ShootWithSpread(currentBullet[i].GetPhotonView().ViewID, directionWithSpread[i]);
-                //currentBullet[i].GetComponent<Rigidbody>().AddForce(directionWithSpread[i].normalized * shootForce, ForceMode.Impulse);
-                //Debug.Log("shoot");
+                bulletID[i] = currentBullet[i].GetPhotonView().ViewID;
             }
+            ShootRPC(bulletID, directionWithSpread);
         }
-        for (int i = 0; i < shotgun; i++)
+        /*for (int i = 0; i < ShotgunBulletPerTap; i++)
         {
             currentBullet[i].GetComponent<Rigidbody>().AddForce(fpsCam.transform.up * upwardForce, ForceMode.Impulse);
-        }
+        }*/
         
 
         //Instantiate muzzle flash, if you have one
@@ -227,27 +245,24 @@ public class ShotGun : Gun
         bulletsLeft = magazineSize;
         reloading = false;
     }
-    private void ShootWithoutSpread(int BulletID, Vector3 directionWithoutSpread)
+    private void ShootRPC(int[] BulletID, Vector3[] directionWithSpread)
     {
-        PV.RPC("RPC_ShootWithoutSpread", RpcTarget.All, BulletID, directionWithoutSpread);
+        Debug.Log(BulletID + ", " + directionWithSpread);
+        PV.RPC("RPC_Shoot", RpcTarget.All, BulletID, directionWithSpread);
     }
-    private void ShootWithSpread(int BulletID, Vector3 directionWithSpread)
-    {
-        PV.RPC("RPC_ShootWithoutSpread", RpcTarget.All, BulletID, directionWithSpread);
-    }
-    [PunRPC]
-
-    void RPC_ShootWithoutSpread(int BulletID, Vector3 directionWithoutSpread)
-    {
-        Debug.Log("shoot " + BulletID);
-        PhotonView.Find(BulletID).GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
-    }
+ 
 
     [PunRPC]
 
-    void RPC_ShootWithSpread(int BulletID, Vector3 directionWithSpread)
+    void RPC_Shoot(int[] BulletID, Vector3[] directionWithSpread)
     {
-        Debug.Log("shoot " + BulletID);
-        PhotonView.Find(BulletID).GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
+        Debug.Log("Shoot!!!!!");
+        for (int i = 0; i < BulletID.Length; i++)
+        {
+            
+            Debug.Log("shoot " + BulletID);
+            PhotonView.Find(BulletID[i]).GetComponent<Rigidbody>().AddForce(directionWithSpread[i].normalized * shootForce, ForceMode.Impulse);
+        }
+        
     }
 }
