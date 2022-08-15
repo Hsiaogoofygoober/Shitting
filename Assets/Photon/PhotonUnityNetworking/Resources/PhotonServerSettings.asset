@@ -45,6 +45,7 @@ MonoBehaviour:
   - RPC_DropWeapon
   - RPC_ShootWithoutSpread
   - RPC_ShootWithSpread
+  - RPC_Shoot
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

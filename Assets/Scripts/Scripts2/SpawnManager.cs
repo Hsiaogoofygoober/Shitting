@@ -42,7 +42,7 @@ public class SpawnManager : MonoBehaviour
         pos.y += 502;
         spawnpoints[index].transform.position = pos;
         Transform spawnpoint = spawnpoints[index].transform;
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ShotgunItem"), spawnpoint.position, spawnpoint.rotation, 0, new object[] { pv.ViewID });
+        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "SniperItem"), spawnpoint.position, spawnpoint.rotation, 0, new object[] { pv.ViewID });
     }
 
     public Spawnpoint[] GetSpawnpoint()

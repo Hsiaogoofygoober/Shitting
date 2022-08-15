@@ -117,9 +117,9 @@ public class Pistol : Gun
     private void MyInput()
     {
         //Check if allowed to hold down button and take corresponding input
-        shooting = starterAssetsInputs.shootpertap;
+        shooting = starterAssetsInputs.shoot;
 
-        if (starterAssetsInputs.shootpertap)
+        if (starterAssetsInputs.shoot)
         {
             Debug.Log("tap");
         }

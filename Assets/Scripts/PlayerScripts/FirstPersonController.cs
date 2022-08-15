@@ -218,11 +218,15 @@ namespace StarterAssets
                 }
             }
             Mybag.SetActive(_input.openbag);
-            if (_input.openbag) 
+            if (_input.openbag)
             {
                 Cursor.visible = true;
                 Screen.lockCursor = false;
             }
+            else 
+            {
+                Cursor.visible = false;
+            }           
             ControllPickAndDrop();
             ControllShoot();
             JumpAndGravity();
