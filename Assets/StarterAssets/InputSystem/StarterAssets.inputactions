@@ -96,12 +96,12 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Shootpertap",
+                    "name": "Openbag",
                     "type": "PassThrough",
-                    "id": "31f7da1b-80e9-40dd-beec-d04b64eed6ee",
-                    "expectedControlType": "",
+                    "id": "6ebc41e6-d582-4347-a899-5e077bb3bcd6",
+                    "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press,Tap",
                     "initialStateCheck": false
                 }
             ],
@@ -383,12 +383,12 @@
                 },
                 {
                     "name": "",
-                    "id": "9f7034d8-da49-4aae-a2b5-fa4e87b7c20f",
-                    "path": "<Mouse>/leftButton",
+                    "id": "eb47ec60-efdd-43eb-8108-d7b11d58f5fe",
+                    "path": "<Keyboard>/#(Z)",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
-                    "action": "Shootpertap",
+                    "action": "Openbag",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

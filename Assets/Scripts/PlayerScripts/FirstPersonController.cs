@@ -131,6 +131,8 @@ namespace StarterAssets
         public InputActionReference PickUpRef;
         public InputActionReference DropDownRef;
 
+        [SerializeField]
+        public GameObject Mybag;
 
         private void Awake()
         {
@@ -214,10 +216,17 @@ namespace StarterAssets
                     EquiptItem(itemIndex + 1);
                     Debug.Log("equip 1");
                 }
-
-
-
             }
+            Mybag.SetActive(_input.openbag);
+            if (_input.openbag)
+            {
+                Cursor.visible = true;
+                Screen.lockCursor = false;
+            }
+            else 
+            {
+                Cursor.visible = false;
+            }           
             ControllPickAndDrop();
             ControllShoot();
             JumpAndGravity();
