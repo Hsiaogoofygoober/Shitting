@@ -24,14 +24,15 @@ public class SpawnManager : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("一共有 " + spawnpoints.Length + " 個重生點");
         int count = 0;
-        for (int i = 0; i < 20; i++) 
-        {
-            count++;
-            CreateGun(i);
+        if (PhotonNetwork.IsMasterClient) { 
+            Debug.Log("一共有 " + spawnpoints.Length + " 個重生點");    
+            for (int i = 0; i < 20; i++)
+            {
+                count++;
+                CreateGun(i);
+            }
         }
-
         Debug.Log("一共產生 " + count + " 把槍");
     }
 
@@ -41,7 +42,7 @@ public class SpawnManager : MonoBehaviour
         pos.y += 502;
         spawnpoints[index].transform.position = pos;
         Transform spawnpoint = spawnpoints[index].transform;
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "ShotgunItem"), spawnpoint.position, spawnpoint.rotation, 0, new object[] { pv.ViewID });
+        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "SniperItem"), spawnpoint.position, spawnpoint.rotation, 0, new object[] { pv.ViewID });
     }
 
     public Spawnpoint[] GetSpawnpoint()

@@ -17,7 +17,7 @@ namespace StarterAssets
 		public bool reload;
 		public bool pick;
 		public bool drop;
-		public bool shootpertap;
+		public bool openbag;
 
 
 		[Header("Movement Settings")]
@@ -72,10 +72,12 @@ namespace StarterAssets
 		{
 			DropInput(value.isPressed);
 		}
-		public void OnShootpertap(InputValue value)
+
+		public void OnOpenbag(InputValue value)
 		{
-			ShootpertapInput(value.isPressed);
+			Openbag(value.isPressed);
 		}
+
 #else
 	// old input sys if we do decide to have it (most likely wont)...
 #endif
@@ -120,9 +122,10 @@ namespace StarterAssets
 		{
 			drop = newDropState;
 		}
-		public void ShootpertapInput(bool newShootpertapState)
+
+		public void Openbag(bool newOpenbag) 
 		{
-			shootpertap = newShootpertapState;
+			openbag = newOpenbag;
 		}
 
 

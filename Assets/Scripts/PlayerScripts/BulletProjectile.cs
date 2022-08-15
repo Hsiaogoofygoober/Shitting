@@ -59,7 +59,9 @@ public class BulletProjectile : MonoBehaviour
         }
     }
 
-    void OnTriggerEnterFixed(Collider other)
+    void OnTriggerEnterFixed
+        
+        (Collider other)
 
     {
         //if (other.CompareTag("Target"))
