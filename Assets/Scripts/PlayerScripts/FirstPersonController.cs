@@ -78,7 +78,7 @@ namespace StarterAssets
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
         const float maxHealth = 100f;
-        float currentHealth = maxHealth;
+        public float currentHealth = maxHealth;
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
