@@ -509,12 +509,12 @@ namespace StarterAssets
                 }
 
             }
-            else if (_input.drop && canDrop)
+            else if (_input.drop && canDrop && items[itemIndex])
             {
                 canDrop = false;
                 Debug.Log("drop");
                 DropWeapon(itemIndex);
-                Invoke("readyToDrop", 1f);
+                Invoke("readyToDrop", 0.5f);
             }
 
             /*if (PV.IsMine)

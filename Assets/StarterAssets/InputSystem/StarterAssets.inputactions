@@ -384,7 +384,7 @@
                 {
                     "name": "",
                     "id": "eb47ec60-efdd-43eb-8108-d7b11d58f5fe",
-                    "path": "<Keyboard>/#(Z)",
+                    "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardMouse",
