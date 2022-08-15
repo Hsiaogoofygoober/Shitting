@@ -15,7 +15,7 @@ MonoBehaviour:
   toolList:
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 0109a3220b106be419ab0cfd738f8a4c, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
