@@ -8,6 +8,8 @@ using Photon.Pun;
 using UnityEngine.UI;
 using Photon.Realtime;
 using System.IO;
+using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 
@@ -25,6 +27,8 @@ namespace StarterAssets
 #endif
     public class FirstPersonController : MonoBehaviourPunCallbacks, IDamageable
     {
+        //public static FirstPersonController instance;
+
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 4.0f;
@@ -133,12 +137,18 @@ namespace StarterAssets
         public InputActionReference PickUpRef;
         public InputActionReference DropDownRef;
 
+        public List<Tool> toolList = new List<Tool>(18);
+
         [SerializeField]
         public GameObject Mybag;
 
 
         private void Awake()
         {
+            //if (instance != null)
+            //    Destroy(this);
+            //instance = this;
+
             // get a reference to our main camera
             if (_mainCamera == null)
             {
@@ -151,6 +161,7 @@ namespace StarterAssets
             Debug.Log("player owner : " + PV.Owner);
             action_view.action.performed += _x => scrolling_value = _x.action.ReadValue<float>();
             isHoldingWeapon = false;
+            toolList[17] = null;
         }
 
         private void Start()
@@ -172,8 +183,8 @@ namespace StarterAssets
                 Destroy(GetComponentInChildren<Camera>().gameObject);
                 Destroy(playerFollowCamera);
                 Destroy(aimVirtualCamera);
-                Destroy(ui);
-                //ui.SetActive(false);
+                //Destroy(ui);
+                ui.SetActive(false);
             }
 
 
@@ -233,15 +244,21 @@ namespace StarterAssets
                 {
                     Cursor.visible = false;
                 }
+
+                if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+                {
+                    PlayerPrefs.SetInt("Status", 1);
+                    SceneManager.LoadScene("Finish");
+                }
                 ControllPickAndDrop();
                 ControllShoot();
                 JumpAndGravity();
                 GroundedCheck();
                 Move();
+                //InventoryManager.RefreshTool();
+                //Aimming();
             }
-
         }
-
         private void LateUpdate()
         {
             if (!PV.IsMine)
