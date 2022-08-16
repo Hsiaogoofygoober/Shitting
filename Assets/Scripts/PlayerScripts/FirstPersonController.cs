@@ -137,10 +137,12 @@ namespace StarterAssets
         public InputActionReference PickUpRef;
         public InputActionReference DropDownRef;
 
-        public List<Tool> toolList = new List<Tool>(18);
+        //public List<Tool> toolList = new List<Tool>(18);
 
         [SerializeField]
         public GameObject Mybag;
+
+        public Player[] other;
 
 
         private void Awake()
@@ -161,7 +163,7 @@ namespace StarterAssets
             Debug.Log("player owner : " + PV.Owner);
             action_view.action.performed += _x => scrolling_value = _x.action.ReadValue<float>();
             isHoldingWeapon = false;
-            toolList[17] = null;
+            //toolList[17] = null;
         }
 
         private void Start()
@@ -247,8 +249,9 @@ namespace StarterAssets
 
                 if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
                 {
-                    PlayerPrefs.SetInt("Status", 1);
-                    SceneManager.LoadScene("Finish");
+                    //PlayerPrefs.SetInt("Status", 1);
+                    //SceneManager.LoadScene("Finish");
+                    playerManagers.Win();
                 }
                 ControllPickAndDrop();
                 ControllShoot();
@@ -482,6 +485,35 @@ namespace StarterAssets
 
             previousItemIndex = itemIndex;
 
+            //constraint.data.target = items[itemIndex].GetComponentInChildren<BoxCollider>().transform;
+
+            //rigBuilder.Build();
+            if (PV.IsMine)
+            {
+                Hashtable hash = new Hashtable();
+                hash.Add("itemIndex", itemIndex);
+                Debug.Log(hash);
+                PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+                
+            }
+
+        }
+
+        private void EquiptItemWhenDrop(int _index)
+        {
+
+            itemIndex = _index;
+
+            items[itemIndex].itemGameObject.SetActive(true);
+
+            if (previousItemIndex != -1 && items[previousItemIndex] != null)
+            {
+
+                items[previousItemIndex].itemGameObject.SetActive(false);
+            }
+
+            previousItemIndex = itemIndex;
+
             constraint.data.target = items[itemIndex].GetComponentInChildren<BoxCollider>().transform;
 
             rigBuilder.Build();
@@ -491,7 +523,7 @@ namespace StarterAssets
                 hash.Add("itemIndex", itemIndex);
                 Debug.Log(hash);
                 PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-                
+
             }
 
         }
@@ -561,16 +593,14 @@ namespace StarterAssets
         }
 
 
-        /*public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
         {
             if (!PV.IsMine && targetPlayer == PV.Owner)
             {
-                Debug.Log((int)changedProps["weapon"]);
-                Debug.Log(PhotonView.Find((int)changedProps["weapon"]));
-                EquiptItem((int)changedProps["itemIndex"],0);
+                EquiptItem((int)changedProps["itemIndex"]);
 
             }
-        }*/
+        }
         public void TakeDamage(float damage)
         {
             PV.RPC("RPC_TakeDameage", RpcTarget.Others, damage);
@@ -685,6 +715,19 @@ namespace StarterAssets
 
         void Die()
         {
+            other = PhotonNetwork.PlayerList;
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                foreach (Player player in other)
+                {
+                    if (player != PhotonNetwork.LocalPlayer)
+                    {
+                        PhotonNetwork.SetMasterClient(player);
+                        break;
+                    }
+                }
+            }
             playerManagers.Die();
         }
     }

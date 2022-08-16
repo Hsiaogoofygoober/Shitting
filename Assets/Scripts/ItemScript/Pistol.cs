@@ -173,8 +173,9 @@ public class Pistol : Gun
         }
         else
         {
-            currentBullet.GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
-            //ShootWithSpread(currentBullet.GetPhotonView().ViewID, directionWithSpread);
+            
+            
+            ShootWithSpread(currentBullet.GetPhotonView().ViewID, directionWithSpread);
             //currentBullet.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
         }
 

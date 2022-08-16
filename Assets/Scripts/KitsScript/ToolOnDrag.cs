@@ -1,4 +1,4 @@
-using StarterAssets;
+/*using StarterAssets;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -88,3 +88,4 @@ public class ToolOnDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     }
 
 }
+*/
