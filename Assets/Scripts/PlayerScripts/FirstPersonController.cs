@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Cinemachine;
 using System.Collections;
+using System.Collections.Generic;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.Animations.Rigging;
 using Photon.Pun;
@@ -9,6 +10,7 @@ using Photon.Realtime;
 using System.IO;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
+
 
 #endif
 
@@ -134,6 +136,7 @@ namespace StarterAssets
         [SerializeField]
         public GameObject Mybag;
 
+
         private void Awake()
         {
             // get a reference to our main camera
@@ -170,6 +173,7 @@ namespace StarterAssets
                 Destroy(playerFollowCamera);
                 Destroy(aimVirtualCamera);
                 Destroy(ui);
+                //ui.SetActive(false);
             }
 
 
@@ -190,49 +194,52 @@ namespace StarterAssets
             {
                 return;
             }
-            if (_input.move != Vector2.zero && !_input.sprint)
-            {
-                _animator.SetFloat("Speed", 0.5f, 0.1f, Time.deltaTime);
-            }
-            else if (_input.sprint && _input.move != Vector2.zero)
-            {
-
-                _animator.SetFloat("Speed", 1.0f, 0.1f, Time.deltaTime);
-            }
             else
             {
-                _animator.SetFloat("Speed", 0);
-            }
-
-            if (scrolling_value < 0 && items[0] != null && items[1] != null)
-            {
-                if (itemIndex >= items.Length - 1)
+                if (_input.move != Vector2.zero && !_input.sprint)
                 {
-                    EquiptItem(0);
-                    Debug.Log("equip 0");
+                    _animator.SetFloat("Speed", 0.5f, 0.1f, Time.deltaTime);
+                }
+                else if (_input.sprint && _input.move != Vector2.zero)
+                {
+
+                    _animator.SetFloat("Speed", 1.0f, 0.1f, Time.deltaTime);
                 }
                 else
                 {
-                    EquiptItem(itemIndex + 1);
-                    Debug.Log("equip 1");
+                    _animator.SetFloat("Speed", 0);
                 }
+
+                if (scrolling_value < 0 && items[0] != null && items[1] != null)
+                {
+                    if (itemIndex >= items.Length - 1)
+                    {
+                        EquiptItem(0);
+                        Debug.Log("equip 0");
+                    }
+                    else
+                    {
+                        EquiptItem(itemIndex + 1);
+                        Debug.Log("equip 1");
+                    }
+                }
+                Mybag.SetActive(_input.openbag);
+                if (_input.openbag)
+                {
+                    Cursor.visible = true;
+                    Screen.lockCursor = false;
+                }
+                else
+                {
+                    Cursor.visible = false;
+                }
+                ControllPickAndDrop();
+                ControllShoot();
+                JumpAndGravity();
+                GroundedCheck();
+                Move();
             }
-            Mybag.SetActive(_input.openbag);
-            if (_input.openbag)
-            {
-                Cursor.visible = true;
-                Screen.lockCursor = false;
-            }
-            else 
-            {
-                Cursor.visible = false;
-            }           
-            ControllPickAndDrop();
-            ControllShoot();
-            JumpAndGravity();
-            GroundedCheck();
-            Move();
-            //Aimming();
+
         }
 
         private void LateUpdate()
@@ -264,6 +271,7 @@ namespace StarterAssets
 
         private void CameraRotation()
         {
+            
             // if there is an input
             if (_input.look.sqrMagnitude >= _threshold)
             {
@@ -548,7 +556,7 @@ namespace StarterAssets
         }*/
         public void TakeDamage(float damage)
         {
-            PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);
+            PV.RPC("RPC_TakeDameage", RpcTarget.Others, damage);
         }
         public void PickWeapon(int weaponID)
         {
@@ -586,7 +594,6 @@ namespace StarterAssets
 
             float random = Random.Range(-1f, 1f);
             weapon.GetComponent<Rigidbody>().AddTorque(new Vector3(random, random, random) * 10);
-            Debug.Log("here");
             previousItemIndex = -1;
             Debug.Log("drop" + itemIndex);
             
@@ -649,7 +656,7 @@ namespace StarterAssets
 
             currentHealth -= damage;
             healthbarImage.fillAmount = currentHealth / maxHealth;
-
+            Debug.Log( "TakeDamage");
             if (currentHealth <= 0)
             {
                 Debug.Log(killer + "殺了你!!!");

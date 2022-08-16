@@ -447,6 +447,7 @@ MonoBehaviour:
   emptySlot: {fileID: 1727963782762424520, guid: ca0f36ed4aa90b94f93456953efeae77, type: 3}
   itemInfo: {fileID: 8832969760634662926}
   slots: []
+  PV: {fileID: 0}
 --- !u!114 &3478831838879910187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -521,7 +522,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.3827392, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -651,6 +652,7 @@ Transform:
   - {fileID: 8645243826457157249}
   - {fileID: 6005335672077323142}
   - {fileID: 7683879013642294002}
+  - {fileID: 5014336597946589214}
   m_Father: {fileID: 1684502989007285838}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1235,8 +1237,8 @@ RectTransform:
   - {fileID: 5014336597632705636}
   - {fileID: 5014336599252029989}
   - {fileID: 5513286040039084200}
-  m_Father: {fileID: 1684502989007285838}
-  m_RootOrder: 1
+  m_Father: {fileID: 4128057159008449921}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1828,7 +1830,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4128057159008449921}
-  - {fileID: 5014336597946589214}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2546,7 +2547,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8762286023885395323, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.7777778
+      value: 1.3827392
       objectReference: {fileID: 0}
     - target: {fileID: 8762286024517199034, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: Damping.x
@@ -2639,7 +2640,7 @@ PrefabInstance:
       objectReference: {fileID: 9003827619895006823}
     - target: {fileID: 8762286023885395323, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.7777778
+      value: 1.3827392
       objectReference: {fileID: 0}
     - target: {fileID: 8762286024517199034, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: Damping.x

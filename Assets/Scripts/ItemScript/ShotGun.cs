@@ -91,7 +91,7 @@ public class ShotGun : Gun
     }
     public void SetSensitivity(float newSensitivity)
     {
-        Sensitivity = newSensitivity;
+        GetComponentInParent<FirstPersonController>().Sensitivity = newSensitivity;
 
     }
     private void Aimming()
@@ -99,7 +99,7 @@ public class ShotGun : Gun
         if (starterAssetsInputs.aim)
         {
             aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 20;
-            SetSensitivity(normalSensitivity * aimSensitivity);
+            SetSensitivity(aimSensitivity);
         }
         else
         {

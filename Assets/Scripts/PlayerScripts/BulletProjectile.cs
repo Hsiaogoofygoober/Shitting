@@ -11,6 +11,7 @@ public class BulletProjectile : MonoBehaviour
     PhotonView PV;
     BulletProjectile bullet;
     int ownerID;
+    bool fixbug = true;
 
     void Start()
     {
@@ -59,21 +60,21 @@ public class BulletProjectile : MonoBehaviour
         }
     }
 
-    void OnTriggerEnterFixed
-        
-        (Collider other)
-
+    void OnTriggerEnterFixed(Collider other)
     {
         //if (other.CompareTag("Target"))
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && fixbug)
         {
+            fixbug = false;
+            Debug.Log("----------shoot-----------");
             other.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
+            Debug.Log("----------takedamage-----------");
             other.gameObject.GetComponent<FirstPersonController>().killer = bullet.PV.Owner.NickName;
             if (bullet.PV.Owner.NickName == "") 
             {
                 Debug.Log("幹你娘耖機掰");
             }
-            Debug.Log(bullet.PV.Owner.NickName + "是開槍的");
+            
         }
         Destroy(gameObject);
         Debug.Log("should destroy");

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -23,26 +24,52 @@ public class InventoryManager : MonoBehaviour
 
     public List<GameObject> slots = new List<GameObject>();
 
+    public PhotonView PV;
+
     private void Awake()
     {
         if (instance != null) 
             Destroy(this);
-        instance = this;
+
+        if (PV == null)
+        {
+            PV = GetComponentInParent<PhotonView>();
+            instance = PV.GetComponentInChildren<InventoryManager>();
+            Debug.Log(instance +" " + PV.ViewID);
+        }
+        
+
+        Debug.Log(instance);
+       
+        
     }
 
     private void OnEnable()
     {
-        RefreshTool();
-        instance.itemInfo.text  = "";
+        
+        if (PV.IsMine)
+        {
+            Debug.Log("123123123");
+            RefreshTool();
+            Debug.Log("1");
+            instance.itemInfo.text = "";
+        }
+
+        
+        
+        
     }
+
+
 
     public static void UpdateToolInfo(string itemDescription) 
     {
         instance.itemInfo.text = itemDescription;
     }
 
-    public static void RefreshTool() 
+    public static void RefreshTool()
     {
+        Debug.Log(instance.slotGrid.transform.childCount);
         for (int i = 0; i < instance.slotGrid.transform.childCount; i++)
         {
             if (instance.slotGrid.transform.childCount == 0)
@@ -57,6 +84,7 @@ public class InventoryManager : MonoBehaviour
             instance.slots[i].transform.SetParent(instance.slotGrid.transform);
             instance.slots[i].GetComponent<Slot>().slotID = i;
             instance.slots[i].GetComponent<Slot>().SetupSlot(instance.myBag.toolList[i]);
+            Debug.Log(instance.slots[i].GetComponent<Slot>().slotID);
         }
     }
 }
