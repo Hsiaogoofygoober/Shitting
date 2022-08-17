@@ -140,6 +140,8 @@ namespace StarterAssets
         [SerializeField]
         public GameObject Mybag;
 
+        public Player[] other;
+
         private void Awake()
         {
             //if (instance != null)
@@ -240,16 +242,17 @@ namespace StarterAssets
                 Cursor.visible = false;
             }
 
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1) 
-            {
-                PlayerPrefs.SetInt("Status", 1);
-                SceneManager.LoadScene("Finish");
-            }
             ControllPickAndDrop();
             ControllShoot();
             JumpAndGravity();
             GroundedCheck();
             Move();
+
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && PhotonNetwork.IsMasterClient)
+            {
+                PlayerPrefs.SetInt("Status", 1);
+                playerManagers.Win();
+            }
             //InventoryManager.RefreshTool();
             //Aimming();
         }
@@ -567,7 +570,7 @@ namespace StarterAssets
         }*/
         public void TakeDamage(float damage)
         {
-            PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);
+            PV.RPC("RPC_TakeDameage", RpcTarget.Others, damage);
         }
         public void PickWeapon(int weaponID)
         {
@@ -680,6 +683,21 @@ namespace StarterAssets
 
         void Die()
         {
+            PlayerPrefs.SetInt("Status", 0);
+
+            other = PhotonNetwork.PlayerList;
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                foreach (Player player in PhotonNetwork.PlayerList) 
+                {
+                    if (player != PhotonNetwork.LocalPlayer) 
+                    {
+                        PhotonNetwork.SetMasterClient(player);
+                        break;
+                    }
+                }          
+            }
             playerManagers.Die();
         }
     }

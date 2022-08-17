@@ -59,9 +59,7 @@ public class BulletProjectile : MonoBehaviour
         }
     }
 
-    void OnTriggerEnterFixed
-        
-        (Collider other)
+    void OnTriggerEnterFixed(Collider other)
 
     {
         //if (other.CompareTag("Target"))
@@ -69,6 +67,7 @@ public class BulletProjectile : MonoBehaviour
         {
             other.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
             other.gameObject.GetComponent<FirstPersonController>().killer = bullet.PV.Owner.NickName;
+            //other.gameObject.GetComponent<FirstPersonController>().other = bullet.PV.Owner.UserId;
             if (bullet.PV.Owner.NickName == "") 
             {
                 Debug.Log("·F§A®QÓf¾÷ÙT");
