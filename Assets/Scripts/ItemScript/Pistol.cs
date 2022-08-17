@@ -47,7 +47,6 @@ public class Pistol : Gun
     [SerializeField] private GameObject aimVirtualCamera;
     [SerializeField] private float normalSensitivity;
     [SerializeField] private float aimSensitivity;
-    public float Sensitivity = 1f;
 
     private void Awake()
     {
@@ -98,7 +97,7 @@ public class Pistol : Gun
 
     public void SetSensitivity(float newSensitivity)
     {
-        Sensitivity = newSensitivity;
+        GetComponentInParent<FirstPersonController>().Sensitivity = newSensitivity;
 
     }
     private void Aimming()
@@ -106,7 +105,7 @@ public class Pistol : Gun
         if (starterAssetsInputs.aim)
         {
             aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 20;
-            SetSensitivity(normalSensitivity * aimSensitivity);
+            SetSensitivity(aimSensitivity);
         }
         else
         {
@@ -119,10 +118,7 @@ public class Pistol : Gun
         //Check if allowed to hold down button and take corresponding input
         shooting = starterAssetsInputs.shoot;
 
-        if (starterAssetsInputs.shoot)
-        {
-            Debug.Log("tap");
-        }
+
         //Reloading 
         if (starterAssetsInputs.reload && bulletsLeft < magazineSize && !reloading) Reload();
         //Reload automatically when trying to shoot without ammo
@@ -177,6 +173,8 @@ public class Pistol : Gun
         }
         else
         {
+            
+            
             ShootWithSpread(currentBullet.GetPhotonView().ViewID, directionWithSpread);
             //currentBullet.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
         }

@@ -227,9 +227,8 @@ MonoBehaviour:
   ammunitionDisplay: {fileID: 0}
   allowInvoke: 1
   aimVirtualCamera: {fileID: 0}
-  normalSensitivity: 0.5
-  aimSensitivity: 0.3
-  Sensitivity: 1
+  normalSensitivity: 0.8
+  aimSensitivity: 0.5
 --- !u!114 &-411809151120541808
 MonoBehaviour:
   m_ObjectHideFlags: 0

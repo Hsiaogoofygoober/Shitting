@@ -181,7 +181,7 @@ MonoBehaviour:
   itemInfo: {fileID: 11400000, guid: 26338a3e91e1d2541835d940c06aa0e6, type: 2}
   itemGameObject: {fileID: 7719600511104899990}
   bullet: {fileID: 8485843583307536810, guid: 322f9d7c08c728e4dbdd1415d4de869b, type: 3}
-  shootForce: 1500
+  shootForce: 1800
   upwardForce: 0
   timeBetweenShooting: 3
   spread: 0
@@ -196,8 +196,8 @@ MonoBehaviour:
   ammunitionDisplay: {fileID: 0}
   allowInvoke: 1
   aimVirtualCamera: {fileID: 0}
-  normalSensitivity: 0.5
-  aimSensitivity: 0.1
+  normalSensitivity: 0.8
+  aimSensitivity: 0.3
   Sensitivity: 1
 --- !u!114 &2845640202781837855
 MonoBehaviour:
@@ -215,7 +215,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 3
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
   - {fileID: 1778020075315309535}

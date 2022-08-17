@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Cinemachine;
 using System.Collections;
+using System.Collections.Generic;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.Animations.Rigging;
 using Photon.Pun;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
+
 
 #endif
 
@@ -135,7 +137,7 @@ namespace StarterAssets
         public InputActionReference PickUpRef;
         public InputActionReference DropDownRef;
 
-        public List<Tool> toolList = new List<Tool>(18);
+        //public List<Tool> toolList = new List<Tool>(18);
 
         [SerializeField]
         public GameObject Mybag;
@@ -160,7 +162,7 @@ namespace StarterAssets
             Debug.Log("player owner : " + PV.Owner);
             action_view.action.performed += _x => scrolling_value = _x.action.ReadValue<float>();
             isHoldingWeapon = false;
-            toolList[17] = null;
+            //toolList[17] = null;
         }
 
         private void Start()
@@ -204,43 +206,45 @@ namespace StarterAssets
             {
                 return;
             }
-            if (_input.move != Vector2.zero && !_input.sprint)
-            {
-                _animator.SetFloat("Speed", 0.5f, 0.1f, Time.deltaTime);
-            }
-            else if (_input.sprint && _input.move != Vector2.zero)
-            {
-
-                _animator.SetFloat("Speed", 1.0f, 0.1f, Time.deltaTime);
-            }
             else
             {
-                _animator.SetFloat("Speed", 0);
-            }
-
-            if (scrolling_value < 0 && items[0] != null && items[1] != null)
-            {
-                if (itemIndex >= items.Length - 1)
+                if (_input.move != Vector2.zero && !_input.sprint)
                 {
-                    EquiptItem(0);
-                    Debug.Log("equip 0");
+                    _animator.SetFloat("Speed", 0.5f, 0.1f, Time.deltaTime);
+                }
+                else if (_input.sprint && _input.move != Vector2.zero)
+                {
+
+                    _animator.SetFloat("Speed", 1.0f, 0.1f, Time.deltaTime);
                 }
                 else
                 {
-                    EquiptItem(itemIndex + 1);
-                    Debug.Log("equip 1");
+                    _animator.SetFloat("Speed", 0);
                 }
-            }
-            Mybag.SetActive(_input.openbag);
-            if (_input.openbag)
-            {
-                Cursor.visible = true;
-                Screen.lockCursor = false;
-            }
-            else 
-            {
-                Cursor.visible = false;
-            }
+
+                if (scrolling_value < 0 && items[0] != null && items[1] != null)
+                {
+                    if (itemIndex >= items.Length - 1)
+                    {
+                        EquiptItem(0);
+                        Debug.Log("equip 0");
+                    }
+                    else
+                    {
+                        EquiptItem(itemIndex + 1);
+                        Debug.Log("equip 1");
+                    }
+                }
+                Mybag.SetActive(_input.openbag);
+                if (_input.openbag)
+                {
+                    Cursor.visible = true;
+                    Screen.lockCursor = false;
+                }
+                else
+                {
+                    Cursor.visible = false;
+                }
 
             ControllPickAndDrop();
             ControllShoot();
@@ -286,6 +290,7 @@ namespace StarterAssets
 
         private void CameraRotation()
         {
+            
             // if there is an input
             if (_input.look.sqrMagnitude >= _threshold)
             {
@@ -479,6 +484,35 @@ namespace StarterAssets
 
             previousItemIndex = itemIndex;
 
+            //constraint.data.target = items[itemIndex].GetComponentInChildren<BoxCollider>().transform;
+
+            //rigBuilder.Build();
+            if (PV.IsMine)
+            {
+                Hashtable hash = new Hashtable();
+                hash.Add("itemIndex", itemIndex);
+                Debug.Log(hash);
+                PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+                
+            }
+
+        }
+
+        private void EquiptItemWhenDrop(int _index)
+        {
+
+            itemIndex = _index;
+
+            items[itemIndex].itemGameObject.SetActive(true);
+
+            if (previousItemIndex != -1 && items[previousItemIndex] != null)
+            {
+
+                items[previousItemIndex].itemGameObject.SetActive(false);
+            }
+
+            previousItemIndex = itemIndex;
+
             constraint.data.target = items[itemIndex].GetComponentInChildren<BoxCollider>().transform;
 
             rigBuilder.Build();
@@ -488,7 +522,7 @@ namespace StarterAssets
                 hash.Add("itemIndex", itemIndex);
                 Debug.Log(hash);
                 PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-                
+
             }
 
         }
@@ -558,16 +592,14 @@ namespace StarterAssets
         }
 
 
-        /*public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
         {
             if (!PV.IsMine && targetPlayer == PV.Owner)
             {
-                Debug.Log((int)changedProps["weapon"]);
-                Debug.Log(PhotonView.Find((int)changedProps["weapon"]));
-                EquiptItem((int)changedProps["itemIndex"],0);
+                EquiptItem((int)changedProps["itemIndex"]);
 
             }
-        }*/
+        }
         public void TakeDamage(float damage)
         {
             PV.RPC("RPC_TakeDameage", RpcTarget.Others, damage);
@@ -608,7 +640,6 @@ namespace StarterAssets
 
             float random = Random.Range(-1f, 1f);
             weapon.GetComponent<Rigidbody>().AddTorque(new Vector3(random, random, random) * 10);
-            Debug.Log("here");
             previousItemIndex = -1;
             Debug.Log("drop" + itemIndex);
             
@@ -671,7 +702,7 @@ namespace StarterAssets
 
             currentHealth -= damage;
             healthbarImage.fillAmount = currentHealth / maxHealth;
-
+            Debug.Log( "TakeDamage");
             if (currentHealth <= 0)
             {
                 Debug.Log(killer + "殺了你!!!");
