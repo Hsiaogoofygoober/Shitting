@@ -144,7 +144,6 @@ namespace StarterAssets
 
         public Player[] other;
 
-
         private void Awake()
         {
             //if (instance != null)
@@ -247,21 +246,21 @@ namespace StarterAssets
                     Cursor.visible = false;
                 }
 
-                if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-                {
-                    //PlayerPrefs.SetInt("Status", 1);
-                    //SceneManager.LoadScene("Finish");
-                    playerManagers.Win();
-                }
-                ControllPickAndDrop();
-                ControllShoot();
-                JumpAndGravity();
-                GroundedCheck();
-                Move();
-                //InventoryManager.RefreshTool();
-                //Aimming();
+            ControllPickAndDrop();
+            ControllShoot();
+            JumpAndGravity();
+            GroundedCheck();
+            Move();
+
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && PhotonNetwork.IsMasterClient)
+            {
+                PlayerPrefs.SetInt("Status", 1);
+                playerManagers.Win();
             }
+            //InventoryManager.RefreshTool();
+            //Aimming();
         }
+
         private void LateUpdate()
         {
             if (!PV.IsMine)
@@ -715,18 +714,20 @@ namespace StarterAssets
 
         void Die()
         {
+            PlayerPrefs.SetInt("Status", 0);
+
             other = PhotonNetwork.PlayerList;
 
             if (PhotonNetwork.IsMasterClient)
             {
-                foreach (Player player in other)
+                foreach (Player player in PhotonNetwork.PlayerList) 
                 {
-                    if (player != PhotonNetwork.LocalPlayer)
+                    if (player != PhotonNetwork.LocalPlayer) 
                     {
                         PhotonNetwork.SetMasterClient(player);
                         break;
                     }
-                }
+                }          
             }
             playerManagers.Die();
         }

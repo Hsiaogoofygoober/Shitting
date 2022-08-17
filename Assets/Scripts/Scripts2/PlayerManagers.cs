@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class PlayerManagers : MonoBehaviour
+public class PlayerManagers : MonoBehaviourPunCallbacks
 {
 	PhotonView PV;
 
@@ -32,18 +33,55 @@ public class PlayerManagers : MonoBehaviour
 
 	public void Die()
 	{
-		PlayerPrefs.SetInt("Status", 0);
-		PhotonNetwork.LeaveRoom();
 		Debug.Log("Leave Room");
-		Destroy(RoomManager.instance.gameObject);
-		PhotonNetwork.LoadLevel(2);
+		DisconnectPlayer();
+		//Destroy(RoomManager.instance.gameObject);
+		//PhotonNetwork.LeaveRoom();
+		//PhotonNetwork.Disconnect();
+		//SceneManager.LoadScene(2);
+		//PhotonNetwork.LoadLevel(2);
 	}
 
 	public void Win()
 	{
-		PlayerPrefs.SetInt("Status", 1);
-		PhotonNetwork.LeaveRoom();
-		Destroy(RoomManager.instance.gameObject);
-		PhotonNetwork.LoadLevel(2);
+		DisconnectPlayer();
+		//Destroy(RoomManager.instance.gameObject);
+		//PhotonNetwork.LeaveRoom();
+		//PhotonNetwork.Disconnect();	
+		//SceneManager.LoadScene(2);
+		//PhotonNetwork.LoadLevel(2);
 	}
+
+	public void DisconnectPlayer()
+	{
+		Destroy(RoomManager.instance.gameObject);
+		StartCoroutine(DisconnectAndLoad());
+	}
+
+	IEnumerator DisconnectAndLoad()
+	{
+		if (PhotonNetwork.InRoom)
+		{
+			SceneManager.LoadScene("Finish");
+
+			PhotonNetwork.AutomaticallySyncScene = false;
+		}
+		else
+			yield return null;
+
+		PhotonNetwork.Disconnect();
+
+	}
+
+	//public void LeaveRoom()
+	//{
+	//	PhotonNetwork.LeaveRoom();
+	//}
+
+	//public override void OnLeftRoom()
+	//{
+	//	SceneManager.LoadScene(2);
+
+	//	base.OnLeftRoom();
+	//}
 }
