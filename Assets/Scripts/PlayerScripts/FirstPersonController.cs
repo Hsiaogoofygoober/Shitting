@@ -247,7 +247,7 @@ namespace StarterAssets
                     Cursor.visible = false;
                 }
 
-                if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+                if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && PhotonNetwork.IsMasterClient)
                 {
                     //PlayerPrefs.SetInt("Status", 1);
                     //SceneManager.LoadScene("Finish");
@@ -484,8 +484,9 @@ namespace StarterAssets
             }
 
             previousItemIndex = itemIndex;
+           
 
-            //constraint.data.target = items[itemIndex].GetComponentInChildren<BoxCollider>().transform;
+            constraint.data.target = items[itemIndex].GetComponentInChildren<BoxCollider>().transform;
 
             //rigBuilder.Build();
             if (PV.IsMine)
@@ -501,30 +502,29 @@ namespace StarterAssets
 
         private void EquiptItemWhenDrop(int _index)
         {
+          
 
-            itemIndex = _index;
+                itemIndex = _index;
 
-            items[itemIndex].itemGameObject.SetActive(true);
+                items[itemIndex].itemGameObject.SetActive(true);
 
-            if (previousItemIndex != -1 && items[previousItemIndex] != null)
-            {
+                if (previousItemIndex != -1 && items[previousItemIndex] != null)
+                {
 
-                items[previousItemIndex].itemGameObject.SetActive(false);
-            }
+                    items[previousItemIndex].itemGameObject.SetActive(false);
+                }
 
-            previousItemIndex = itemIndex;
+                Debug.Log(items[itemIndex].name);
+                Debug.Log(constraint.data.target);
+                Debug.Log(items[itemIndex].GetComponentInChildren<BoxCollider>().transform);
 
-            constraint.data.target = items[itemIndex].GetComponentInChildren<BoxCollider>().transform;
+                previousItemIndex = itemIndex;
 
-            rigBuilder.Build();
-            if (PV.IsMine)
-            {
-                Hashtable hash = new Hashtable();
-                hash.Add("itemIndex", itemIndex);
-                Debug.Log(hash);
-                PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+                constraint.data.target = items[itemIndex].GetComponentInChildren<BoxCollider>().transform;
 
-            }
+                rigBuilder.Build();
+
+            
 
         }
 
@@ -566,7 +566,7 @@ namespace StarterAssets
                 }
 
             }
-            else if (_input.drop && canDrop && items[itemIndex])
+            else if (_input.drop && canDrop && items[itemIndex] != null)
             {
                 canDrop = false;
                 Debug.Log("drop");
@@ -643,19 +643,18 @@ namespace StarterAssets
             weapon.GetComponent<Rigidbody>().AddTorque(new Vector3(random, random, random) * 10);
             previousItemIndex = -1;
             Debug.Log("drop" + itemIndex);
+            Debug.Log(weapon.name);
+
             
             if (itemIndex == 0 && items[1] != null)
             {
-                EquiptItem(1);
-                constraint.data.target = items[1].GetComponentInChildren<BoxCollider>().transform;
-                rigBuilder.Build();
+                Debug.Log(items[1].name);
+                EquiptItemWhenDrop(1);
             }
             else if (itemIndex == 1 && items[0] != null)
             {
-                
-                EquiptItem(0);
-                constraint.data.target = items[0].GetComponentInChildren<BoxCollider>().transform;
-                rigBuilder.Build();
+                Debug.Log(items[0].name);
+                EquiptItemWhenDrop(0);
             }
             else if (items[0] == null && items[1] == null)
             {
