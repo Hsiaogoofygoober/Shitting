@@ -246,19 +246,20 @@ namespace StarterAssets
                     Cursor.visible = false;
                 }
 
-            ControllPickAndDrop();
-            ControllShoot();
-            JumpAndGravity();
-            GroundedCheck();
-            Move();
+                ControllPickAndDrop();
+                ControllShoot();
+                JumpAndGravity();
+                GroundedCheck();
+                Move();
 
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && PhotonNetwork.IsMasterClient)
-            {
-                PlayerPrefs.SetInt("Status", 1);
-                playerManagers.Win();
+                if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && PhotonNetwork.IsMasterClient)
+                {
+                    PlayerPrefs.SetInt("Status", 1);
+                    playerManagers.Win();
+                }
+                //InventoryManager.RefreshTool();
+                //Aimming();
             }
-            //InventoryManager.RefreshTool();
-            //Aimming();
         }
 
         private void LateUpdate()
