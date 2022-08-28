@@ -522,7 +522,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.3827392, y: 1}
+    m_SensorSize: {x: 1.4915572, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -686,12 +686,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55919ac34a26952479f3fc91f777b2fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 10
-  SprintSpeed: 20
+  MoveSpeed: 8
+  SprintSpeed: 30
   RotationSpeed: 1
   SpeedChangeRate: 10
   Sensitivity: 1
-  JumpHeight: 5
+  JumpHeight: 2
   Gravity: -40
   JumpTimeout: 0.1
   FallTimeout: 0.15
@@ -726,7 +726,7 @@ MonoBehaviour:
   itemHolder: {fileID: 6005335672077323142}
   gunItem: {fileID: 0}
   playerCam: {fileID: 5014336599036692605}
-  pickUpRange: 10
+  pickUpRange: 3
   dropForwardForce: 1
   dropUpwardForce: 2
   equipped: 0
@@ -2547,7 +2547,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8762286023885395323, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.3827392
+      value: 1.4915572
       objectReference: {fileID: 0}
     - target: {fileID: 8762286024517199034, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: Damping.x
@@ -2640,7 +2640,7 @@ PrefabInstance:
       objectReference: {fileID: 9003827619895006823}
     - target: {fileID: 8762286023885395323, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.3827392
+      value: 1.4915572
       objectReference: {fileID: 0}
     - target: {fileID: 8762286024517199034, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: Damping.x

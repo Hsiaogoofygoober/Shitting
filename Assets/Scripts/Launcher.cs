@@ -13,7 +13,7 @@ namespace Com.FPSGaming
 
         [Tooltip("遊戲室玩家人數上限. 當遊戲室玩家人數已滿額, 新玩家只能新開遊戲室來進行遊戲.")]
         [SerializeField]
-        private byte maxPlayersPerRoom = 2;
+        private byte maxPlayersPerRoom = 5;
 
         [Tooltip("顯示/隱藏 遊戲玩家名稱與 Play 按鈕")]
         [SerializeField]
@@ -112,11 +112,11 @@ namespace Com.FPSGaming
             waitingLabel.SetActive(true);
             progressLabel.SetActive(false);
             Debug.Log("PUN 呼叫 OnJoinedRoom(), 已成功進入遊戲室中." + " " + PhotonNetwork.CurrentRoom.PlayerCount);
-            if (PhotonNetwork.CurrentRoom.PlayerCount == maxPlayersPerRoom)
+            /*if (PhotonNetwork.CurrentRoom.PlayerCount == maxPlayersPerRoom)
             {
                 PhotonNetwork.CurrentRoom.IsOpen = false;    
                 PhotonNetwork.LoadLevel(1);    
-            }
+            }*/
         }
     }
 }

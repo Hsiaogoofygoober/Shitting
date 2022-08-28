@@ -12,6 +12,7 @@ TagManager:
   - Aim
   - weaponMessage
   - SniperAim
+  - bullet
   layers:
   - Default
   - TransparentFX

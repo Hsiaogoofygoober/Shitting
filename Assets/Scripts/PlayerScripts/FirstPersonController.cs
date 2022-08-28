@@ -251,6 +251,7 @@ namespace StarterAssets
                 JumpAndGravity();
                 GroundedCheck();
                 Move();
+                healthbarImage.fillAmount = currentHealth / maxHealth;
 
                 if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && PhotonNetwork.IsMasterClient)
                 {
@@ -528,6 +529,8 @@ namespace StarterAssets
 
         }
 
+
+
         private void ControllPickAndDrop()
         {
             Ray ray = playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //Just a ray through the middle of your current view
@@ -550,7 +553,7 @@ namespace StarterAssets
                 {
                     Debug.Log(hit.collider.gameObject);
 
-                    if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("weapon"))
+                    if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("weapon") && hit.distance <= pickUpRange)
                     {
                         canPick = false;
                         Debug.Log("is weapon");
@@ -603,7 +606,12 @@ namespace StarterAssets
         }
         public void TakeDamage(float damage)
         {
-            PV.RPC("RPC_TakeDameage", RpcTarget.Others, damage);
+            //only victom sends message to everyone
+            if (PV.IsMine)
+            {
+                PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);
+            }
+            
         }
         public void PickWeapon(int weaponID)
         {
@@ -697,11 +705,9 @@ namespace StarterAssets
         [PunRPC]
         void RPC_TakeDameage(float damage)
         {
-            if (!PV.IsMine)
-                return;
 
             currentHealth -= damage;
-            healthbarImage.fillAmount = currentHealth / maxHealth;
+           
             Debug.Log( "TakeDamage");
             if (currentHealth <= 0)
             {
@@ -731,5 +737,7 @@ namespace StarterAssets
             }
             playerManagers.Die();
         }
+
+       
     }
 }
