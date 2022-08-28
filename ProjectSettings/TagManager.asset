@@ -12,6 +12,8 @@ TagManager:
   - Aim
   - weaponMessage
   - SniperAim
+  - HealthPortion
+  - inventoryPanel
   layers:
   - Default
   - TransparentFX

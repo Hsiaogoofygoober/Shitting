@@ -10,6 +10,7 @@ using Photon.Realtime;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 
@@ -144,6 +145,8 @@ namespace StarterAssets
 
         public Player[] other;
 
+        public Inventorys inventorys;
+
         private void Awake()
         {
             //if (instance != null)
@@ -197,6 +200,13 @@ namespace StarterAssets
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
+
+            inventorys.ItemUsed += Inventorys_ItemUsed;
+        }
+
+        private void Inventorys_ItemUsed(object sender, InventoryEventArgs e)
+        {
+            IInventoryItem item = e.Item;
         }
 
         private void Update()
@@ -246,20 +256,48 @@ namespace StarterAssets
                     Cursor.visible = false;
                 }
 
-            ControllPickAndDrop();
-            ControllShoot();
-            JumpAndGravity();
-            GroundedCheck();
-            Move();
+                ControllPickAndDrop();
+                ControllShoot();
+                JumpAndGravity();
+                GroundedCheck();
+                Move();
 
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && PhotonNetwork.IsMasterClient)
-            {
-                PlayerPrefs.SetInt("Status", 1);
-                playerManagers.Win();
+                if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && PhotonNetwork.IsMasterClient)
+                {
+                    PlayerPrefs.SetInt("Status", 1);
+                    playerManagers.Win();
+                }
+                //InventoryManager.RefreshTool();
+                //Aimming();
             }
-            //InventoryManager.RefreshTool();
-            //Aimming();
         }
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("HealthPortion"))
+            {
+                IInventoryItem item = other.GetComponent<IInventoryItem>();
+                if(item.Image == null)
+                    Debug.Log("被抓去柬埔寨");
+                if (item != null)
+                {
+                    inventorys.AddItem(item);
+                }
+                else 
+                {
+                    Debug.Log("幹你娘");
+                }
+                //Destroy(gameObject);
+            }
+        }
+
+        //private void OnControllerColliderHit(ControllerColliderHit hit)
+        //{
+        //    IInventoryItem item = hit.collider.GetComponent<IInventoryItem>();
+        //    if (item != null) 
+        //    {
+        //        inventorys.AddItem(item);
+        //    }
+        //}
 
         private void LateUpdate()
         {
