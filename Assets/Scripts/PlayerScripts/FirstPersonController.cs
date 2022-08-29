@@ -138,7 +138,7 @@ namespace StarterAssets
         public InputActionReference PickUpRef;
         public InputActionReference DropDownRef;
 
-        //public List<Tool> toolList = new List<Tool>(18);
+        public Tool[] toolList = new Tool[18];
 
         [SerializeField]
         public GameObject Mybag;
@@ -271,31 +271,22 @@ namespace StarterAssets
                 //Aimming();
             }
         }
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.CompareTag("HealthPortion"))
-            {
-                IInventoryItem item = other.GetComponent<IInventoryItem>();
-                if(item.Image == null)
-                    Debug.Log("被抓去柬埔寨");
-                if (item != null)
-                {
-                    inventorys.AddItem(item);
-                }
-                else 
-                {
-                    Debug.Log("幹你娘");
-                }
-                //Destroy(gameObject);
-            }
-        }
-
-        //private void OnControllerColliderHit(ControllerColliderHit hit)
+        //private void OnTriggerEnter(Collider other)
         //{
-        //    IInventoryItem item = hit.collider.GetComponent<IInventoryItem>();
-        //    if (item != null) 
+        //    if (other.gameObject.CompareTag("HealthPortion"))
         //    {
-        //        inventorys.AddItem(item);
+        //        IInventoryItem item = other.GetComponent<IInventoryItem>();
+        //        if(item.Image == null)
+        //            Debug.Log("被抓去柬埔寨");
+        //        if (item != null)
+        //        {
+        //            inventorys.AddItem(item);
+        //        }
+        //        else 
+        //        {
+        //            Debug.Log("幹你娘");
+        //        }
+        //        //Destroy(gameObject);
         //    }
         //}
 

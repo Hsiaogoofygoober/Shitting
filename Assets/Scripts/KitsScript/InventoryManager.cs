@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using StarterAssets;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -24,42 +25,44 @@ public class InventoryManager : MonoBehaviour
 
     public List<GameObject> slots = new List<GameObject>();
 
-    public PhotonView PV;
+    public Tool[] toolList;
+
+    //public PhotonView PV;
 
     private void Awake()
     {
+        toolList = InventorySystem.instance.toolList;
         if (instance != null) 
             Destroy(this);
+        instance = this;
 
-        if (PV == null)
-        {
-            PV = GetComponentInParent<PhotonView>();
-            instance = PV.GetComponentInChildren<InventoryManager>();
-            Debug.Log(instance +" " + PV.ViewID);
-        }
-        
-
-        Debug.Log(instance);
-       
-        
+        //if (PV == null)
+        //{
+        //    PV = GetComponentInParent<PhotonView>();
+        //    instance = PV.GetComponentInChildren<InventoryManager>();
+        //    Debug.Log(instance +" " + PV.ViewID);
+        //}
+        //Debug.Log(instance);
     }
 
     private void OnEnable()
-    {
-        
-        if (PV.IsMine)
-        {
+    {  
+        RefreshTool();
+        //Debug.Log("1");
+        instance.itemInfo.text = "";
+        //if (PV.IsMine)
+        //{
             //Debug.Log("123123123");
-            RefreshTool();
+            //RefreshTool();
             //Debug.Log("1");
-            instance.itemInfo.text = "";
-        }
-
-        
-        
-        
+        //    instance.itemInfo.text = "";
+        //}
     }
 
+    private void Start()
+    {
+    
+    }
 
 
     public static void UpdateToolInfo(string itemDescription) 
@@ -78,13 +81,17 @@ public class InventoryManager : MonoBehaviour
             instance.slots.Clear();
         }
 
-        for (int i = 0; i < instance.myBag.toolList.Count; i++) 
+        for (int i = 0; i < InventorySystem.instance.toolList.Length; i++) 
         {
             instance.slots.Add(Instantiate(instance.emptySlot)); // 生成18個空白的格子
             instance.slots[i].transform.SetParent(instance.slotGrid.transform);
             instance.slots[i].GetComponent<Slot>().slotID = i;
-            instance.slots[i].GetComponent<Slot>().SetupSlot(instance.myBag.toolList[i]);
-            //Debug.Log(instance.slots[i].GetComponent<Slot>().slotID);
+            if (InventorySystem.instance.toolList[i] != null)
+                Debug.Log("幹 " + i);
+            instance.slots[i].GetComponent<Slot>().SetupSlot(InventorySystem.instance.toolList[i]);
+            if (instance.slots[i].GetComponent<Slot>().slotImage != null)
+                Debug.Log("Apex小達人 " + i);
+           
         }
     }
 }

@@ -7,8 +7,8 @@ public class Slot : MonoBehaviour
 {
     public int slotID; //空格ID 等於 物品ID
 
-    [SerializeField]
-    public Tool slotTool;
+    //[SerializeField]
+    //public Tool slotTool;
 
     [SerializeField]
     public Image slotImage;
@@ -20,24 +20,28 @@ public class Slot : MonoBehaviour
     [SerializeField]
     public GameObject toolOnSlot;
 
-    public Inventory myBag;
+    //public Inventory myBag;
 
     public void ItemOnClicked() 
     {
         InventoryManager.UpdateToolInfo(slotInfo);
         Debug.Log(slotName + " " + slotID);
-        myBag.toolList[slotID] = null;
+        InventorySystem.instance.toolList[slotID] = null;
         InventoryManager.RefreshTool();
     }
 
     public void SetupSlot(Tool tool) 
     {
+        toolOnSlot.SetActive(true);
         if (tool == null) 
         {
             toolOnSlot.SetActive(false);
             return;
         }
+        
         slotImage.sprite = tool.toolImage;
+        if(slotImage.sprite != null)
+            Debug.Log("真的是很可悲 " + slotID);
         slotInfo = tool.toolInfo;
         slotName = tool.toolName;
     }
