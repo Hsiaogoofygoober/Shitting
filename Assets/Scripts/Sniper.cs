@@ -165,20 +165,16 @@ public class Sniper : Gun
         //Calculate new direction with spread
         Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last direction
 
-        //Instantiate bullet/projectile
-        GameObject currentBullet = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", bullet.name), attackPoint.position, Quaternion.identity); //store instantiated bullet in currentBullet
-        //Rotate bullet to shoot direction
-        currentBullet.transform.forward = directionWithSpread.normalized;
 
         //Add forces to bullet
         if (starterAssetsInputs.aim)
         {
-            ShootWithoutSpread(currentBullet.GetPhotonView().ViewID, directionWithoutSpread);
+            ShootWithoutSpread(directionWithoutSpread);
             //currentBullet.GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
         }
         else
         {
-            ShootWithSpread(currentBullet.GetPhotonView().ViewID, directionWithSpread);
+            ShootWithSpread(directionWithSpread);
             //currentBullet.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
         }
 
@@ -224,28 +220,24 @@ public class Sniper : Gun
         bulletsLeft = magazineSize;
         reloading = false;
     }
-    private void ShootWithoutSpread(int BulletID, Vector3 directionWithoutSpread)
+    private void ShootWithoutSpread(Vector3 directionWithoutSpread)
     {
-        PV.RPC("RPC_ShootWithoutSpread", RpcTarget.All, BulletID, directionWithoutSpread);
+        PV.RPC("RPC_Shoot", RpcTarget.All,directionWithoutSpread);
     }
-    private void ShootWithSpread(int BulletID, Vector3 directionWithSpread)
+    private void ShootWithSpread(Vector3 directionWithSpread)
     {
-        PV.RPC("RPC_ShootWithoutSpread", RpcTarget.All, BulletID, directionWithSpread);
-    }
-
-    [PunRPC]
-
-    void RPC_ShootWithoutSpread(int BulletID, Vector3 directionWithoutSpread)
-    {
-        //Debug.Log("shoot " + BulletID);
-        PhotonView.Find(BulletID).GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
+        PV.RPC("RPC_Shoot", RpcTarget.All,directionWithSpread);
     }
 
     [PunRPC]
 
-    void RPC_ShootWithSpread(int BulletID, Vector3 directionWithSpread)
+    void RPC_Shoot(Vector3 directionWithSpread)
     {
-        //Debug.Log("shoot " + BulletID);
-        PhotonView.Find(BulletID).GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
+        GameObject currentBullet = Instantiate(bullet,attackPoint.position, Quaternion.identity);
+        currentBullet.transform.forward = directionWithSpread.normalized;
+        currentBullet.GetComponent<BulletProjectile>().owner = PV.Owner.NickName;
+        Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
+        rb.AddRelativeForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
+        //PhotonView.Find(BulletID).GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
     }
 }

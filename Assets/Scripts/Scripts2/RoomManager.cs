@@ -61,6 +61,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		}
 		Debug.LogFormat("載入{0}人的場景",
 			PhotonNetwork.CurrentRoom.PlayerCount);
-		PhotonNetwork.LoadLevel(1);
+		if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        {
+			PhotonNetwork.LoadLevel(1);
+        }
+		
 	}
 }

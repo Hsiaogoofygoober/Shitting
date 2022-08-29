@@ -8,75 +8,96 @@ public class BulletProjectile : MonoBehaviour
 {
     Rigidbody rb;
     public float damage;
-    PhotonView PV;
+    Vector3 mPrevious;
     BulletProjectile bullet;
     int ownerID;
-    bool fixbug = true;
+    public string owner = "123";
 
     void Start()
     {
-        rb = this.gameObject.GetComponent<Rigidbody>();
-        PV = this.gameObject.GetComponent<PhotonView>();
+        /*rb = this.gameObject.GetComponent<Rigidbody>();
         bullet = gameObject.GetComponent<BulletProjectile>();
 
-        StartCoroutine(Predict());
+        StartCoroutine(Predict());*/
+        mPrevious = transform.position;
     }
-    void FixedUpdate()
+
+    private void Update()
+    {
+        
+        RaycastHit[] hits = Physics.RaycastAll(new Ray(mPrevious, (transform.position - mPrevious).normalized), (transform.position - mPrevious).magnitude);
+        Debug.Log(owner);
+        for(int i = 0; i < hits.Length; i++)
+        {
+            if(hits[i].collider != null && !hits[i].collider.CompareTag("bullet"))
+            {
+                if (hits[i].collider.CompareTag("Player"))
+                {
+                    hits[i].collider.GetComponent<IDamageable>()?.TakeDamage(damage);
+                    hits[i].collider.GetComponent<FirstPersonController>().killer = owner;
+                }
+                Destroy(gameObject);
+            }
+            
+        }
+        Destroy(gameObject, 3);
+
+        mPrevious = transform.position;
+    }
+    /*void FixedUpdate()
 
     {
 
         StartCoroutine(Predict());
         Destroy(gameObject, 3);
-    }
+    }*/
 
-    IEnumerator Predict()
+    /* IEnumerator Predict()
 
-    {
+     {
 
-        Vector3 prediction = transform.position + rb.velocity * Time.fixedDeltaTime;
+         Vector3 prediction = transform.position + rb.velocity * Time.fixedDeltaTime;
 
-        RaycastHit hit2;
+         RaycastHit hit2;
 
-        int layerMask = ~LayerMask.GetMask("Bullet");
+         int layerMask = ~LayerMask.GetMask("Bullet");
 
-        //Debug.DrawLine(transform.position, prediction);
-
-
+         //Debug.DrawLine(transform.position, prediction);
 
 
-        if (Physics.Linecast(transform.position, prediction, out hit2, layerMask))
 
-        {
 
-            transform.position = hit2.point;
+         if (Physics.Linecast(transform.position, prediction, out hit2, layerMask))
 
-            rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+         {
 
-            rb.isKinematic = true;
+             transform.position = hit2.point;
 
-            yield return 0;
+             rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
 
-            OnTriggerEnterFixed(hit2.collider);
-        }
-    }
+             rb.isKinematic = true;
 
-    void OnTriggerEnterFixed(Collider other)
-    {
-        //if (other.CompareTag("Target"))
-        if (other.CompareTag("Player") && fixbug)
-        {
-            fixbug = false;
-            Debug.Log("----------shoot-----------");
-            other.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
-            Debug.Log("----------takedamage-----------");
-            other.gameObject.GetComponent<FirstPersonController>().killer = bullet.PV.Owner.NickName;
-            if (bullet.PV.Owner.NickName == "") 
-            {
-                Debug.Log("·F§A®QÓf¾÷ÙT");
-            }
-            
-        }
-        Destroy(gameObject);
-        Debug.Log("should destroy");
-    }
+             yield return 0;
+
+             OnTriggerEnterFixed(hit2.collider);
+         }
+     }*/
+
+    /*void OnTriggerEnterFixed(Collider other)
+   {
+       //if (other.CompareTag("Target"))
+       if (other.CompareTag("Player"))
+       {
+           Debug.Log("----------shoot-----------");
+           other.gameObject.GetComponent<IDamageable>()?.TakeDamage(damage);
+           Debug.Log("----------takedamage-----------");
+           //other.gameObject.GetComponent<FirstPersonController>().killer = bullet.PV.Owner.NickName;
+           if (bullet.PV.Owner.NickName == "") 
+           {
+               Debug.Log("·F§A®QÓf¾÷ÙT");
+           }            
+       }
+       Destroy(gameObject);
+       Debug.Log("should destroy");
+   }*/
 }
