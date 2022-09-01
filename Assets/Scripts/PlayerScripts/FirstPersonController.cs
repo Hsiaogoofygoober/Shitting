@@ -137,6 +137,10 @@ namespace StarterAssets
         public InputActionReference PickUpRef;
         public InputActionReference DropDownRef;
 
+        //damage text
+        public GameObject damageText;
+        
+
         //public List<Tool> toolList = new List<Tool>(18);
 
         [SerializeField]
@@ -604,12 +608,17 @@ namespace StarterAssets
 
             }
         }
-        public void TakeDamage(float damage)
+        public void TakeDamage(int damage)
         {
             //only victom sends message to everyone
             if (PV.IsMine)
             {
                 PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);
+            }
+            else
+            {
+                DamageIndicator indicator = Instantiate(damageText, transform.position+Vector3.up*2, Quaternion.identity).GetComponent<DamageIndicator>();
+                indicator.SetDamageText(damage);
             }
             
         }
@@ -703,7 +712,7 @@ namespace StarterAssets
         }
 
         [PunRPC]
-        void RPC_TakeDameage(float damage)
+        void RPC_TakeDameage(int damage)
         {
 
             currentHealth -= damage;

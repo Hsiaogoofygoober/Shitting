@@ -113,6 +113,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 8
   owner: 
+  blood: {fileID: 5549737897277506911, guid: f81b37c4338295d4aad0f11de379e12c, type: 3}
 --- !u!54 &2484611345789266870
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -522,7 +522,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.4915572, y: 1}
+    m_SensorSize: {x: 1.3771107, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -734,6 +734,7 @@ MonoBehaviour:
   canDrop: 1
   PickUpRef: {fileID: -6722303360145565273, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
   DropDownRef: {fileID: 6889210387038372656, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
+  damageText: {fileID: 7421645783877424611, guid: 8c47736a75d96274c885e3b72ae00954, type: 3}
   Mybag: {fileID: 2424158859462253342}
 --- !u!114 &6837152431155922379
 MonoBehaviour:
@@ -2547,7 +2548,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8762286023885395323, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.4915572
+      value: 1.3771107
       objectReference: {fileID: 0}
     - target: {fileID: 8762286024517199034, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: Damping.x
@@ -2640,7 +2641,7 @@ PrefabInstance:
       objectReference: {fileID: 9003827619895006823}
     - target: {fileID: 8762286023885395323, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.4915572
+      value: 1.3771107
       objectReference: {fileID: 0}
     - target: {fileID: 8762286024517199034, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: Damping.x
