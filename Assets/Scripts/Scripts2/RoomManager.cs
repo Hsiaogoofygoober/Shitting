@@ -63,6 +63,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 			PhotonNetwork.CurrentRoom.PlayerCount);
 		if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
+			PhotonNetwork.CurrentRoom.IsOpen = false;
 			PhotonNetwork.LoadLevel(1);
         }
 		

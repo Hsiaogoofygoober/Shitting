@@ -10,24 +10,26 @@ public class Slot : MonoBehaviour
     //[SerializeField]
     //public Tool slotTool;
 
-    [SerializeField]
     public Image slotImage;
 
     public string slotInfo;
 
     public string slotName;
 
-    [SerializeField]
     public GameObject toolOnSlot;
 
     //public Inventory myBag;
 
     public void ItemOnClicked() 
-    {
-        InventoryManager.UpdateToolInfo(slotInfo);
-        Debug.Log(slotName + " " + slotID);
-        InventorySystem.instance.toolList[slotID] = null;
-        InventoryManager.RefreshTool();
+    {   
+        Debug.Log(slotName + " ¹CÀ¸ + µ²§ô " + slotID + " + ¥i¼¦ + " + slotInfo);
+        slotImage.sprite = null;
+        slotInfo = null;
+        slotName = null;
+        toolOnSlot.SetActive(false);
+        //InventoryManager.UpdateToolInfo(slotInfo);
+
+        PlayerPrefs.SetInt("SlotID", slotID);
     }
 
     public void SetupSlot(Tool tool) 

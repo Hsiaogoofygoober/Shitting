@@ -14,7 +14,6 @@ using UnityEngine.InputSystem;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 
-
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -138,14 +137,18 @@ namespace StarterAssets
         public InputActionReference PickUpRef;
         public InputActionReference DropDownRef;
 
-        public Tool[] toolList = new Tool[18];
+        //public Tool[] toolList = new Tool[18];
 
         [SerializeField]
         public GameObject Mybag;
 
         public Player[] other;
 
-        public Inventorys inventorys;
+        //public Inventorys inventorys;
+
+        public InventoryManager2 InventoryManager2;
+
+        InventorySystem inventorySystem;
 
         private void Awake()
         {
@@ -161,6 +164,7 @@ namespace StarterAssets
             PV = GetComponent<PhotonView>();
             //Debug.Log(GameObject.FindWithTag("MainCamera").transform);
             playerManagers = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManagers>();
+            inventorySystem = PhotonView.Find((int)PV.InstantiationData[0]).GetComponentInParent<InventorySystem>();
             fpsCam = _mainCamera.transform;
             Debug.Log("player owner : " + PV.Owner);
             action_view.action.performed += _x => scrolling_value = _x.action.ReadValue<float>();
@@ -187,8 +191,8 @@ namespace StarterAssets
                 Destroy(GetComponentInChildren<Camera>().gameObject);
                 Destroy(playerFollowCamera);
                 Destroy(aimVirtualCamera);
-                //Destroy(ui);
-                ui.SetActive(false);
+                Destroy(ui);
+                //ui.SetActive(false);
             }
 
 
@@ -201,7 +205,7 @@ namespace StarterAssets
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
 
-            inventorys.ItemUsed += Inventorys_ItemUsed;
+            //inventorys.ItemUsed += Inventorys_ItemUsed;
         }
 
         private void Inventorys_ItemUsed(object sender, InventoryEventArgs e)
@@ -270,6 +274,44 @@ namespace StarterAssets
                 }
                 //InventoryManager.RefreshTool();
                 //Aimming();
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("HealthPortion"))
+            {
+                Tool healBag = other.gameObject.GetComponent<Tool>();
+                Debug.Log(healBag.toolName);
+                Debug.Log(healBag.toolInfo);
+
+                AddNewItem(healBag);
+            }
+        }
+
+        private void AddNewItem(Tool thisTool)
+        {
+            if (PV.IsMine)
+            {
+                for (int i = 0; i < PV.GetComponentInChildren<InventorySystem>().toolList.Length; i++)
+                {
+                    if (PV.GetComponentInChildren<InventorySystem>().toolList[i] == null)
+                    {
+                        PV.GetComponentInChildren<InventorySystem>().toolList[i] = thisTool;
+                        //if(PV.GetComponentInChildren<InventorySystem>().toolList[i] != null)
+                        //    Debug.Log("楊文霖 " + i);
+                        break;
+                    }
+                }
+                //InventoryManager.instance.toolList = PV.GetComponentInChildren<InventorySystem>().toolList;
+                //if(InventoryManager.instance.toolList[0] != null)
+                //    Debug.Log("洗洗囉");
+                //InventoryManager.RefreshTool();
+                InventoryManager2.toolList = PV.GetComponentInChildren<InventorySystem>().toolList;
+                if (InventoryManager2.toolList[0] != null)
+                    Debug.Log("洗洗囉");
+                InventoryManager2.RefreshTool();
+
             }
         }
 
