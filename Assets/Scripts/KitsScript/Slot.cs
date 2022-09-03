@@ -7,9 +7,6 @@ public class Slot : MonoBehaviour
 {
     public int slotID; //空格ID 等於 物品ID
 
-    //[SerializeField]
-    //public Tool slotTool;
-
     public Image slotImage;
 
     public string slotInfo;
@@ -17,8 +14,6 @@ public class Slot : MonoBehaviour
     public string slotName;
 
     public GameObject toolOnSlot;
-
-    //public Inventory myBag;
 
     public void ItemOnClicked() 
     {   

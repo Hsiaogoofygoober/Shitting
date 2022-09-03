@@ -27,9 +27,6 @@ public class InventoryManager2 : MonoBehaviour
 
     private void Awake()
     {
-        //if (instance != null) 
-        //    Destroy(this);
-        //instance = this;
         if (PV == null)
         {
             PV = this.gameObject.GetComponentInParent<PhotonView>();
@@ -70,46 +67,12 @@ public class InventoryManager2 : MonoBehaviour
 
     public void RefreshTool()
     {
-        GameObject grid = GameObject.Find("grid");
-
         if (PV.IsMine) 
         {
-            for (int i = 0; i < grid.transform.childCount; i++) 
+            for (int i = 0; i < slotGrid.transform.childCount; i++) 
             {
-                grid.transform.GetChild(i).GetComponent<Slot>().SetupSlot(toolList[i]);
+                slotGrid.transform.GetChild(i).GetComponent<Slot>().SetupSlot(toolList[i]);
             }    
         }
-
-        //if (PV.IsMine)
-        //{
-        //    Debug.Log("slots�ӼƬ�: " + GetComponentsInChildren<Slot>().Length);
-        //    ////Debug.Log(instance.slotGrid.transform.childCount);
-        //    //for (int i = 0; i < slotGrid.transform.childCount; i++)
-        //    //{
-        //    //    Debug.Log("Fuck my life " + slotGrid.transform.childCount);
-        //    //    if (slotGrid.transform.childCount == 0)
-        //    //        break;
-        //    //    //slotGrid.transform.GetChild(i).gameObject = null;
-        //    //    slots.Clear();
-        //    //}
-            
-
-        //    for (int i = 0; i < toolList.Length; i++)
-        //    {
-        //        slots.Add(Instantiate(emptySlot)); // �ͦ�18�Ӫťժ���l
-        //        slots[i].transform.SetParent(slotGrid.transform);
-        //        slots[i].GetComponent<Slot>().slotID = i;
-        //        if (toolList[i] != null)
-        //            Debug.Log("�F " + i);
-        //        slots[i].GetComponent<Slot>().SetupSlot(toolList[i]);
-        //        if (slots[i].GetComponent<Slot>().slotImage.sprite != null)
-        //            Debug.Log("Apex�p�F�H " + i);
-        //        Debug.Log("PV ID ��: " + PV.ViewID);
-        //    }
-        //}
-        //else
-        //{
-        //    Debug.Log("PV ID ��: " + PV.ViewID);
-        //}
     }
 }
