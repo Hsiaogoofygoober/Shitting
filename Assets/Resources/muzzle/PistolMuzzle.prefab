@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6324177277152907162}
   - component: {fileID: 114597834176563982}
   - component: {fileID: 3925317372677040400}
+  - component: {fileID: -3239250513007684298}
   m_Layer: 0
   m_Name: PistolMuzzle
   m_TagString: Untagged
@@ -4813,6 +4814,20 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-3239250513007684298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229961866326357629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2bf7396be90c83469f2330e44efb993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AgeLimit: 4
+  Age: 0
 --- !u!1 &6136991733217451815
 GameObject:
   m_ObjectHideFlags: 0

@@ -37,7 +37,7 @@ public class ShotGun : Gun
     public Transform attackPoint;
 
     //Graphics
-    //public GameObject muzzleFlash;
+    public ParticleSystem muzzleFlash;
     public TextMeshProUGUI ammunitionDisplay;
 
     PhotonView PV;
@@ -155,7 +155,7 @@ public class ShotGun : Gun
         for(int i = 0; i < ShotgunBulletPerTap; i++) 
         {
             float x = Random.Range(-2*spread, 2*spread);
-            float y = Random.Range(-spread, spread);
+            float y = Random.Range(-2*spread, 2*spread);
             directionWithSpread[i] = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last direction
         }
 
@@ -172,21 +172,12 @@ public class ShotGun : Gun
         //Add forces to bullet
         if (starterAssetsInputs.aim)
         {
-           ShootRPC(directionWithlittleSpread);           
+           ShootRPC(directionWithlittleSpread, directionWithoutSpread);           
         }
         else
         {
-            ShootRPC(directionWithSpread);
+            ShootRPC(directionWithSpread, directionWithoutSpread);
         }
-        /*for (int i = 0; i < ShotgunBulletPerTap; i++)
-        {
-            currentBullet[i].GetComponent<Rigidbody>().AddForce(fpsCam.transform.up * upwardForce, ForceMode.Impulse);
-        }*/
-        
-
-        //Instantiate muzzle flash, if you have one
-        //if (muzzleFlash != null)
-        //    Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
 
         bulletsLeft--;
         bulletsShot++;
@@ -197,8 +188,6 @@ public class ShotGun : Gun
             Invoke("ResetShot", timeBetweenShooting);
             allowInvoke = false;
 
-            //Add recoil to player (should only be called once)
-            //playerRb.AddForce(-directionWithSpread.normalized * recoilForce, ForceMode.Impulse);
         }
 
         //if more than one bulletsPerTap make sure to repeat shoot function
@@ -224,15 +213,16 @@ public class ShotGun : Gun
         bulletsLeft = magazineSize;
         reloading = false;
     }
-    private void ShootRPC(Vector3[] directionWithSpread)
+    private void ShootRPC(Vector3[] directionWithSpread, Vector3 directionWithoutSpread)
     {
-        PV.RPC("RPC_Shoot", RpcTarget.All,directionWithSpread);
+        PV.RPC("RPC_Shoot", RpcTarget.All,directionWithSpread, directionWithoutSpread);
     }
  
 
     [PunRPC]
-    void RPC_Shoot(Vector3[] directionWithSpread)
+    void RPC_Shoot(Vector3[] directionWithSpread, Vector3 directionWithoutSpread)
     {
+        Instantiate(muzzleFlash, attackPoint.position, Quaternion.LookRotation(directionWithoutSpread));
         for (int i = 0; i < ShotgunBulletPerTap; i++)
         {
             GameObject currentBullet = Instantiate(bullet, attackPoint.position, Quaternion.identity);
@@ -241,7 +231,5 @@ public class ShotGun : Gun
             Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
             rb.AddRelativeForce(directionWithSpread[i].normalized * shootForce, ForceMode.Impulse);
         }
-        
-        //PhotonView.Find(BulletID).GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
     }
 }
