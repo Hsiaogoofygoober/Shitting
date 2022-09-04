@@ -127,7 +127,6 @@ namespace StarterAssets
         public Item gunItem;
         public Camera playerCam;
         private GameObject weapon;
-        private bool isHoldingWeapon;
         public float pickUpRange;
         public float dropForwardForce, dropUpwardForce;
         public bool equipped;
@@ -172,7 +171,6 @@ namespace StarterAssets
             fpsCam = _mainCamera.transform;
             Debug.Log("player owner : " + PV.Owner);
             action_view.action.performed += _x => scrolling_value = _x.action.ReadValue<float>();
-            isHoldingWeapon = false;
             //toolList[17] = null;
         }
 
@@ -181,14 +179,7 @@ namespace StarterAssets
             constraint = GetComponentInChildren<TwoBoneIKConstraint>();
             if (PV.IsMine)
             {
-                //EquiptItem(0);
-                if (isHoldingWeapon)
-                {
-                    constraint.data.target = GameObject.FindWithTag("weaponHold").transform;
-                }
 
-                rigBuilder.Build();
-                //itemHolder = GameObject.FindWithTag("ItemHolder").transform;
             }
             else
             {
@@ -519,7 +510,8 @@ namespace StarterAssets
                 items[previousItemIndex].itemGameObject.SetActive(false);
                 
             }
-            constraint.data.target = items[itemIndex].GetComponentInChildren<BoxCollider>().transform;
+            constraint.data.target = items[itemIndex].transform.Find("WeaponHold");
+            Debug.Log(items[itemIndex].transform.Find("WeaponHold"));
             rigBuilder.Build();
             previousItemIndex = itemIndex;
 
@@ -543,9 +535,9 @@ namespace StarterAssets
             previousItemIndex = itemIndex;
            
 
-            constraint.data.target = items[itemIndex].GetComponentInChildren<BoxCollider>().transform;
+            constraint.data.target = items[itemIndex].transform.Find("WeaponHold");
 
-            //rigBuilder.Build();
+            rigBuilder.Build();
             if (PV.IsMine)
             {
                 Hashtable hash = new Hashtable();
@@ -577,7 +569,7 @@ namespace StarterAssets
 
                 previousItemIndex = itemIndex;
 
-                constraint.data.target = items[itemIndex].GetComponentInChildren<BoxCollider>().transform;
+                constraint.data.target = items[itemIndex].transform.Find("WeaponHold");
 
                 rigBuilder.Build();
 

@@ -9,8 +9,9 @@ public class BulletProjectile : MonoBehaviour
 
     public int damage;
     Vector3 mPrevious;
-    public string owner = "123";
+    public string owner;
     public ParticleSystem blood;
+    public ParticleSystem HitPartical;
 
     void Start()
     {
@@ -21,7 +22,6 @@ public class BulletProjectile : MonoBehaviour
     {
         
         RaycastHit[] hits = Physics.RaycastAll(new Ray(mPrevious, (transform.position - mPrevious).normalized), (transform.position - mPrevious).magnitude);
-        Debug.Log(owner);
         for(int i = 0; i < hits.Length; i++)
         {
             if(hits[i].collider != null && !hits[i].collider.CompareTag("bullet"))
@@ -31,6 +31,10 @@ public class BulletProjectile : MonoBehaviour
                     hits[i].collider.GetComponent<IDamageable>()?.TakeDamage(damage);
                     hits[i].collider.GetComponent<FirstPersonController>().killer = owner;
                     Instantiate(blood, (transform.position + mPrevious) / 2, Quaternion.LookRotation((transform.position + mPrevious) / 2 - hits[i].transform.position));
+                    if (HitPartical != null)
+                    {
+                        Instantiate(HitPartical, (transform.position + mPrevious) / 2, Quaternion.LookRotation((transform.position + mPrevious) / 2 - hits[i].transform.position));
+                    }
                 }
                 Destroy(gameObject);
             }
