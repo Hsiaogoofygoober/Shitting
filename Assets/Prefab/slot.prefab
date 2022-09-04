@@ -91,12 +91,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotID: 0
-  slotTool: {fileID: 0}
   slotImage: {fileID: 8543477374084270769}
   slotInfo: 
   slotName: 
   toolOnSlot: {fileID: 4212188333955144973}
-  myBag: {fileID: 11400000, guid: 4c5473caa39f24a49af34a99fc8bf05b, type: 2}
 --- !u!1 &4212188333955144973
 GameObject:
   m_ObjectHideFlags: 0
