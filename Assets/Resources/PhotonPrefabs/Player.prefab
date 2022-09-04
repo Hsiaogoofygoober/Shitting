@@ -4307,6 +4307,7 @@ MonoBehaviour:
   canDrop: 1
   PickUpRef: {fileID: -6722303360145565273, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
   DropDownRef: {fileID: 6889210387038372656, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
+  damageText: {fileID: 0}
   Mybag: {fileID: 2424158859462253342}
   InventoryManager2: {fileID: 1934315005400836030}
 --- !u!114 &6837152431155922379
