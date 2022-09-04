@@ -35,9 +35,8 @@ public class Pistol : Gun
     public Transform attackPoint;
 
     //Graphics
-    //public GameObject muzzleFlash;
+    public ParticleSystem muzzleFlash;
     public TextMeshProUGUI ammunitionDisplay;
-
     PhotonView PV;
 
     //bug fixing :D
@@ -227,6 +226,7 @@ public class Pistol : Gun
     void RPC_Shoot(Vector3 directionWithSpread) 
     {
         GameObject currentBullet = Instantiate(bullet, attackPoint.position, Quaternion.identity);
+        Instantiate(muzzleFlash, attackPoint.position, Quaternion.LookRotation(directionWithSpread));
         currentBullet.transform.forward = directionWithSpread.normalized;
         currentBullet.GetComponent<BulletProjectile>().owner = PV.Owner.NickName;
         Debug.Log(PV.Owner.NickName);
