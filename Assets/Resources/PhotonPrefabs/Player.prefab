@@ -169,7 +169,9 @@ MonoBehaviour:
   slotID: 6
   slotImage: {fileID: 3980303881483920979}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 2585017496597569265}
 --- !u!1 &70363956831167967
 GameObject:
@@ -340,7 +342,9 @@ MonoBehaviour:
   slotID: 13
   slotImage: {fileID: 6376113050150745333}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 4538091803606478558}
 --- !u!1 &362058346803501465
 GameObject:
@@ -557,7 +561,9 @@ MonoBehaviour:
   slotID: 15
   slotImage: {fileID: 7840309402320228381}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 562727897264821047}
 --- !u!1 &521215696253028687
 GameObject:
@@ -1267,7 +1273,9 @@ MonoBehaviour:
   slotID: 16
   slotImage: {fileID: 5626192553922244428}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 5002098014685369010}
 --- !u!1 &869102132581796019
 GameObject:
@@ -1362,7 +1370,9 @@ MonoBehaviour:
   slotID: 0
   slotImage: {fileID: 9094533299898528976}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 7954420568757292907}
 --- !u!1 &952531257115583199
 GameObject:
@@ -1592,7 +1602,9 @@ MonoBehaviour:
   slotID: 10
   slotImage: {fileID: 1123860620116353462}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 6112705353322698316}
 --- !u!1 &1050717062620113267
 GameObject:
@@ -2023,7 +2035,9 @@ MonoBehaviour:
   slotID: 4
   slotImage: {fileID: 4649806873803896662}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 843858266430234140}
 --- !u!1 &1532085951509654145
 GameObject:
@@ -3041,7 +3055,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.4859287, y: 1}
+    m_SensorSize: {x: 1.8057852, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3143,7 +3157,9 @@ MonoBehaviour:
   slotID: 11
   slotImage: {fileID: 8669641362690051609}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 8395093028094353631}
 --- !u!1 &2568929645480597566
 GameObject:
@@ -3238,7 +3254,9 @@ MonoBehaviour:
   slotID: 12
   slotImage: {fileID: 8574455191369239396}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 1688782637229390736}
 --- !u!1 &2585017496597569265
 GameObject:
@@ -3700,7 +3718,9 @@ MonoBehaviour:
   slotID: 7
   slotImage: {fileID: 3299993529896209372}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 3998809720888425408}
 --- !u!1 &2976894923169105192
 GameObject:
@@ -3871,7 +3891,9 @@ MonoBehaviour:
   slotID: 5
   slotImage: {fileID: 6120558842635156003}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 619073962294198754}
 --- !u!1 &3178113537541787591
 GameObject:
@@ -4280,13 +4302,13 @@ MonoBehaviour:
   killer: 
   PV: {fileID: 0}
   gun: {fileID: 0}
-  currentHealth: 100
   playerFollowCamera: {fileID: 4327787885690698274}
   aimVirtualCamera: {fileID: 4327787885862135951}
   normalSensitivity: 0.5
   aimSensitivity: 0.3
   healthbarImage: {fileID: 1500393650009819507}
   ui: {fileID: 5014336597946589186}
+  currentHealth: 100
   items:
   - {fileID: 0}
   - {fileID: 0}
@@ -4310,6 +4332,9 @@ MonoBehaviour:
   damageText: {fileID: 7421645783877424611, guid: 8c47736a75d96274c885e3b72ae00954, type: 3}
   Mybag: {fileID: 2424158859462253342}
   InventoryManager2: {fileID: 1934315005400836030}
+  pistolAmmo: 0
+  shotgunAmmo: 0
+  rifleAmmo: 0
 --- !u!114 &6837152431155922379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4959,7 +4984,9 @@ MonoBehaviour:
   slotID: 9
   slotImage: {fileID: 7250982142455508192}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 2119204972821581196}
 --- !u!1 &3998809720888425408
 GameObject:
@@ -6725,7 +6752,9 @@ MonoBehaviour:
   slotID: 3
   slotImage: {fileID: 4287011404347983590}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 1166354209904213106}
 --- !u!1 &5447444473161188018
 GameObject:
@@ -6820,7 +6849,9 @@ MonoBehaviour:
   slotID: 1
   slotImage: {fileID: 5290150976473897221}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 5637261557832497225}
 --- !u!1 &5564126160336764185
 GameObject:
@@ -7250,7 +7281,9 @@ MonoBehaviour:
   slotID: 2
   slotImage: {fileID: 6578108766669176970}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 9002746021901708301}
 --- !u!1 &5970605045627748936
 GameObject:
@@ -7721,7 +7754,9 @@ MonoBehaviour:
   slotID: 17
   slotImage: {fileID: 1909775674638165942}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 7977175453531196795}
 --- !u!1 &6241519293827717599
 GameObject:
@@ -7892,7 +7927,9 @@ MonoBehaviour:
   slotID: 14
   slotImage: {fileID: 1529582721155600932}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 1532085951509654145}
 --- !u!1 &6401666221817587841
 GameObject:
@@ -8139,7 +8176,9 @@ MonoBehaviour:
   slotID: 8
   slotImage: {fileID: 2868236897143105353}
   slotInfo: 
+  slotValue: 0
   slotName: 
+  decreasingRate: 2
   toolOnSlot: {fileID: 7706788630021671404}
 --- !u!1 &6568833523250389601
 GameObject:
@@ -10166,7 +10205,7 @@ MonoBehaviour:
   toolList:
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: -6079933604225118891, guid: fa89100fffbc07d4d873554de9a9dea7, type: 3}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -10361,7 +10400,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8762286023885395323, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.4859287
+      value: 1.8057852
       objectReference: {fileID: 0}
     - target: {fileID: 8762286024517199034, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: Damping.x
@@ -10454,7 +10493,7 @@ PrefabInstance:
       objectReference: {fileID: 9003827619895006823}
     - target: {fileID: 8762286023885395323, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.4859287
+      value: 1.8057852
       objectReference: {fileID: 0}
     - target: {fileID: 8762286024517199034, guid: 9c489a8547f4d9e4387da15a4ff82c81, type: 3}
       propertyPath: Damping.x

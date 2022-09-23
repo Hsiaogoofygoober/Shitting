@@ -12,7 +12,9 @@ public class Rifle : Gun
     private StarterAssetsInputs starterAssetsInputs;
     //bullet 
     public GameObject bullet;
-
+    public int ammoPerBox;
+    public int ammoInBag = 0;
+    public int preAmmoInBag = 0;
     //public float damage = 10;
     //bullet force
     public float shootForce, upwardForce;
@@ -90,7 +92,7 @@ public class Rifle : Gun
         }
         else
         {
-            ammunitionDisplay.SetText("ammo left: \n" + bulletsLeft / bulletsPerTap + " / " + magazineSize / bulletsPerTap);
+            ammunitionDisplay.SetText("rifle ammo: \n" + bulletsLeft / bulletsPerTap + " / " + (GetComponentInParent<FirstPersonController>().rifleAmmo) / bulletsPerTap);
         }
 
     }
@@ -121,7 +123,7 @@ public class Rifle : Gun
         //Reloading 
         if (starterAssetsInputs.reload && bulletsLeft < magazineSize && !reloading) Reload();
         //Reload automatically when trying to shoot without ammo
-        if (readyToShoot && shooting && !reloading && bulletsLeft <= 0) Reload();
+        if (readyToShoot && shooting && !reloading && bulletsLeft <= 0 && GetComponentInParent<FirstPersonController>().rifleAmmo > 0) Reload();
 
         //Shooting
         if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
@@ -193,6 +195,28 @@ public class Rifle : Gun
         if (bulletsShot < bulletsPerTap && bulletsLeft > 0)
             Invoke("Shoot", timeBetweenShots);
     }
+    private void CheckAmmoInBag()
+    {
+        if (GetComponentInParent<FirstPersonController>().rifleAmmo % ammoPerBox != 0)
+        {
+            ammoInBag = GetComponentInParent<FirstPersonController>().rifleAmmo / ammoPerBox + 1;
+
+        }
+        else
+        {
+            ammoInBag = GetComponentInParent<FirstPersonController>().rifleAmmo / ammoPerBox;
+        }
+        Debug.Log("ammo In Bag : " + ammoInBag);
+        Debug.Log("ammo In pre Bag : " + preAmmoInBag);
+        if (ammoInBag < preAmmoInBag)
+        {
+            Debug.Log("ammo In two Bag : " + ammoInBag + " , " + preAmmoInBag);
+            PlayerPrefs.SetInt("RefreshBag", 2);
+        }
+
+        preAmmoInBag = ammoInBag;
+
+    }
 
     private void ResetShot()
     {
@@ -209,7 +233,17 @@ public class Rifle : Gun
     private void ReloadFinished()
     {
         //Fill magazine
-        bulletsLeft = magazineSize;
+        if (GetComponentInParent<FirstPersonController>().rifleAmmo >= magazineSize)
+        {
+            GetComponentInParent<FirstPersonController>().rifleAmmo -= magazineSize;
+            bulletsLeft = magazineSize;
+        }
+        else
+        {
+            bulletsLeft = GetComponentInParent<FirstPersonController>().rifleAmmo;
+            GetComponentInParent<FirstPersonController>().rifleAmmo = 0;
+        }
+        CheckAmmoInBag();
         reloading = false;
     }
     private void ShootWithoutSpread(Vector3 directionWithoutSpread)

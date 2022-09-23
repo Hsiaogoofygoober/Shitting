@@ -13,6 +13,11 @@ TagManager:
   - weaponMessage
   - SniperAim
   - bullet
+  - HealthPortion
+  - inventoryPanel
+  - burger
+  - pistolAmmo
+  - rifleAmmo
   layers:
   - Default
   - TransparentFX

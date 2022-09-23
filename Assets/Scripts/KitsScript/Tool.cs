@@ -8,6 +8,7 @@ public class Tool : MonoBehaviour
 {
     public string toolName;
     public Sprite toolImage;
+    public int toolValue;
 
     [TextArea]
     public string toolInfo;

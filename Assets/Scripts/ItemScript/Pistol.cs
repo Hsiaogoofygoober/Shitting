@@ -12,7 +12,9 @@ public class Pistol : Gun
     private StarterAssetsInputs starterAssetsInputs;
     //bullet 
     public GameObject bullet;
-
+    public int ammoPerBox;
+    public int ammoInBag = 0;
+    public int preAmmoInBag = 0;
     //public float damage = 10;
     //bullet force
     public float shootForce, upwardForce;
@@ -89,7 +91,7 @@ public class Pistol : Gun
         }
         else
         {
-            ammunitionDisplay.SetText("ammo left: \n" + bulletsLeft / bulletsPerTap + " / " + magazineSize / bulletsPerTap);
+            ammunitionDisplay.SetText("pistol ammo: \n" + bulletsLeft / bulletsPerTap + " / " + (GetComponentInParent<FirstPersonController>().pistolAmmo)/bulletsPerTap);
         }
 
     }
@@ -121,7 +123,7 @@ public class Pistol : Gun
         //Reloading 
         if (starterAssetsInputs.reload && bulletsLeft < magazineSize && !reloading) Reload();
         //Reload automatically when trying to shoot without ammo
-        if (readyToShoot && shooting && !reloading && bulletsLeft <= 0) Reload();
+        if (readyToShoot && shooting && !reloading && bulletsLeft <= 0 && GetComponentInParent<FirstPersonController>().pistolAmmo>0) Reload();
 
         //Shooting
         if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
@@ -130,7 +132,7 @@ public class Pistol : Gun
             bulletsShot = 0;
 
             Shoot();
-            
+
         }
     }
 
@@ -163,23 +165,17 @@ public class Pistol : Gun
         if (starterAssetsInputs.aim)
         {
             ShootRPC(directionWithoutSpread);
-            //currentBullet.GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
         }
         else
         {
             
             
             ShootRPC(directionWithSpread);
-            //currentBullet.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
         }
 
-        //currentBullet.GetComponent<Rigidbody>().AddForce(fpsCam.transform.up * upwardForce, ForceMode.Impulse);
-
-        //Instantiate muzzle flash, if you have one
-        //if (muzzleFlash != null)
-        //    Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
 
         bulletsLeft--;
+
         bulletsShot++;
 
         //Invoke resetShot function (if not already invoked), with your timeBetweenShooting
@@ -195,6 +191,30 @@ public class Pistol : Gun
         //if more than one bulletsPerTap make sure to repeat shoot function
         if (bulletsShot < bulletsPerTap && bulletsLeft > 0)
             Invoke("Shoot", timeBetweenShots);
+
+    }
+
+    private void CheckAmmoInBag()
+    {
+        if (GetComponentInParent<FirstPersonController>().pistolAmmo % ammoPerBox != 0)
+        {
+            ammoInBag = GetComponentInParent<FirstPersonController>().pistolAmmo / ammoPerBox + 1;
+            
+        }
+        else
+        {
+            ammoInBag = GetComponentInParent<FirstPersonController>().pistolAmmo / ammoPerBox;
+        }
+        Debug.Log("ammo In Bag : " + ammoInBag);
+        Debug.Log("ammo In pre Bag : " + preAmmoInBag);
+        if (ammoInBag < preAmmoInBag)
+        {
+            Debug.Log("ammo In two Bag : " + ammoInBag + " , " + preAmmoInBag);
+            PlayerPrefs.SetInt("RefreshBag", 1);
+        }
+
+        preAmmoInBag = ammoInBag;
+
     }
 
     private void ResetShot()
@@ -212,7 +232,17 @@ public class Pistol : Gun
     private void ReloadFinished()
     {
         //Fill magazine
-        bulletsLeft = magazineSize;
+        if (GetComponentInParent<FirstPersonController>().pistolAmmo >= magazineSize)
+        {
+            GetComponentInParent<FirstPersonController>().pistolAmmo -= magazineSize;
+            bulletsLeft = magazineSize;
+        }
+        else
+        {
+            bulletsLeft = GetComponentInParent<FirstPersonController>().pistolAmmo;
+            GetComponentInParent<FirstPersonController>().pistolAmmo = 0;  
+        }
+        CheckAmmoInBag();
         reloading = false;
     }
     private void ShootRPC(Vector3 directionWithoutSpread)
