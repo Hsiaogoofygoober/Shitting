@@ -116,13 +116,16 @@ MonoBehaviour:
   itemInfo: {fileID: 11400000, guid: 90a6f496d1ec6284fa8ee20959fadbf7, type: 2}
   itemGameObject: {fileID: 3530434826739937031}
   bullet: {fileID: 1485420261758061438, guid: f9be764a91ffb1a4fb34ed38cf12f1a9, type: 3}
+  ammoPerBox: 60
+  ammoInBag: 0
+  preAmmoInBag: 0
   shootForce: 1000
   upwardForce: 0
-  timeBetweenShooting: 0.15
+  timeBetweenShooting: 0.1
   spread: 0
   reloadTime: 3
   timeBetweenShots: 3
-  magazineSize: 18
+  magazineSize: 26
   bulletsPerTap: 1
   allowButtonHold: 0
   recoilForce: 0

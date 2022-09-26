@@ -824,6 +824,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toolName: HealthPortion
   toolImage: {fileID: 21300000, guid: bebdcb1b1d4112d49bb5e505c72918c6, type: 3}
+  toolValue: 0
   toolInfo: Heal 20% hp
 --- !u!1 &407528436
 GameObject:

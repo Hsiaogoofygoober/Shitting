@@ -83,8 +83,7 @@ namespace StarterAssets
         private float _rotationVelocity;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
-        const float maxHealth = 100f;
-        public float currentHealth = maxHealth;
+        
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
@@ -105,6 +104,8 @@ namespace StarterAssets
         // health
         [SerializeField] Image healthbarImage;
         [SerializeField] GameObject ui;
+        const float maxHealth = 100f;
+        public float currentHealth = maxHealth;
 
         // item
         [SerializeField] Item[] items;
@@ -152,6 +153,13 @@ namespace StarterAssets
         public static int status;
 
         public InventoryManager2 InventoryManager2;
+
+        InventorySystem inventorySystem;
+
+        //current ammo
+        public int pistolAmmo = 0;
+        public int shotgunAmmo = 0;
+        public int rifleAmmo = 0;
 
         private void Awake()
         {
@@ -274,17 +282,6 @@ namespace StarterAssets
             }
         }
 
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.gameObject.CompareTag("HealthPortion"))
-            {
-                Tool healBag = other.gameObject.GetComponent<Tool>();
-                Debug.Log(healBag.toolName);
-                Debug.Log(healBag.toolInfo);
-
-                AddNewItem(healBag);
-            }
-        }
 
         private void AddNewItem(Tool thisTool)
         {
@@ -294,16 +291,16 @@ namespace StarterAssets
                 {
                     if (PV.GetComponentInChildren<InventorySystem>().toolList[i] == null)
                     {
+                        
                         PV.GetComponentInChildren<InventorySystem>().toolList[i] = thisTool;
-                        //if(PV.GetComponentInChildren<InventorySystem>().toolList[i] != null)
-                        //    Debug.Log("楊文霖 " + i);
+                        if(thisTool.toolName == "PistolAmmo" || thisTool.toolName == "RifleAmmo")
+                        {
+                            PlayerPrefs.SetInt("SlotID", i);
+                            Debug.Log("pick slotid :"+ PlayerPrefs.GetInt("SlotID"));
+                        }
                         break;
                     }
                 }
-                //InventoryManager.instance.toolList = PV.GetComponentInChildren<InventorySystem>().toolList;
-                //if(InventoryManager.instance.toolList[0] != null)
-                //    Debug.Log("洗洗囉");
-                //InventoryManager.RefreshTool();
                 InventoryManager2.toolList = PV.GetComponentInChildren<InventorySystem>().toolList;
                 if (InventoryManager2.toolList[0] != null)
                     Debug.Log("洗洗囉");
@@ -595,7 +592,7 @@ namespace StarterAssets
                 slotFull = false;
             }
 
-            if (_input.pick && canPick && !slotFull)
+            if (_input.pick && canPick)
             {
 
                 Debug.Log("hit E");
@@ -603,7 +600,8 @@ namespace StarterAssets
                 {
                     Debug.Log(hit.collider.gameObject);
 
-                    if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("weapon") && hit.distance <= pickUpRange)
+                    //pick gun
+                    if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("weapon") && hit.distance <= pickUpRange && !slotFull)
                     {
                         canPick = false;
                         Debug.Log("is weapon");
@@ -614,6 +612,38 @@ namespace StarterAssets
                         Invoke("readyToPick", 0.1f);
 
                         Debug.Log("pick");
+                    }
+                    //pick burger
+                    else if(hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("burger") && hit.distance <= pickUpRange)
+                    {
+                        canPick = false;
+                        Tool tool = hit.collider.GetComponent<Tool>();
+                        AddNewItem(tool);
+                        hit.collider.gameObject.SetActive(false);
+                        //Destroy(hit.collider.gameObject); 
+                        Invoke("readyToPick", 0.1f);
+                    }
+                    //pick pistol ammo
+                    else if(hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("pistolAmmo") && hit.distance <= pickUpRange)
+                    {
+                        canPick = false;
+                        Tool tool = hit.collider.GetComponent<Tool>();
+                        AddNewItem(tool);
+                        pistolAmmo += tool.toolValue;
+                        hit.collider.gameObject.SetActive(false);
+                        //Destroy(hit.collider.gameObject);
+                        Invoke("readyToPick", 0.1f);
+                    }
+                    //pick rifle ammo
+                    else if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("rifleAmmo") && hit.distance <= pickUpRange)
+                    {
+                        canPick = false;
+                        Tool tool = hit.collider.GetComponent<Tool>();
+                        AddNewItem(tool);
+                        rifleAmmo += tool.toolValue;
+                        hit.collider.gameObject.SetActive(false);
+                        //Destroy(hit.collider.gameObject);
+                        Invoke("readyToPick", 0.1f);
                     }
 
                 }

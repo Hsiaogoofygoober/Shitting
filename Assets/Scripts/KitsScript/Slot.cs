@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using StarterAssets;
 
 public class Slot : MonoBehaviour
 {
@@ -10,21 +11,37 @@ public class Slot : MonoBehaviour
     public Image slotImage;
 
     public string slotInfo;
-
+    public int slotValue;
     public string slotName;
 
+    [SerializeField] private float decreasingRate = 2;
+    private FirstPersonController player;
     public GameObject toolOnSlot;
 
     public void ItemOnClicked() 
     {   
         Debug.Log(slotName + " 遊戲 + 結束 " + slotID + " + 可憐 + " + slotInfo);
-        slotImage.sprite = null;
-        slotInfo = null;
-        slotName = null;
-        toolOnSlot.SetActive(false);
-        //InventoryManager.UpdateToolInfo(slotInfo);
+        player = GetComponentInParent<FirstPersonController>();
 
-        PlayerPrefs.SetInt("SlotID", slotID);
+        switch (slotName)
+        {
+            case "Burger":
+                UsingBurger();
+                Invoke("AfterUsingBurger", 4);
+                slotImage.sprite = null;
+                slotInfo = null;
+                slotName = null;
+                toolOnSlot.SetActive(false);
+                PlayerPrefs.SetInt("SlotID", slotID);
+                break;
+            case "PisolAmmo":
+            case "RifleAmmo":
+                break;
+            default:
+                Debug.Log("error");
+                break;
+        }
+       
     }
 
     public void SetupSlot(Tool tool) 
@@ -41,5 +58,18 @@ public class Slot : MonoBehaviour
             Debug.Log("真的是很可悲 " + slotID);
         slotInfo = tool.toolInfo;
         slotName = tool.toolName;
+        slotValue = tool.toolValue;
+    }
+    public void UsingBurger()
+    {
+        player.MoveSpeed /= decreasingRate;
+        player.SprintSpeed /= decreasingRate;
+       
+    }
+    public void AfterUsingBurger()
+    {
+        player.currentHealth += slotValue;
+        player.MoveSpeed *= decreasingRate;
+        player.SprintSpeed *= decreasingRate;
     }
 }
