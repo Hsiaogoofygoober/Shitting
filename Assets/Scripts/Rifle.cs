@@ -121,7 +121,7 @@ public class Rifle : Gun
 
 
         //Reloading 
-        if (starterAssetsInputs.reload && bulletsLeft < magazineSize && !reloading) Reload();
+        if (starterAssetsInputs.reload && bulletsLeft < magazineSize && !reloading && GetComponentInParent<FirstPersonController>().rifleAmmo > 0) Reload();
         //Reload automatically when trying to shoot without ammo
         if (readyToShoot && shooting && !reloading && bulletsLeft <= 0 && GetComponentInParent<FirstPersonController>().rifleAmmo > 0) Reload();
 

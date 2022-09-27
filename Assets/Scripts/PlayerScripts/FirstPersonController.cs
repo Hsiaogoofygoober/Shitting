@@ -13,6 +13,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
+using TMPro;
 
 #endif
 
@@ -154,12 +155,11 @@ namespace StarterAssets
 
         public InventoryManager2 InventoryManager2;
 
-        InventorySystem inventorySystem;
-
         //current ammo
         public int pistolAmmo = 0;
         public int shotgunAmmo = 0;
         public int rifleAmmo = 0;
+        public TextMeshProUGUI ammunitionDisplay;
 
         private void Awake()
         {
@@ -293,7 +293,7 @@ namespace StarterAssets
                     {
                         
                         PV.GetComponentInChildren<InventorySystem>().toolList[i] = thisTool;
-                        if(thisTool.toolName == "PistolAmmo" || thisTool.toolName == "RifleAmmo")
+                        if(thisTool.toolName == "PistolAmmo" || thisTool.toolName == "RifleAmmo" || thisTool.toolName == "ShotgunAmmo")
                         {
                             PlayerPrefs.SetInt("SlotID", i);
                             Debug.Log("pick slotid :"+ PlayerPrefs.GetInt("SlotID"));
@@ -645,6 +645,17 @@ namespace StarterAssets
                         //Destroy(hit.collider.gameObject);
                         Invoke("readyToPick", 0.1f);
                     }
+                    //pick shotgun ammo
+                    else if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("shotgunAmmo") && hit.distance <= pickUpRange)
+                    {
+                        canPick = false;
+                        Tool tool = hit.collider.GetComponent<Tool>();
+                        AddNewItem(tool);
+                        shotgunAmmo += tool.toolValue;
+                        hit.collider.gameObject.SetActive(false);
+                        //Destroy(hit.collider.gameObject);
+                        Invoke("readyToPick", 0.1f);
+                    }
 
                 }
 
@@ -770,6 +781,10 @@ namespace StarterAssets
             }
             else if (items[0] == null && items[1] == null)
             {
+                if (PV.IsMine)
+                {
+                    ammunitionDisplay.SetText("no weapon");
+                }
                 constraint.data.target = null;
                 rigBuilder.Build();
                 Debug.Log(constraint.data.target);

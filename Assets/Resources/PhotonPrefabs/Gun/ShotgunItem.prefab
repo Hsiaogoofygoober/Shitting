@@ -85,14 +85,17 @@ MonoBehaviour:
   bullet: {fileID: 7854024766286042895, guid: 8752971b8ecb2d7428659b1d728d7551, type: 3}
   shootForce: 150
   upwardForce: 10
-  timeBetweenShooting: 2
+  timeBetweenShooting: 1
   spread: 2
-  reloadTime: 3
-  timeBetweenShots: 2
+  reloadTime: 2
+  timeBetweenShots: 1
   magazineSize: 6
   bulletsPerTap: 1
   allowButtonHold: 1
   ShotgunBulletPerTap: 15
+  ammoPerBox: 10
+  ammoInBag: 0
+  preAmmoInBag: 0
   recoilForce: 0
   fpsCam: {fileID: 0}
   attackPoint: {fileID: 2693723018236411215}

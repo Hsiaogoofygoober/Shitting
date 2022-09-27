@@ -20,7 +20,7 @@ public class Sniper : Gun
     public float timeBetweenShooting, spread, reloadTime, timeBetweenShots;
     public int magazineSize, bulletsPerTap;
     public bool allowButtonHold;
-
+    public int sniperAmmo;
     int bulletsLeft, bulletsShot;
 
     //Recoil
@@ -90,7 +90,7 @@ public class Sniper : Gun
         }
         else
         {
-            ammunitionDisplay.SetText("ammo left: \n" + bulletsLeft / bulletsPerTap + " / " + magazineSize / bulletsPerTap);
+            ammunitionDisplay.SetText("sniper ammo: \n" + bulletsLeft / bulletsPerTap + " / " + sniperAmmo / bulletsPerTap);
         }
 
     }
@@ -125,9 +125,9 @@ public class Sniper : Gun
             Debug.Log("tap");
         }
         //Reloading 
-        if (starterAssetsInputs.reload && bulletsLeft < magazineSize && !reloading) Reload();
+        if (starterAssetsInputs.reload && bulletsLeft < magazineSize && !reloading && sniperAmmo>0) Reload();
         //Reload automatically when trying to shoot without ammo
-        if (readyToShoot && shooting && !reloading && bulletsLeft <= 0) Reload();
+        if (readyToShoot && shooting && !reloading && bulletsLeft <= 0 && sniperAmmo > 0) Reload();
 
         //Shooting
         if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
@@ -217,7 +217,16 @@ public class Sniper : Gun
     private void ReloadFinished()
     {
         //Fill magazine
-        bulletsLeft = magazineSize;
+        if (sniperAmmo >= magazineSize)
+        {
+            sniperAmmo -= magazineSize;
+            bulletsLeft = magazineSize;
+        }
+        else
+        {
+            bulletsLeft = sniperAmmo;
+            sniperAmmo = 0;
+        }
         reloading = false;
     }
     private void ShootWithoutSpread(Vector3 directionWithoutSpread)
