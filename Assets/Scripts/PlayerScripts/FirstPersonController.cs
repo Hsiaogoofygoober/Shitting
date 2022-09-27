@@ -139,7 +139,7 @@ namespace StarterAssets
 
         //damage text
         public GameObject damageText;
-        
+
 
         //public List<Tool> toolList = new List<Tool>(18);
 
@@ -149,6 +149,8 @@ namespace StarterAssets
         public Player[] other;
 
         //public Inventorys inventorys;
+
+        public static int status;
 
         public InventoryManager2 InventoryManager2;
 
@@ -164,6 +166,7 @@ namespace StarterAssets
             //if (instance != null)
             //    Destroy(this);
             //instance = this;
+            Debug.Log("Master Client: " + PhotonNetwork.MasterClient.NickName);
 
             // get a reference to our main camera
             if (_mainCamera == null)
@@ -173,10 +176,11 @@ namespace StarterAssets
             PV = GetComponent<PhotonView>();
             //Debug.Log(GameObject.FindWithTag("MainCamera").transform);
             playerManagers = PhotonView.Find((int)PV.InstantiationData[0]).GetComponent<PlayerManagers>();
-            
             fpsCam = _mainCamera.transform;
             Debug.Log("player owner : " + PV.Owner);
+            Debug.Log("hello world " + playerManagers.photonView);
             action_view.action.performed += _x => scrolling_value = _x.action.ReadValue<float>();
+
             //toolList[17] = null;
         }
 
@@ -268,11 +272,11 @@ namespace StarterAssets
                 Move();
                 healthbarImage.fillAmount = currentHealth / maxHealth;
 
-                if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && PhotonNetwork.IsMasterClient)
-                {
-                    PlayerPrefs.SetInt("Status", 1);
-                    playerManagers.Win();
-                }
+                //if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+                //{
+                //    PlayerPrefs.SetInt("Winner", 1);
+                //    playerManagers.Win();
+                //}
                 //InventoryManager.RefreshTool();
                 //Aimming();
             }
@@ -334,7 +338,7 @@ namespace StarterAssets
 
         private void CameraRotation()
         {
-            
+
             // if there is an input
             if (_input.look.sqrMagnitude >= _threshold)
             {
@@ -480,12 +484,12 @@ namespace StarterAssets
         }
 
 
-        private void EquiptItem(int _index,int weaponID)
+        private void EquiptItem(int _index, int weaponID)
         {
 
 
             GameObject weapon = PhotonView.Find(weaponID).gameObject;
-            
+
             itemIndex = _index;
             weapon.transform.SetParent(itemHolder);
             weapon.transform.localPosition = Vector3.zero;
@@ -493,17 +497,17 @@ namespace StarterAssets
             weapon.transform.localScale = Vector3.one;
             weapon.GetComponent<Rigidbody>().isKinematic = true;
             weapon.GetComponentInChildren<BoxCollider>().enabled = false;
-           
+
             items[itemIndex] = weapon.GetComponent<Item>();
             equipped = true;
 
-            
+
             items[itemIndex].itemGameObject.SetActive(true);
 
             if (previousItemIndex != -1)
             {
                 items[previousItemIndex].itemGameObject.SetActive(false);
-                
+
             }
             constraint.data.target = items[itemIndex].transform.Find("WeaponHold");
             Debug.Log(items[itemIndex].transform.Find("WeaponHold"));
@@ -518,7 +522,7 @@ namespace StarterAssets
         {
 
             itemIndex = _index;
-            
+
             items[itemIndex].itemGameObject.SetActive(true);
 
             if (previousItemIndex != -1 && items[previousItemIndex] != null)
@@ -528,7 +532,7 @@ namespace StarterAssets
             }
 
             previousItemIndex = itemIndex;
-           
+
 
             constraint.data.target = items[itemIndex].transform.Find("WeaponHold");
 
@@ -539,36 +543,36 @@ namespace StarterAssets
                 hash.Add("itemIndex", itemIndex);
                 Debug.Log(hash);
                 PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-                
+
             }
 
         }
 
         private void EquiptItemWhenDrop(int _index)
         {
-          
 
-                itemIndex = _index;
 
-                items[itemIndex].itemGameObject.SetActive(true);
+            itemIndex = _index;
 
-                if (previousItemIndex != -1 && items[previousItemIndex] != null)
-                {
+            items[itemIndex].itemGameObject.SetActive(true);
 
-                    items[previousItemIndex].itemGameObject.SetActive(false);
-                }
+            if (previousItemIndex != -1 && items[previousItemIndex] != null)
+            {
 
-                Debug.Log(items[itemIndex].name);
-                Debug.Log(constraint.data.target);
-                Debug.Log(items[itemIndex].GetComponentInChildren<BoxCollider>().transform);
+                items[previousItemIndex].itemGameObject.SetActive(false);
+            }
 
-                previousItemIndex = itemIndex;
+            Debug.Log(items[itemIndex].name);
+            Debug.Log(constraint.data.target);
+            Debug.Log(items[itemIndex].GetComponentInChildren<BoxCollider>().transform);
 
-                constraint.data.target = items[itemIndex].transform.Find("WeaponHold");
+            previousItemIndex = itemIndex;
 
-                rigBuilder.Build();
+            constraint.data.target = items[itemIndex].transform.Find("WeaponHold");
 
-            
+            rigBuilder.Build();
+
+
 
         }
 
@@ -579,13 +583,13 @@ namespace StarterAssets
             Ray ray = playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //Just a ray through the middle of your current view
             RaycastHit hit;
 
-            if(items[0] != null && items[1] != null)
+            if (items[0] != null && items[1] != null)
             {
                 slotFull = true;
             }
             else
             {
-                slotFull=false;
+                slotFull = false;
             }
 
             if (_input.pick && canPick)
@@ -686,25 +690,44 @@ namespace StarterAssets
             if (PV.IsMine)
             {
                 PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);
+                if (currentHealth <= 0)
+                {
+                    Debug.Log(killer + "殺了你!!!");
+                    Debug.Log("目前Master Client為: " + PhotonNetwork.LocalPlayer.NickName);
+                    //if (PhotonNetwork.LocalPlayer.IsMasterClient)
+                    //{
+                    //    foreach (Player player in PhotonNetwork.PlayerListOthers)
+                    //    {
+                    //        Debug.Log("玩家名稱 : " + player.NickName);
+                    //        PhotonNetwork.SetMasterClient(player);
+                    //        break;
+                    //    }
+                    //}
+                    Die();
+                }
             }
             else
             {
-                DamageIndicator indicator = Instantiate(damageText, transform.position+Vector3.up*2, Quaternion.identity).GetComponent<DamageIndicator>();
+                DamageIndicator indicator = Instantiate(damageText, transform.position + Vector3.up * 2, Quaternion.identity).GetComponent<DamageIndicator>();
                 indicator.SetDamageText(damage);
             }
-            
+
         }
         public void PickWeapon(int weaponID)
         {
             PV.RPC("RPC_PickWeapon", RpcTarget.All, weaponID);
         }
 
+
+
+
+
         public void DropWeapon(int itemIndex)
         {
             PV.RPC("RPC_DropWeapon", RpcTarget.All, itemIndex);
         }
 
-        
+
         [PunRPC]
 
         void RPC_DropWeapon(int itemIndex)
@@ -734,7 +757,7 @@ namespace StarterAssets
             Debug.Log("drop" + itemIndex);
             Debug.Log(weapon.name);
 
-            
+
             if (itemIndex == 0 && items[1] != null)
             {
                 Debug.Log(items[1].name);
@@ -763,22 +786,22 @@ namespace StarterAssets
                 Debug.Log("change owership");
             }
             equipped = true;
-            
+
             //itemHolder = GameObject.Find("ItemHolder").transform;
             if (items[0] == null)
             {
-                
+
                 EquiptItem(0, weaponID);
-                
+
 
             }
             else if (items[1] == null)
             {
 
-                EquiptItem(1,weaponID);
+                EquiptItem(1, weaponID);
 
             }
-            
+
             //weapon.GetPhotonView().RequestOwnership();
 
         }
@@ -786,39 +809,38 @@ namespace StarterAssets
         [PunRPC]
         void RPC_TakeDameage(int damage)
         {
-
             currentHealth -= damage;
-           
-            Debug.Log( "TakeDamage");
-            if (currentHealth <= 0)
-            {
-                Debug.Log(killer + "殺了你!!!");
-                PlayerPrefs.SetString("killer", killer);
-                Die();
-            }
 
+            Debug.Log("TakeDamage");
+
+        }
+
+        //public override void OnMasterClientSwitched(Player newPlayer)
+        //{
+        //    base.OnMasterClientSwitched(newPlayer);
+
+        //    Debug.Log("Master Client 轉換 : " + PhotonNetwork.MasterClient.NickName);
+        //    Die();
+        //}
+
+        public override void OnPlayerLeftRoom(Player otherPlayer)
+        {
+            base.OnPlayerLeftRoom(otherPlayer);
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            {
+                StateController.status = 1;
+                //PlayerPrefs.SetInt("Winner", 1);
+                playerManagers.Win();
+            }
         }
 
         void Die()
         {
-            PlayerPrefs.SetInt("Status", 0);
+            StateController.status = 0;
+            Debug.Log("玩家目前人數 : " + PhotonNetwork.CurrentRoom.PlayerCount);
+            Debug.Log("AutoCleanUP : " + PhotonNetwork.CurrentRoom.AutoCleanUp);
 
-            other = PhotonNetwork.PlayerList;
-
-            if (PhotonNetwork.IsMasterClient)
-            {
-                foreach (Player player in PhotonNetwork.PlayerList) 
-                {
-                    if (player != PhotonNetwork.LocalPlayer) 
-                    {
-                        PhotonNetwork.SetMasterClient(player);
-                        break;
-                    }
-                }          
-            }
             playerManagers.Die();
-        }
-
-       
+        } 
     }
 }

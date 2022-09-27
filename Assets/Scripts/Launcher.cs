@@ -101,8 +101,9 @@ namespace Com.FPSGaming
             // 好吧, 我們自己開一個遊戲室.
             PhotonNetwork.CreateRoom(null, new RoomOptions
             {
-                MaxPlayers = maxPlayersPerRoom
-            });
+                MaxPlayers = 5,
+                CleanupCacheOnLeave = false
+            }); 
             Debug.Log("PUN , 創建遊戲室成功.");
         }
 
