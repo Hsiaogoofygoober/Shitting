@@ -1,87 +1,94 @@
 using Photon.Pun;
+using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerManagers : MonoBehaviourPunCallbacks
 {
-	PhotonView PV;
+    PhotonView PV;
 
-	GameObject controller;
-	
-	void Awake()
-	{
-		PV = GetComponent<PhotonView>();
-	}
+    GameObject controller;
 
-	void Start()
-	{
-		if (PV.IsMine)
-		{
-			CreateController();
-		}
-	}
+    void Awake()
+    {
+        PV = GetComponent<PhotonView>();
+    }
 
-	void CreateController()
-	{
-		Debug.Log("Instantiated Player Controller");
-		Vector3 spawnPoint = new Vector3(Random.Range(-200f, 260f), 150f,  Random.Range(-130f, 340f));
-		controller =  PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Player"), spawnPoint, Quaternion.identity , 0, new object[] { PV.ViewID });
-	}
+    void Start()
+    {
+        if (PV.IsMine)
+        {
+            CreateController();
+        }
+    }
 
-	public void Die()
-	{
-		Debug.Log("Leave Room");
-		DisconnectPlayer();
-		//Destroy(RoomManager.instance.gameObject);
-		//PhotonNetwork.LeaveRoom();
-		//PhotonNetwork.Disconnect();
-		//SceneManager.LoadScene(2);
-		//PhotonNetwork.LoadLevel(2);
-	}
+    void CreateController()
+    {
+        Debug.Log("Instantiated Player Controller");
+        Vector3 spawnPoint = new Vector3(Random.Range(-200f, 260f), 150f, Random.Range(-130f, 340f));
+        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Player"), spawnPoint, Quaternion.identity, 0, new object[] { PV.ViewID });
+    }
 
-	public void Win()
-	{
-		DisconnectPlayer();
-		//Destroy(RoomManager.instance.gameObject);
-		//PhotonNetwork.LeaveRoom();
-		//PhotonNetwork.Disconnect();	
-		//SceneManager.LoadScene(2);
-		//PhotonNetwork.LoadLevel(2);
-	}
+    public void Die()
+    {
+        PhotonNetwork.Destroy(controller);
+        Debug.Log("Player Die and Leave Room");
+        DisconnectPlayer();
+    }
 
-	public void DisconnectPlayer()
-	{
-		Destroy(RoomManager.instance.gameObject);
-		StartCoroutine(DisconnectAndLoad());
-	}
+    public void Win()
+    {
+        PhotonNetwork.Destroy(controller);
+        //Destroy(RoomManager.instance.gameObject);
+        Debug.Log("I am winner !!!");
+        DisconnectPlayer();
+    }
 
-	IEnumerator DisconnectAndLoad()
-	{
-		if (PhotonNetwork.InRoom)
-		{
-			SceneManager.LoadScene("Finish");
+    public void DisconnectPlayer()
+    {
+        PhotonNetwork.LeaveRoom(false);
+    }
 
-			PhotonNetwork.AutomaticallySyncScene = false;
-		}
-		else
-			yield return null;
+    public override void OnLeftRoom()
+    {
+        base.OnLeftRoom();
+        Debug.Log("直接消失");
+        Destroy(RoomManager.instance.gameObject);
+        SceneManager.LoadScene("Finish");
+        //StartCoroutine(DisconnectAndLoad());
+    }
 
-		PhotonNetwork.Disconnect();
+    public static PlayerManagers Find(Player player)
+    {
+        return FindObjectsOfType<PlayerManagers>().SingleOrDefault(x => x.PV.Owner == player);
+    }
 
-	}
+    //IEnumerator DisconnectAndLoad()
+    //{
+    //    PhotonNetwork.LeaveRoom();
 
-	//public void LeaveRoom()
-	//{
-	//	PhotonNetwork.LeaveRoom();
-	//}
+    //    while (PhotonNetwork.InRoom)
+    //        yield return null;
 
-	//public override void OnLeftRoom()
-	//{
-	//	SceneManager.LoadScene(2);
+    //    SceneManager.LoadScene("Finish");
 
-	//	base.OnLeftRoom();
-	//}
+
+
+
+    //    if (PhotonNetwork.InRoom)
+    //    {
+    //        PhotonNetwork.AutomaticallySyncScene = false;
+
+    //        PhotonNetwork.LoadLevel("Finish");
+    //        //SceneManager.LoadScene("Finish");
+    //    }
+    //    else
+    //        yield return null;
+
+    //    PhotonNetwork.Disconnect();
+    //}
 }

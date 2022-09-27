@@ -66,6 +66,5 @@ public class RoomManager : MonoBehaviourPunCallbacks
 			PhotonNetwork.CurrentRoom.IsOpen = false;
 			PhotonNetwork.LoadLevel(1);
         }
-		
 	}
 }

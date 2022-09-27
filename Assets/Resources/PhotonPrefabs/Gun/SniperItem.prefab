@@ -125,6 +125,7 @@ MonoBehaviour:
   magazineSize: 4
   bulletsPerTap: 1
   allowButtonHold: 0
+  sniperAmmo: 8
   recoilForce: 0
   fpsCam: {fileID: 0}
   attackPoint: {fileID: 75325033565575351}

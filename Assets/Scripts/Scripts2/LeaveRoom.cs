@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using StarterAssets;
 
 public class LeaveRoom : MonoBehaviour
 {
@@ -22,15 +23,18 @@ public class LeaveRoom : MonoBehaviour
     {
         Cursor.visible = true;
 
-        if (PlayerPrefs.GetInt("Status") == 0)
+        if (StateController.status == 1)
         {
-            my_text.text = "GOT " + PlayerPrefs.GetString("killer") + " KILLED !!!";
-            
-            //WinnerLabel.SetActive(false);
+            my_text.text = "YOU ARE CHAMPION !!!";           
         }
-        else if (PlayerPrefs.GetInt("Status") == 1)
+        else if (StateController.status == 0)
         {
-           my_text.text = "YOU ARE CHAMPION !!!";
+            /*PlayerPrefs.GetInt("Status")*/
+            my_text.text = "GOT KILLED !!!";
+        }
+        else 
+        {
+            my_text.text = "·F§A®Q¾÷ÙT !!!";
         }
         Cursor.visible = true;
         Screen.lockCursor = false;

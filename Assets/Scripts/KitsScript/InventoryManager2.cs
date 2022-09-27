@@ -27,6 +27,7 @@ public class InventoryManager2 : MonoBehaviour
 
     private Stack<int> pistolAmmoStack = new Stack<int> ();
     private Stack<int> rifleAmmoStack = new Stack<int>();
+    private Stack<int> shotgunAmmoStack = new Stack<int>();
     private void Awake()
     {
         if (PV == null)
@@ -68,6 +69,12 @@ public class InventoryManager2 : MonoBehaviour
                 Debug.Log("push id >> " + PlayerPrefs.GetInt("SlotID"));
                 PlayerPrefs.DeleteAll();
             }
+            else if (inventorySystem.toolList[PlayerPrefs.GetInt("SlotID")].toolName == "ShotgunAmmo")
+            {
+                shotgunAmmoStack.Push(PlayerPrefs.GetInt("SlotID"));
+                Debug.Log("push id >> " + PlayerPrefs.GetInt("SlotID"));
+                PlayerPrefs.DeleteAll();
+            }
             else
             {
                 inventorySystem.toolList[PlayerPrefs.GetInt("SlotID")] = null;
@@ -92,6 +99,15 @@ public class InventoryManager2 : MonoBehaviour
         {
             Debug.Log("pop id >> " + PlayerPrefs.GetInt("SlotID"));
             int popId = rifleAmmoStack.Pop();
+            Debug.Log("pop id >> " + popId);
+            inventorySystem.toolList[popId] = null;
+            RefreshTool();
+            PlayerPrefs.DeleteAll();
+        }
+        else if (PlayerPrefs.GetInt("RefreshBag") == 3)
+        {
+            Debug.Log("pop id >> " + PlayerPrefs.GetInt("SlotID"));
+            int popId = shotgunAmmoStack.Pop();
             Debug.Log("pop id >> " + popId);
             inventorySystem.toolList[popId] = null;
             RefreshTool();

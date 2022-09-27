@@ -9,10 +9,13 @@ public class BillBoard : MonoBehaviour
         mainCameraTransform = Camera.main.transform;    
     }
 
-    private void LateUpdate()
+    private void Update()
     {
-        transform.LookAt(transform.position + mainCameraTransform.rotation * Vector3.forward
-            + mainCameraTransform.rotation * Vector3.up);
+        /*if (transform != null)
+        {
+            transform.LookAt(transform.position + mainCameraTransform.rotation * Vector3.forward
+                + mainCameraTransform.rotation * Vector3.up);
+        }*/
     }
 
 }
