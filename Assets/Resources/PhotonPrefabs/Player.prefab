@@ -4335,6 +4335,7 @@ MonoBehaviour:
   pistolAmmo: 0
   shotgunAmmo: 0
   rifleAmmo: 0
+  ammunitionDisplay: {fileID: 0}
 --- !u!114 &6837152431155922379
 MonoBehaviour:
   m_ObjectHideFlags: 0

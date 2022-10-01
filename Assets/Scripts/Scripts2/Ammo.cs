@@ -27,6 +27,4 @@ public class Ammo
     {
         amount -= 1;
     }
-
-
 }
