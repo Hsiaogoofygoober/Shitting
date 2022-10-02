@@ -53,7 +53,9 @@ public class ShotGun : Gun
     [SerializeField] private float normalSensitivity;
     [SerializeField] private float aimSensitivity;
     public float Sensitivity = 1f;
-
+    public GameObject AimPos;
+    public GameObject OriginalPos;
+    
     private void Awake()
     {
 
@@ -99,15 +101,26 @@ public class ShotGun : Gun
     }
     private void Aimming()
     {
-        if (starterAssetsInputs.aim)
+        if (starterAssetsInputs.aim && GetComponent<StateReset>().isAimming)
         {
+            GetComponentInParent<FirstPersonController>().constraint.data.target = GetComponentInParent<FirstPersonController>().PistolAimPos.transform;
+            GetComponentInParent<FirstPersonController>().rigBuilder.Build();
             aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 20;
             SetSensitivity(aimSensitivity);
+            GetComponent<StateReset>().isAimming = false;
+            GetComponent<StateReset>().notAimming = true;
         }
-        else
+        else if (!starterAssetsInputs.aim && GetComponent<StateReset>().notAimming)
         {
+            transform.localPosition = OriginalPos.transform.localPosition;
+            transform.localRotation = OriginalPos.transform.localRotation;
+            transform.localScale = OriginalPos.transform.localScale;
+            GetComponentInParent<FirstPersonController>().constraint.data.target = GetComponentInParent<FirstPersonController>().PistolInitPos.transform;
+            GetComponentInParent<FirstPersonController>().rigBuilder.Build();
             aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 5;
             SetSensitivity(normalSensitivity);
+            GetComponent<StateReset>().isAimming = true;
+            GetComponent<StateReset>().notAimming = false;
         }
     }
     private void MyInput()

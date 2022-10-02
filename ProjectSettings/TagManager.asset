@@ -19,6 +19,8 @@ TagManager:
   - pistolAmmo
   - rifleAmmo
   - shotgunAmmo
+  - PistolInitPos
+  - PistolAimPos
   layers:
   - Default
   - TransparentFX

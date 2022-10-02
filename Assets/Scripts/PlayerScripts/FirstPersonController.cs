@@ -65,6 +65,7 @@ namespace StarterAssets
         [Header("Cinemachine")]
         [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
         public GameObject CinemachineCameraTarget;
+        public GameObject AimCinemachineCameraTarget;
         [Tooltip("How far in degrees can you move the camera up")]
         public float TopClamp = 90.0f;
         [Tooltip("How far in degrees can you move the camera down")]
@@ -78,7 +79,6 @@ namespace StarterAssets
 
         // cinemachine
         private float _cinemachineTargetPitch;
-        [SerializeField] private GameObject gun;
         // player
         private float _speed;
         private float _rotationVelocity;
@@ -98,9 +98,13 @@ namespace StarterAssets
         [SerializeField] private CinemachineVirtualCamera playerFollowCamera;
 
         // aimming
-        [SerializeField] private CinemachineVirtualCamera aimVirtualCamera;
+        public CinemachineVirtualCamera aimVirtualCamera;
         [SerializeField] private float normalSensitivity;
         [SerializeField] private float aimSensitivity;
+        public GameObject PistolInitPos;
+        public GameObject PistolAimPos;
+        public GameObject SniperAimPos;
+        public GameObject Target;
 
         // health
         [SerializeField] Image healthbarImage;
@@ -114,7 +118,7 @@ namespace StarterAssets
         int previousItemIndex = -1;
 
         // switch weapon rigging
-        TwoBoneIKConstraint constraint;
+        public TwoBoneIKConstraint constraint;
         public RigBuilder rigBuilder;
 
         // switch gun
@@ -166,7 +170,7 @@ namespace StarterAssets
             //if (instance != null)
             //    Destroy(this);
             //instance = this;
-            Debug.Log("Master Client: " + PhotonNetwork.MasterClient.NickName);
+           // Debug.Log("Master Client: " + PhotonNetwork.MasterClient.NickName);
 
             // get a reference to our main camera
             if (_mainCamera == null)
@@ -336,9 +340,11 @@ namespace StarterAssets
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers, QueryTriggerInteraction.Ignore);
         }
 
-        private void CameraRotation()
+        public void CameraRotation()
         {
-
+            Ray ray = _mainCamera.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            Target.transform.position = ray.GetPoint(50);
+            
             // if there is an input
             if (_input.look.sqrMagnitude >= _threshold)
             {
@@ -350,7 +356,7 @@ namespace StarterAssets
 
                 // Update Cinemachine camera target pitch
                 CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
-
+                AimCinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
                 // rotate the player left and right
                 transform.Rotate(Vector3.up * _rotationVelocity);
             }
@@ -491,6 +497,9 @@ namespace StarterAssets
             GameObject weapon = PhotonView.Find(weaponID).gameObject;
 
             itemIndex = _index;
+            constraint.data.target = PistolInitPos.transform;
+            rigBuilder.Build();
+
             weapon.transform.SetParent(itemHolder);
             weapon.transform.localPosition = Vector3.zero;
             weapon.transform.localRotation = Quaternion.Euler(Vector3.zero);
@@ -509,9 +518,7 @@ namespace StarterAssets
                 items[previousItemIndex].itemGameObject.SetActive(false);
 
             }
-            constraint.data.target = items[itemIndex].transform.Find("WeaponHold");
-            Debug.Log(items[itemIndex].transform.Find("WeaponHold"));
-            rigBuilder.Build();
+            
             previousItemIndex = itemIndex;
 
 
@@ -534,9 +541,9 @@ namespace StarterAssets
             previousItemIndex = itemIndex;
 
 
-            constraint.data.target = items[itemIndex].transform.Find("WeaponHold");
-
+            constraint.data.target = PistolInitPos.transform;
             rigBuilder.Build();
+
             if (PV.IsMine)
             {
                 Hashtable hash = new Hashtable();
@@ -568,8 +575,7 @@ namespace StarterAssets
 
             previousItemIndex = itemIndex;
 
-            constraint.data.target = items[itemIndex].transform.Find("WeaponHold");
-
+            constraint.data.target = PistolInitPos.transform;
             rigBuilder.Build();
 
 
@@ -665,6 +671,7 @@ namespace StarterAssets
                 canDrop = false;
                 Debug.Log("drop");
                 DropWeapon(itemIndex);
+
                 Invoke("readyToDrop", 0.5f);
             }
 
@@ -751,6 +758,7 @@ namespace StarterAssets
             items[itemIndex] = null;
             weapon.transform.SetParent(null);
 
+            weapon.GetComponent<StateReset>().ResetState();
             //Make Rigidbody not kinematic and BoxCollider normal
             weapon.GetComponent<Rigidbody>().isKinematic = false;
             weapon.GetComponentInChildren<BoxCollider>().enabled = true;
