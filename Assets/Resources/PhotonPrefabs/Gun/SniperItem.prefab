@@ -149,7 +149,7 @@ MonoBehaviour:
   itemInfo: {fileID: 11400000, guid: 26338a3e91e1d2541835d940c06aa0e6, type: 2}
   itemGameObject: {fileID: 7719600511104899990}
   bullet: {fileID: 8605788664499661015, guid: a614726efc56f954c82429577f80a2de, type: 3}
-  shootForce: 1800
+  shootForce: 900
   upwardForce: 0
   timeBetweenShooting: 3
   spread: 0

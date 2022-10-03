@@ -120,7 +120,7 @@ MonoBehaviour:
   ammoPerBox: 60
   ammoInBag: 0
   preAmmoInBag: 0
-  shootForce: 1000
+  shootForce: 500
   upwardForce: 0
   timeBetweenShooting: 0.1
   spread: 0
