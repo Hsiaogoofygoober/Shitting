@@ -112,10 +112,10 @@ public class SpawnManager : MonoBehaviour
 
     void CreateAmmo(int index, string str)
     {
-        int z = Random.Range(-1000, 1000) % 50;
-        int x = Random.Range(-1000, 1000) % 50;
+        int z = Random.Range(-1000, 1000) % 25;
+        int x = Random.Range(-1000, 1000) % 25;
         Vector3 pos = spawnpoints[index].transform.position;
-        pos.y += 50;
+        pos.y += 5;
         pos.z += z;
         pos.x += x;
         spawnpoints[index].transform.position = pos;
