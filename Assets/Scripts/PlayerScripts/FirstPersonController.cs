@@ -705,6 +705,7 @@ namespace StarterAssets
         public void TakeDamage(int damage)
         {
             //only victom sends message to everyone
+            
             if (PV.IsMine)
             {
                 PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);

@@ -108,8 +108,7 @@ public class Sniper : Gun
     {
         if (starterAssetsInputs.aim && GetComponent<StateReset>().isAimming)
         {
-            GetComponentInParent<FirstPersonController>().constraint.data.target = GetComponentInParent<FirstPersonController>().PistolAimPos.transform;
-            GetComponentInParent<FirstPersonController>().rigBuilder.Build();
+            AimRPC();
             aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 20;
             SetSensitivity(aimSensitivity);
             GetComponent<StateReset>().isAimming = false;
@@ -120,8 +119,7 @@ public class Sniper : Gun
             transform.localPosition = OriginalPos.transform.localPosition;
             transform.localRotation = OriginalPos.transform.localRotation;
             transform.localScale = OriginalPos.transform.localScale;
-            GetComponentInParent<FirstPersonController>().constraint.data.target = GetComponentInParent<FirstPersonController>().PistolInitPos.transform;
-            GetComponentInParent<FirstPersonController>().rigBuilder.Build();
+            NotAimRPC();
             aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 5;
             SetSensitivity(normalSensitivity);
             GetComponent<StateReset>().isAimming = true;
@@ -250,7 +248,14 @@ public class Sniper : Gun
     {
         PV.RPC("RPC_Shoot", RpcTarget.All,directionWithSpread);
     }
-
+    private void NotAimRPC()
+    {
+        PV.RPC("RPC_NotAim", RpcTarget.All);
+    }
+    private void AimRPC()
+    {
+        PV.RPC("RPC_Aim", RpcTarget.All);
+    }
     [PunRPC]
 
     void RPC_Shoot(Vector3 directionWithSpread)
@@ -262,5 +267,20 @@ public class Sniper : Gun
         Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
         rb.AddRelativeForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
         //PhotonView.Find(BulletID).GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
+    }
+    [PunRPC]
+
+    void RPC_NotAim()
+    {
+        GetComponentInParent<FirstPersonController>().constraint.data.target = GetComponentInParent<FirstPersonController>().PistolInitPos.transform;
+        GetComponentInParent<FirstPersonController>().rigBuilder.Build();
+    }
+
+    [PunRPC]
+
+    void RPC_Aim()
+    {
+        GetComponentInParent<FirstPersonController>().constraint.data.target = GetComponentInParent<FirstPersonController>().PistolAimPos.transform;
+        GetComponentInParent<FirstPersonController>().rigBuilder.Build();
     }
 }
