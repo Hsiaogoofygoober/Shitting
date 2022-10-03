@@ -13,7 +13,6 @@ public class Slot : MonoBehaviour
     public string slotInfo;
     public int slotValue;
     public string slotName;
-
     [SerializeField] private float decreasingRate = 2;
     private FirstPersonController player;
     public GameObject toolOnSlot;
@@ -23,24 +22,32 @@ public class Slot : MonoBehaviour
         Debug.Log(slotName + " ¹CÀ¸ + µ²§ô " + slotID + " + ¥i¼¦ + " + slotInfo);
         player = GetComponentInParent<FirstPersonController>();
 
-        switch (slotName)
+        if (player.canUse)
         {
-            case "Burger":
-                UsingBurger();
-                Invoke("AfterUsingBurger", 4);
-                slotImage.sprite = null;
-                slotInfo = null;
-                slotName = null;
-                toolOnSlot.SetActive(false);
-                PlayerPrefs.SetInt("SlotID", slotID);
-                break;
-            case "PisolAmmo":
-            case "RifleAmmo":
-                break;
-            default:
-                Debug.Log("error");
-                break;
+            switch (slotName)
+            {
+                case "Burger":
+                    if (player.currentHealth < 100)
+                    {
+                        UsingBurger();
+                        Invoke("AfterUsingBurger", 4);
+                        slotImage.sprite = null;
+                        slotInfo = null;
+                        slotName = null;
+                        toolOnSlot.SetActive(false);
+                        PlayerPrefs.SetInt("SlotID", slotID);
+                    }
+                    break;
+                case "PisolAmmo":
+                case "RifleAmmo":
+                case "ShotgunAmmo":
+                    break;
+                default:
+                    Debug.Log("error");
+                    break;
+            }
         }
+        
        
     }
 
@@ -64,12 +71,22 @@ public class Slot : MonoBehaviour
     {
         player.MoveSpeed /= decreasingRate;
         player.SprintSpeed /= decreasingRate;
+        player.canUse = false;
        
     }
     public void AfterUsingBurger()
     {
-        player.currentHealth += slotValue;
+        if(player.currentHealth > 100 - slotValue)
+        {
+            player.currentHealth = 100;
+        }
+        else
+        {
+            player.currentHealth += slotValue;
+        }
+        
         player.MoveSpeed *= decreasingRate;
         player.SprintSpeed *= decreasingRate;
+        player.canUse = true;
     }
 }

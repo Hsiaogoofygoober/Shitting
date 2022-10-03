@@ -53,7 +53,9 @@ public class ShotGun : Gun
     [SerializeField] private float normalSensitivity;
     [SerializeField] private float aimSensitivity;
     public float Sensitivity = 1f;
-
+    public GameObject AimPos;
+    public GameObject OriginalPos;
+    
     private void Awake()
     {
 
@@ -99,15 +101,27 @@ public class ShotGun : Gun
     }
     private void Aimming()
     {
-        if (starterAssetsInputs.aim)
+        if (starterAssetsInputs.aim && GetComponent<StateReset>().isAimming)
         {
+            AimRPC();
+            GetComponentInParent<FirstPersonController>().GunCrosshair.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 20;
             SetSensitivity(aimSensitivity);
+            GetComponent<StateReset>().isAimming = false;
+            GetComponent<StateReset>().notAimming = true;
         }
-        else
+        else if (!starterAssetsInputs.aim && GetComponent<StateReset>().notAimming)
         {
+            transform.localPosition = OriginalPos.transform.localPosition;
+            transform.localRotation = OriginalPos.transform.localRotation;
+            transform.localScale = OriginalPos.transform.localScale;
+            GetComponentInParent<FirstPersonController>().GunCrosshair.SetActive(true);
+            GetComponentInParent<FirstPersonController>().GunCrosshair.transform.localScale = new Vector3(1, 1, 1);
+            NotAimRPC();
             aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 5;
             SetSensitivity(normalSensitivity);
+            GetComponent<StateReset>().isAimming = true;
+            GetComponent<StateReset>().notAimming = false;
         }
     }
     private void MyInput()
@@ -123,7 +137,7 @@ public class ShotGun : Gun
         if (readyToShoot && shooting && !reloading && bulletsLeft <= 0 && GetComponentInParent<FirstPersonController>().shotgunAmmo > 0) Reload();
 
         //Shooting
-        if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
+        if (readyToShoot && shooting && !reloading && bulletsLeft > 0 && GetComponentInParent<FirstPersonController>().canUse)
         {
             //Set bullets shot to 0
             bulletsShot = 0;
@@ -252,7 +266,14 @@ public class ShotGun : Gun
     {
         PV.RPC("RPC_Shoot", RpcTarget.All,directionWithSpread, directionWithoutSpread);
     }
- 
+    private void NotAimRPC()
+    {
+        PV.RPC("RPC_NotAim", RpcTarget.All);
+    }
+    private void AimRPC()
+    {
+        PV.RPC("RPC_Aim", RpcTarget.All);
+    }
 
     [PunRPC]
     void RPC_Shoot(Vector3[] directionWithSpread, Vector3 directionWithoutSpread)
@@ -266,5 +287,21 @@ public class ShotGun : Gun
             Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
             rb.AddRelativeForce(directionWithSpread[i].normalized * shootForce, ForceMode.Impulse);
         }
+    }
+
+    [PunRPC]
+
+    void RPC_NotAim()
+    {
+        GetComponentInParent<FirstPersonController>().constraint.data.target = GetComponentInParent<FirstPersonController>().PistolInitPos.transform;
+        GetComponentInParent<FirstPersonController>().rigBuilder.Build();
+    }
+
+    [PunRPC]
+
+    void RPC_Aim()
+    {
+        GetComponentInParent<FirstPersonController>().constraint.data.target = GetComponentInParent<FirstPersonController>().PistolAimPos.transform;
+        GetComponentInParent<FirstPersonController>().rigBuilder.Build();
     }
 }
