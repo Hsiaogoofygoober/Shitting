@@ -4418,6 +4418,7 @@ MonoBehaviour:
   damageText: {fileID: 7421645783877424611, guid: 8c47736a75d96274c885e3b72ae00954, type: 3}
   Mybag: {fileID: 2424158859462253342}
   InventoryManager2: {fileID: 1934315005400836030}
+  canUse: 1
   pistolAmmo: 0
   shotgunAmmo: 0
   rifleAmmo: 0

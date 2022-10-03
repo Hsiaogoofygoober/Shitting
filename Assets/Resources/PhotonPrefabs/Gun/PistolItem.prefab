@@ -89,7 +89,7 @@ MonoBehaviour:
   ammoPerBox: 20
   ammoInBag: 0
   preAmmoInBag: 0
-  shootForce: 100
+  shootForce: 1000
   upwardForce: 0
   timeBetweenShooting: 0.8
   spread: 0

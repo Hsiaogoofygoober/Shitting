@@ -140,7 +140,7 @@ public class Rifle : Gun
         if (readyToShoot && shooting && !reloading && bulletsLeft <= 0 && GetComponentInParent<FirstPersonController>().rifleAmmo > 0) Reload();
 
         //Shooting
-        if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
+        if (readyToShoot && shooting && !reloading && bulletsLeft > 0 && GetComponentInParent<FirstPersonController>().canUse)
         {
             //Set bullets shot to 0
             bulletsShot = 0;

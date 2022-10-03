@@ -154,7 +154,7 @@ public class Pistol : Gun
         if (readyToShoot && shooting && !reloading && bulletsLeft <= 0 && GetComponentInParent<FirstPersonController>().pistolAmmo>0) Reload();
 
         //Shooting
-        if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
+        if (readyToShoot && shooting && !reloading && bulletsLeft > 0 && GetComponentInParent<FirstPersonController>().canUse)
         {
             //Set bullets shot to 0
             bulletsShot = 0;
@@ -289,6 +289,7 @@ public class Pistol : Gun
         PV.RPC("RPC_Aim", RpcTarget.All);
     }
 
+
     [PunRPC]
 
     void RPC_Shoot(Vector3 directionWithSpread) 
@@ -298,12 +299,10 @@ public class Pistol : Gun
         currentBullet.transform.forward = directionWithSpread.normalized;
         Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
         rb.AddRelativeForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
-        //PhotonView.Find(BulletID).GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
+
     }
 
     [PunRPC]
-
-
     void RPC_NotAim()
     {
         GetComponentInParent<FirstPersonController>().constraint.data.target = GetComponentInParent<FirstPersonController>().PistolInitPos.transform;

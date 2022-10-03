@@ -160,6 +160,7 @@ namespace StarterAssets
         public static int status;
 
         public InventoryManager2 InventoryManager2;
+        public bool canUse = true;
 
         //current ammo
         public int pistolAmmo = 0;
@@ -841,6 +842,7 @@ namespace StarterAssets
             Debug.Log("TakeDamage");
 
         }
+
 
         //public override void OnMasterClientSwitched(Player newPlayer)
         //{

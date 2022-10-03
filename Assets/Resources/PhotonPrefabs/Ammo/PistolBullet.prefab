@@ -98,8 +98,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 20
-  owner: 123
+  owner: 
   blood: {fileID: 5549737897277506911, guid: f81b37c4338295d4aad0f11de379e12c, type: 3}
+  HitPartical: {fileID: 0}
 --- !u!54 &-8115621954425810514
 Rigidbody:
   m_ObjectHideFlags: 0
