@@ -106,24 +106,40 @@ public class Pistol : Gun
     }
     private void Aimming()
     {
-        if (starterAssetsInputs.aim && GetComponent<StateReset>().isAimming)
+        Vector3 localScale = new Vector3(1f, 1f, 1f);
+        Vector3 shrinkScale = new Vector3(0.5f, 0.5f, 0.5f);
+        float scaleModifier = 1;
+        if (starterAssetsInputs.aim)
         {
-            AimRPC();
-            aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 20;
-            SetSensitivity(aimSensitivity);
-            GetComponent<StateReset>().isAimming = false;
-            GetComponent<StateReset>().notAimming = true;
+
+            if (GetComponent<StateReset>().isAimming)
+            {
+                GetComponentInParent<FirstPersonController>().GunCrosshair.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+                AimRPC();
+                aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 20;
+                SetSensitivity(aimSensitivity);
+                GetComponent<StateReset>().isAimming = false;
+                GetComponent<StateReset>().notAimming = true;
+            }   
         }
-        else if(!starterAssetsInputs.aim && GetComponent<StateReset>().notAimming)
+
+        else if(!starterAssetsInputs.aim)
         {
-            transform.localPosition = OriginalPos.transform.localPosition;
-            transform.localRotation = OriginalPos.transform.localRotation;
-            transform.localScale = OriginalPos.transform.localScale;
-            NotAimRPC();
-            aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 5;
-            SetSensitivity(normalSensitivity);
-            GetComponent<StateReset>().isAimming = true;
-            GetComponent<StateReset>().notAimming = false;
+            if (GetComponent<StateReset>().notAimming)
+            {
+                transform.localPosition = OriginalPos.transform.localPosition;
+                transform.localRotation = OriginalPos.transform.localRotation;
+                transform.localScale = OriginalPos.transform.localScale;
+                GetComponentInParent<FirstPersonController>().GunCrosshair.SetActive(true);
+                GetComponentInParent<FirstPersonController>().GunCrosshair.transform.localScale = new Vector3(1, 1, 1);
+                NotAimRPC();
+                aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 5;
+                SetSensitivity(normalSensitivity);
+                GetComponent<StateReset>().isAimming = true;
+                GetComponent<StateReset>().notAimming = false;
+
+            }
+            
         }
     }
     private void MyInput()
@@ -286,6 +302,7 @@ public class Pistol : Gun
     }
 
     [PunRPC]
+
 
     void RPC_NotAim()
     {

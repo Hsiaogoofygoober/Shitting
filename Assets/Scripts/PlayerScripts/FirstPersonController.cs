@@ -105,6 +105,8 @@ namespace StarterAssets
         public GameObject PistolAimPos;
         public GameObject SniperAimPos;
         public GameObject Target;
+        public GameObject SniperScope;
+        public GameObject GunCrosshair;
 
         // health
         [SerializeField] Image healthbarImage;
@@ -793,6 +795,7 @@ namespace StarterAssets
                 if (PV.IsMine)
                 {
                     ammunitionDisplay.SetText("no weapon");
+                    GunCrosshair.SetActive(false);
                 }
                 constraint.data.target = null;
                 rigBuilder.Build();

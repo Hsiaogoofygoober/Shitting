@@ -108,17 +108,22 @@ public class Sniper : Gun
     {
         if (starterAssetsInputs.aim && GetComponent<StateReset>().isAimming)
         {
+            GetComponentInParent<FirstPersonController>().SniperScope.SetActive(true);
+            GetComponentInParent<FirstPersonController>().GunCrosshair.SetActive(false);
             AimRPC();
             aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 20;
             SetSensitivity(aimSensitivity);
             GetComponent<StateReset>().isAimming = false;
             GetComponent<StateReset>().notAimming = true;
+            
         }
         else if (!starterAssetsInputs.aim && GetComponent<StateReset>().notAimming)
         {
             transform.localPosition = OriginalPos.transform.localPosition;
             transform.localRotation = OriginalPos.transform.localRotation;
             transform.localScale = OriginalPos.transform.localScale;
+            GetComponentInParent<FirstPersonController>().SniperScope.SetActive(false);
+            GetComponentInParent<FirstPersonController>().GunCrosshair.SetActive(true);
             NotAimRPC();
             aimVirtualCamera.GetComponent<CinemachineVirtualCamera>().Priority = 5;
             SetSensitivity(normalSensitivity);
