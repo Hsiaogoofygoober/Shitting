@@ -29,6 +29,35 @@ public class SpawnManager : MonoBehaviour
         GunGenerator();
         
         AmmoGenerator();
+
+        KitGenerator();
+    }
+
+
+    void KitGenerator() 
+    {
+        bool flag = true;
+
+        int count = 0;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Debug.Log("一共有 " + spawnpoints.Length + " 個重生點");
+            while (flag)
+            {
+                if (count < 20)
+                {
+                    CreateKit(count);
+                    CreateKit(count);
+                    count++;
+                }
+
+                if (count == 20)
+                {
+                    flag = false;
+                }
+            }
+        }
+        Debug.Log("一共產生 " + count + " 把槍");
     }
 
     void GunGenerator()
@@ -106,7 +135,7 @@ public class SpawnManager : MonoBehaviour
     void CreateGun(int index, string str)
     {
         Vector3 pos = spawnpoints[index].transform.position;
-        pos.y += 502;
+        pos.y += 520;
         spawnpoints[index].transform.position = pos;
         Transform spawnpoint = spawnpoints[index].transform;
         PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs/Gun", str), spawnpoint.position, spawnpoint.rotation, 0, new object[] { pv.ViewID });
@@ -114,8 +143,8 @@ public class SpawnManager : MonoBehaviour
 
     void CreateAmmo(int index, string str)
     {
-        int z = Random.Range(-1000, 1000) % 25;
-        int x = Random.Range(-1000, 1000) % 25;
+        int z = Random.Range(-1000, 1000) % 20;
+        int x = Random.Range(-1000, 1000) % 20;
         Vector3 pos = spawnpoints[index].transform.position;
         pos.y += 5;
         pos.z += z;
@@ -123,6 +152,19 @@ public class SpawnManager : MonoBehaviour
         spawnpoints[index].transform.position = pos;
         Transform spawnpoint = spawnpoints[index].transform;
         PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs/Kits", str), spawnpoint.position, spawnpoint.rotation, 0, new object[] { pv.ViewID });
+    }
+
+    void CreateKit(int index)
+    {
+        int z = Random.Range(-1000, 1000) % 20;
+        int x = Random.Range(-1000, 1000) % 20;
+        Vector3 pos = spawnpoints[index].transform.position;
+        pos.y += 5;
+        pos.z += z;
+        pos.x += x;
+        spawnpoints[index].transform.position = pos;
+        Transform spawnpoint = spawnpoints[index].transform;
+        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs/Kits", "Burger"), spawnpoint.position, spawnpoint.rotation, 0, new object[] { pv.ViewID });
     }
 
     public Spawnpoint[] GetSpawnpoint()
