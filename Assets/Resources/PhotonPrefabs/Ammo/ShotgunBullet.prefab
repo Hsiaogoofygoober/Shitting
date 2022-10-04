@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8783ae4e171df7146a4b3b9e97198063, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 6
+  damage: 5
   owner: 
   blood: {fileID: 5549737897277506911, guid: f81b37c4338295d4aad0f11de379e12c, type: 3}
   HitPartical: {fileID: 0}

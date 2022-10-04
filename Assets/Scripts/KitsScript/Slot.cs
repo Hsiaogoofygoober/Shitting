@@ -61,11 +61,19 @@ public class Slot : MonoBehaviour
         }
         
         slotImage.sprite = tool.toolImage;
-        if(slotImage.sprite != null)
+        if (slotImage.sprite != null)
             Debug.Log("真的是很可悲 " + slotID);
         slotInfo = tool.toolInfo;
         slotName = tool.toolName;
         slotValue = tool.toolValue;
+        if (slotName == "Burger")
+        {
+            slotImage.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+        }
+        else
+        {
+            slotImage.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        }
     }
     public void UsingBurger()
     {

@@ -119,13 +119,13 @@ MonoBehaviour:
   shootForce: 150
   upwardForce: 10
   timeBetweenShooting: 1
-  spread: 2
+  spread: 5
   reloadTime: 2
   timeBetweenShots: 1
   magazineSize: 6
   bulletsPerTap: 1
   allowButtonHold: 1
-  ShotgunBulletPerTap: 15
+  ShotgunBulletPerTap: 10
   ammoPerBox: 10
   ammoInBag: 0
   preAmmoInBag: 0

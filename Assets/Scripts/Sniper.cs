@@ -146,7 +146,7 @@ public class Sniper : Gun
         if (readyToShoot && shooting && !reloading && bulletsLeft <= 0 && sniperAmmo > 0) Reload();
 
         //Shooting
-        if (readyToShoot && shooting && !reloading && bulletsLeft > 0 && GetComponentInParent<FirstPersonController>().canUse)
+        if (readyToShoot && shooting && !reloading && bulletsLeft > 0 && GetComponentInParent<FirstPersonController>().canUse && !starterAssetsInputs.openbag)
         {
             //Set bullets shot to 0
             bulletsShot = 0;
@@ -172,7 +172,7 @@ public class Sniper : Gun
             targetPoint = ray.GetPoint(75); //Just a point far away from the player
 
         //Calculate direction from attackPoint to targetPoint
-        Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
+        Vector3 directionWithoutSpread = ray.GetPoint(75) - attackPoint.position;
 
         //Calculate spread
         float x = Random.Range(-spread, spread);
@@ -186,19 +186,12 @@ public class Sniper : Gun
         if (starterAssetsInputs.aim)
         {
             ShootWithoutSpread(directionWithoutSpread);
-            //currentBullet.GetComponent<Rigidbody>().AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
         }
         else
         {
             ShootWithSpread(directionWithSpread);
-            //currentBullet.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
         }
 
-        //currentBullet.GetComponent<Rigidbody>().AddForce(fpsCam.transform.up * upwardForce, ForceMode.Impulse);
-
-        //Instantiate muzzle flash, if you have one
-        //if (muzzleFlash != null)
-        //    Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
 
         bulletsLeft--;
         bulletsShot++;

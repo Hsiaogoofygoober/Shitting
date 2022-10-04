@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -3881942585247874837}
   - component: {fileID: 5673543406897567602}
   m_Layer: 0
-  m_Name: shotgunAmmo
+  m_Name: ShotgunAmmo
   m_TagString: shotgunAmmo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9099bb5a7f76bc649bd4888e003099d1, type: 2}
+  - {fileID: 2100000, guid: 75606e82a41c12f459498f8da6acc6e6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toolName: ShotgunAmmo
-  toolImage: {fileID: 21300032, guid: 37607ec1aab56e349af84a980f685a4b, type: 3}
+  toolImage: {fileID: 21300000, guid: 841eef334eca01849ae7153b7b4c3aa2, type: 3}
   toolValue: 10
   toolInfo: shotgun ammo
 --- !u!114 &-3881942585247874837

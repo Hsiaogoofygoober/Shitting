@@ -152,7 +152,7 @@ MonoBehaviour:
   shootForce: 900
   upwardForce: 0
   timeBetweenShooting: 3
-  spread: 0
+  spread: 5
   reloadTime: 4
   timeBetweenShots: 3
   magazineSize: 4
@@ -167,7 +167,7 @@ MonoBehaviour:
   allowInvoke: 1
   aimVirtualCamera: {fileID: 0}
   normalSensitivity: 0.8
-  aimSensitivity: 0.3
+  aimSensitivity: 0.05
   Sensitivity: 1
   AimPos: {fileID: 0}
   OriginalPos: {fileID: 3488469220812538972}

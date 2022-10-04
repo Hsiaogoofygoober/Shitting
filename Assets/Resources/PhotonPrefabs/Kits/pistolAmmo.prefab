@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -3791761887787002744}
   - component: {fileID: -2117890248908310132}
   m_Layer: 0
-  m_Name: pistolAmmo
+  m_Name: PistolAmmo
   m_TagString: pistolAmmo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9099bb5a7f76bc649bd4888e003099d1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toolName: PistolAmmo
-  toolImage: {fileID: 21300000, guid: bebdcb1b1d4112d49bb5e505c72918c6, type: 3}
+  toolImage: {fileID: 21300000, guid: 114eb7951eb927f4ead33d451ddb2d69, type: 3}
   toolValue: 20
   toolInfo: pistol ammo
 --- !u!54 &5577283083282686981
@@ -151,7 +151,8 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: -2117890248908310132}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

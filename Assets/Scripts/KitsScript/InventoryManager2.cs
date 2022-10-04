@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System.IO;
 
 public class InventoryManager2 : MonoBehaviour
 {
@@ -128,6 +129,37 @@ public class InventoryManager2 : MonoBehaviour
             {
                 slotGrid.transform.GetChild(i).GetComponent<Slot>().SetupSlot(toolList[i]);
             }    
+        }
+    }
+
+    public bool IsBagFull()
+    {
+        if (PV.IsMine)
+        {
+            for (int i = 0; i < toolList.Length; i++)
+            {
+                if(toolList[i] == null) return false;
+            }
+            return true;
+        }
+        return true;
+    }
+
+    public void DropKitWhenDie(float DropUpForce)
+    {
+        if (PV.IsMine)
+        {
+            for (int i = 0; i < toolList.Length; i++)
+            {
+                if (toolList[i] != null)
+                {
+                    GameObject Kit = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs/Kits", toolList[i].toolName), transform.position, Quaternion.identity);
+                    Kit.GetComponent<Rigidbody>().AddForce(Vector3.up * DropUpForce, ForceMode.Impulse);
+                    float random = Random.Range(-1f, 1f);
+                    Kit.GetComponent<Rigidbody>().AddTorque(new Vector3(random, random, random) * 10);
+                }
+            }
+            
         }
     }
 }

@@ -154,7 +154,7 @@ public class Pistol : Gun
         if (readyToShoot && shooting && !reloading && bulletsLeft <= 0 && GetComponentInParent<FirstPersonController>().pistolAmmo>0) Reload();
 
         //Shooting
-        if (readyToShoot && shooting && !reloading && bulletsLeft > 0 && GetComponentInParent<FirstPersonController>().canUse)
+        if (readyToShoot && shooting && !reloading && bulletsLeft > 0 && GetComponentInParent<FirstPersonController>().canUse && !starterAssetsInputs.openbag)
         {
             //Set bullets shot to 0
             bulletsShot = 0;
@@ -180,7 +180,7 @@ public class Pistol : Gun
             targetPoint = ray.GetPoint(75); //Just a point far away from the player
 
         //Calculate direction from attackPoint to targetPoint
-        Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
+        Vector3 directionWithoutSpread = ray.GetPoint(75) - attackPoint.position;
 
         //Calculate spread
         float x = Random.Range(-spread, spread);

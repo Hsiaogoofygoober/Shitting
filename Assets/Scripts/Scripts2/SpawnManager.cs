@@ -67,9 +67,9 @@ public class SpawnManager : MonoBehaviour
     void AmmoGenerator()
     {
         Ammo[] ammos = new Ammo[3];
-        ammos[0] = new Ammo("pistolAmmo", 20);
-        ammos[1] = new Ammo("rifleAmmo", 20);
-        ammos[2] = new Ammo("shotgunAmmo", 20);
+        ammos[0] = new Ammo("PistolAmmo", 20);
+        ammos[1] = new Ammo("RifleAmmo", 20);
+        ammos[2] = new Ammo("ShotgunAmmo", 20);
         bool flag = true;
 
         int count = 0;

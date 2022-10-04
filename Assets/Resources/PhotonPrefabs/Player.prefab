@@ -3131,7 +3131,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.5772532, y: 1}
+    m_SensorSize: {x: 1.6926316, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4422,7 +4422,7 @@ MonoBehaviour:
   pistolAmmo: 0
   shotgunAmmo: 0
   rifleAmmo: 0
-  ammunitionDisplay: {fileID: 0}
+  ammunitionDisplay: {fileID: 5014336599252029986}
 --- !u!114 &6837152431155922379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5419,7 +5419,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.5772532, y: 1}
+    m_SensorSize: {x: 1.6926316, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -5490,7 +5490,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.5772532, y: 1}
+    m_SensorSize: {x: 1.6926316, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
