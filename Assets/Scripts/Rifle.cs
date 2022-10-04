@@ -285,7 +285,6 @@ public class Rifle : Gun
         currentBullet.GetComponent<BulletProjectile>().owner = PV.Owner.NickName;
         Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
         rb.AddRelativeForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
-        //PhotonView.Find(BulletID).GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
     }
     [PunRPC]
 
