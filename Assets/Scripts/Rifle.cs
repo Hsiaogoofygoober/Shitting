@@ -165,7 +165,7 @@ public class Rifle : Gun
             targetPoint = ray.GetPoint(75); //Just a point far away from the player
 
         //Calculate direction from attackPoint to targetPoint
-        Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
+        Vector3 directionWithoutSpread = ray.GetPoint(75) - attackPoint.position;
 
         //Calculate spread
         float x = Random.Range(-spread, spread);

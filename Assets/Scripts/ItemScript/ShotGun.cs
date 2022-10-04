@@ -162,7 +162,7 @@ public class ShotGun : Gun
             targetPoint = ray.GetPoint(75); //Just a point far away from the player
 
         //Calculate direction from attackPoint to targetPoint
-        Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
+        Vector3 directionWithoutSpread = ray.GetPoint(75) - attackPoint.position;
 
         //Calculate spread
         
@@ -171,8 +171,8 @@ public class ShotGun : Gun
         Vector3[] directionWithSpread = new Vector3[ShotgunBulletPerTap];
         for(int i = 0; i < ShotgunBulletPerTap; i++) 
         {
-            float x = Random.Range(-2*spread, 2*spread);
-            float y = Random.Range(-2*spread, 2*spread);
+            float x = Random.Range(-spread, spread);
+            float y = Random.Range(-spread, spread);
             directionWithSpread[i] = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last direction
         }
 
