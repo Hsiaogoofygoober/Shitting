@@ -24,7 +24,7 @@ public class BulletProjectile : MonoBehaviour
         RaycastHit[] hits = Physics.RaycastAll(new Ray(mPrevious, (transform.position - mPrevious).normalized), (transform.position - mPrevious).magnitude);
         for(int i = 0; i < hits.Length; i++)
         {
-            Debug.DrawLine(mPrevious,transform.position);
+            //Debug.DrawLine(mPrevious,transform.position);
             if (hits[i].collider != null && !hits[i].collider.CompareTag("bullet"))
             {
                 if (hits[i].collider.CompareTag("Player"))

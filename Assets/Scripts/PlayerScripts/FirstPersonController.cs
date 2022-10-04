@@ -728,6 +728,7 @@ namespace StarterAssets
                     //        break;
                     //    }
                     //}
+                    DropKitWhenDie();
                     Die();
                 }
             }
@@ -752,7 +753,6 @@ namespace StarterAssets
         {
             PV.RPC("RPC_InactiveKit", RpcTarget.All, ID);
         }
-
 
         [PunRPC]
 
@@ -815,6 +815,7 @@ namespace StarterAssets
             if (PV.IsMine)
             {
                 PhotonView.Find(weaponID).RequestOwnership();
+                
                 Debug.Log("change owership");
             }
             equipped = true;
@@ -853,6 +854,9 @@ namespace StarterAssets
             PhotonView.Find(ID).gameObject.SetActive(false);
         }
 
+        
+
+
 
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -873,6 +877,34 @@ namespace StarterAssets
             Debug.Log("AutoCleanUP : " + PhotonNetwork.CurrentRoom.AutoCleanUp);
 
             playerManagers.Die();
-        } 
+        }
+        void DropKitWhenDie()
+        {
+            //drop weapon to null
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (items[i] != null)
+                {
+                    string weaponName = items[i].gameObject.GetComponent<Item>().itemInfo.itemName;
+                    GameObject weapon = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs/Gun", weaponName),transform.position,Quaternion.identity);
+                    PhotonNetwork.Destroy(items[i].GetComponent<PhotonView>());
+                    items[i] = null;
+               
+                    //Gun carries momentum of player
+                    weapon.GetComponent<Rigidbody>().velocity = player.GetComponent<CharacterController>().velocity;
+
+                    //AddForce
+                    weapon.GetComponent<Rigidbody>().AddForce(Vector3.up * dropUpwardForce, ForceMode.Impulse);
+
+                    float random = Random.Range(-1f, 1f);
+                    weapon.GetComponent<Rigidbody>().AddTorque(new Vector3(random, random, random) * 10);
+                }
+            }
+            //drop kits in bag
+            InventoryManager2.DropKitWhenDie(dropUpwardForce);
+
+
+
+        }
     }
 }
