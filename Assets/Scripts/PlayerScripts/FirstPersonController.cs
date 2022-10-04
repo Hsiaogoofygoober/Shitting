@@ -623,7 +623,7 @@ namespace StarterAssets
                         Debug.Log("pick");
                     }
                     //pick burger
-                    else if(hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("burger") && hit.distance <= pickUpRange)
+                    else if(hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("burger") && hit.distance <= pickUpRange && !InventoryManager2.IsBagFull())
                     {
                         canPick = false;
                         Tool tool = hit.collider.GetComponent<Tool>();
@@ -633,35 +633,38 @@ namespace StarterAssets
                         Invoke("readyToPick", 0.1f);
                     }
                     //pick pistol ammo
-                    else if(hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("pistolAmmo") && hit.distance <= pickUpRange)
+                    else if(hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("pistolAmmo") && hit.distance <= pickUpRange && !InventoryManager2.IsBagFull())
                     {
                         canPick = false;
                         Tool tool = hit.collider.GetComponent<Tool>();
                         AddNewItem(tool);
                         pistolAmmo += tool.toolValue;
-                        hit.collider.gameObject.SetActive(false);
+                        InactiveKit(hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
+                        //hit.collider.gameObject.SetActive(false);
                         //Destroy(hit.collider.gameObject);
                         Invoke("readyToPick", 0.1f);
                     }
                     //pick rifle ammo
-                    else if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("rifleAmmo") && hit.distance <= pickUpRange)
+                    else if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("rifleAmmo") && hit.distance <= pickUpRange && !InventoryManager2.IsBagFull())
                     {
                         canPick = false;
                         Tool tool = hit.collider.GetComponent<Tool>();
                         AddNewItem(tool);
                         rifleAmmo += tool.toolValue;
-                        hit.collider.gameObject.SetActive(false);
+                        InactiveKit(hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
+                        //hit.collider.gameObject.SetActive(false);
                         //Destroy(hit.collider.gameObject);
                         Invoke("readyToPick", 0.1f);
                     }
                     //pick shotgun ammo
-                    else if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("shotgunAmmo") && hit.distance <= pickUpRange)
+                    else if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("shotgunAmmo") && hit.distance <= pickUpRange && !InventoryManager2.IsBagFull())
                     {
                         canPick = false;
                         Tool tool = hit.collider.GetComponent<Tool>();
                         AddNewItem(tool);
                         shotgunAmmo += tool.toolValue;
-                        hit.collider.gameObject.SetActive(false);
+                        InactiveKit(hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
+                        //hit.collider.gameObject.SetActive(false);
                         //Destroy(hit.collider.gameObject);
                         Invoke("readyToPick", 0.1f);
                     }
@@ -740,13 +743,14 @@ namespace StarterAssets
             PV.RPC("RPC_PickWeapon", RpcTarget.All, weaponID);
         }
 
-
-
-
-
         public void DropWeapon(int itemIndex)
         {
             PV.RPC("RPC_DropWeapon", RpcTarget.All, itemIndex);
+        }
+
+        public void InactiveKit(int ID)
+        {
+            PV.RPC("RPC_InactiveKit", RpcTarget.All, ID);
         }
 
 
@@ -843,14 +847,13 @@ namespace StarterAssets
 
         }
 
+        [PunRPC]
+        void RPC_InactiveKit(int ID)
+        {
+            PhotonView.Find(ID).gameObject.SetActive(false);
+        }
 
-        //public override void OnMasterClientSwitched(Player newPlayer)
-        //{
-        //    base.OnMasterClientSwitched(newPlayer);
 
-        //    Debug.Log("Master Client 轉換 : " + PhotonNetwork.MasterClient.NickName);
-        //    Die();
-        //}
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {

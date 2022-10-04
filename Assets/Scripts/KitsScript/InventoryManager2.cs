@@ -130,4 +130,17 @@ public class InventoryManager2 : MonoBehaviour
             }    
         }
     }
+
+    public bool IsBagFull()
+    {
+        if (PV.IsMine)
+        {
+            for (int i = 0; i < toolList.Length; i++)
+            {
+                if(toolList[i] == null) return false;
+            }
+            return true;
+        }
+        return true;
+    }
 }
