@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 8990006326427745843}
   - component: {fileID: 3073610808935115883}
   m_Layer: 0
-  m_Name: RifleAmmo
+  m_Name: rifleAmmo
   m_TagString: rifleAmmo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
