@@ -284,7 +284,7 @@ public class Rifle : Gun
         currentBullet.transform.forward = directionWithSpread.normalized;
         currentBullet.GetComponent<BulletProjectile>().owner = PV.Owner.NickName;
         Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
-        rb.AddRelativeForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
+        rb.AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
     }
     [PunRPC]
 

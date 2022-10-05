@@ -4361,11 +4361,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 10
-  SprintSpeed: 20
+  SprintSpeed: 10
   RotationSpeed: 1
-  SpeedChangeRate: 10
+  SpeedChangeRate: 5
   Sensitivity: 1
-  JumpHeight: 5
+  JumpHeight: 2.5
   Gravity: -40
   JumpTimeout: 0.1
   FallTimeout: 0.15

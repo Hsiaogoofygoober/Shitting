@@ -298,7 +298,7 @@ public class Pistol : Gun
         Instantiate(muzzleFlash, attackPoint.position, Quaternion.LookRotation(directionWithSpread));
         currentBullet.transform.forward = directionWithSpread.normalized;
         Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
-        rb.AddRelativeForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
+        rb.AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
 
     }
 
