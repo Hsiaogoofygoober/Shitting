@@ -63,10 +63,10 @@ public class SpawnManager : MonoBehaviour
     void GunGenerator()
     {
         Weapon[] weapons = new Weapon[4];
-        weapons[0] = new Weapon("PistolItem", 0);
-        weapons[1] = new Weapon("RifleItem", 0);
-        weapons[2] = new Weapon("ShotgunItem", 0);
-        weapons[3] = new Weapon("SniperItem", 20);
+        weapons[0] = new Weapon("PistolItem", 6);
+        weapons[1] = new Weapon("RifleItem", 8);
+        weapons[2] = new Weapon("ShotgunItem", 5);
+        weapons[3] = new Weapon("SniperItem", 1);
 
         bool flag = true;
 
@@ -77,7 +77,7 @@ public class SpawnManager : MonoBehaviour
             while (flag)
             {
                 int num1 = Random.Range(0, 1000) % 4;
-                if (weapons[3].getAmount() > 0)
+                if (weapons[num1].getAmount() > 0)
                 {
                     CreateGun(count, weapons[num1].getWeaponName());
                     weapons[num1].decreaceAmount();

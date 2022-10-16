@@ -45,7 +45,7 @@ public class LeaveRoom : MonoBehaviour
 
     public void GoBackLobby()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("Launcher");
     }
 
     public void Open() 

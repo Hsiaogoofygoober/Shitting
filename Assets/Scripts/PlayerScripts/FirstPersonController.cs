@@ -265,11 +265,12 @@ namespace StarterAssets
                 if (_input.openbag)
                 {
                     Cursor.visible = true;
-                    Screen.lockCursor = false;
+                    Cursor.lockState = CursorLockMode.Confined;
                 }
                 else
                 {
                     Cursor.visible = false;
+                    Cursor.lockState = CursorLockMode.Locked;
                 }
 
                 ControllPickAndDrop();
@@ -854,11 +855,6 @@ namespace StarterAssets
             PhotonView.Find(ID).gameObject.SetActive(false);
         }
 
-        
-
-
-
-
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
             base.OnPlayerLeftRoom(otherPlayer);
@@ -902,9 +898,6 @@ namespace StarterAssets
             }
             //drop kits in bag
             InventoryManager2.DropKitWhenDie(dropUpwardForce);
-
-
-
         }
     }
 }
