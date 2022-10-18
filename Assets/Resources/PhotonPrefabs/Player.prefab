@@ -4361,7 +4361,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MoveSpeed: 10
-  SprintSpeed: 10
+  SprintSpeed: 15
   RotationSpeed: 1
   SpeedChangeRate: 5
   Sensitivity: 1
