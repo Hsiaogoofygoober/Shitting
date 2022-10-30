@@ -855,11 +855,6 @@ namespace StarterAssets
             PhotonView.Find(ID).gameObject.SetActive(false);
         }
 
-        
-
-
-
-
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
             base.OnPlayerLeftRoom(otherPlayer);
@@ -903,9 +898,6 @@ namespace StarterAssets
             }
             //drop kits in bag
             InventoryManager2.DropKitWhenDie(dropUpwardForce);
-
-
-
         }
     }
 }
