@@ -31,14 +31,16 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		SceneManager.sceneLoaded -= OnSceneLoaded;
 	}
 
-	void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
 	{
-		if (scene.buildIndex == 1) // We're in the game scene
+		if (scene.buildIndex == 2) // We're in the game scene
 		{
 			PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
 		}
-		else if (scene.buildIndex == 0) {
-			PhotonNetwork.Disconnect();
+		else if (scene.buildIndex == 1) {
+			if(PhotonNetwork.IsConnected)
+				PhotonNetwork.Disconnect();
 		}
 	}
 
@@ -64,7 +66,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		if (PhotonNetwork.CurrentRoom.PlayerCount == 5)
         {
 			PhotonNetwork.CurrentRoom.IsOpen = false;
-			PhotonNetwork.LoadLevel(1);
+			PhotonNetwork.LoadLevel(2);
         }
 	}
 }
