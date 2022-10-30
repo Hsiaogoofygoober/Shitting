@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,7 +32,8 @@ namespace Com.FPSGaming
         [SerializeField]
         private Text playersOnMaster;
 
-        private Text playerUI;
+        [SerializeField]
+        private TMP_Text playerAccount;
         // 遊戲版本的編碼, 可讓 Photon Server 做同款遊戲不同版本的區隔.
         string gameVersion = "1";
         bool isConnecting = false;
@@ -46,9 +48,12 @@ namespace Com.FPSGaming
         void Start()
         {
             PhotonNetwork.ConnectUsingSettings();
+            string account = PlayerPrefs.GetString("Account");
+            playerAccount.text = account;
+
             progressLabel.SetActive(false);
             waitingLabel.SetActive(false);
-            controlPanel.SetActive(true);
+            controlPanel.SetActive(true);     
         }
 
         // 與 Photon Cloud 連線

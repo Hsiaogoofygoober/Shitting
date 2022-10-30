@@ -194,10 +194,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Use this scene if you''re building to webgl
-
-    FIle > Build Settings
-    > Player Settings... > Web3Template'
+  m_Text: 
 --- !u!222 &174141134
 CanvasRenderer:
   m_ObjectHideFlags: 0
