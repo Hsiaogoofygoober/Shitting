@@ -285,7 +285,7 @@ public class ShotGun : Gun
             currentBullet.transform.forward = directionWithSpread[i].normalized;
             currentBullet.GetComponent<BulletProjectile>().owner = PV.Owner.NickName;
             Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
-            rb.AddRelativeForce(directionWithSpread[i].normalized * shootForce, ForceMode.Impulse);
+            rb.AddForce(directionWithSpread[i].normalized * shootForce, ForceMode.Impulse);
         }
     }
 
