@@ -31,6 +31,7 @@ public class BulletProjectile : MonoBehaviour
                 {
                     Debug.Log("hit => " + hits[i].point);
                     hits[i].collider.GetComponent<IDamageable>()?.TakeDamage(damage);
+                    //PlayerPrefs.SetInt("SlotID", slotID);
                     hits[i].collider.GetComponent<FirstPersonController>().killer = owner;
                     Instantiate(blood, (transform.position + mPrevious) / 2, Quaternion.LookRotation((transform.position + mPrevious) / 2 - hits[i].transform.position));
                     if (HitPartical != null)
