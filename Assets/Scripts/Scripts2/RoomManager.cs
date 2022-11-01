@@ -3,7 +3,7 @@ using Photon.Pun;
 using UnityEngine.SceneManagement;
 using System.IO;
 using Photon.Realtime;
-
+using Newtonsoft.Json;
 public class RoomManager : MonoBehaviourPunCallbacks
 {
 	public static RoomManager instance;
@@ -37,13 +37,15 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		if (scene.buildIndex == 2) // We're in the game scene
 		{
 			PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
+			//OnSendTransaction();
+			//PayforTicket();
 		}
 		else if (scene.buildIndex == 1) {
 			if(PhotonNetwork.IsConnected)
 				PhotonNetwork.Disconnect();
 		}
 	}
-
+	
 	public override void OnPlayerEnteredRoom(Player other)
 	{
 		Debug.LogFormat("{0} 進入遊戲室", other.NickName);
@@ -63,7 +65,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		}
 		Debug.LogFormat("載入{0}人的場景",
 			PhotonNetwork.CurrentRoom.PlayerCount);
-		if (PhotonNetwork.CurrentRoom.PlayerCount == 5)
+		if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
 			PhotonNetwork.CurrentRoom.IsOpen = false;
 			PhotonNetwork.LoadLevel(2);
