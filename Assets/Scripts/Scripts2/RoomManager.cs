@@ -37,15 +37,13 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		if (scene.buildIndex == 2) // We're in the game scene
 		{
 			PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
-			//OnSendTransaction();
-			//PayforTicket();
 		}
 		else if (scene.buildIndex == 1) {
 			if(PhotonNetwork.IsConnected)
 				PhotonNetwork.Disconnect();
 		}
 	}
-	
+
 	public override void OnPlayerEnteredRoom(Player other)
 	{
 		Debug.LogFormat("{0} ¶i¤J¹CÀ¸«Ç", other.NickName);
@@ -67,6 +65,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 			PhotonNetwork.CurrentRoom.PlayerCount);
 		if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {
+			PlayerPrefs.DeleteKey("hasPaid");
 			PhotonNetwork.CurrentRoom.IsOpen = false;
 			PhotonNetwork.LoadLevel(2);
         }
