@@ -260,11 +260,11 @@ public class ShotGun : Gun
             GetComponentInParent<FirstPersonController>().shotgunAmmo = 0;
         }
         CheckAmmoInBag();
-        reloading = false; ;
+        reloading = false; 
     }
     private void ShootRPC(Vector3[] directionWithSpread, Vector3 directionWithoutSpread)
     {
-        PV.RPC("RPC_Shoot", RpcTarget.All,directionWithSpread, directionWithoutSpread);
+        PV.RPC("RPC_Shoot", RpcTarget.All, directionWithSpread, directionWithoutSpread);
     }
     private void NotAimRPC()
     {
@@ -284,6 +284,8 @@ public class ShotGun : Gun
             GameObject currentBullet = Instantiate(bullet, attackPoint.position, Quaternion.identity);
             currentBullet.transform.forward = directionWithSpread[i].normalized;
             currentBullet.GetComponent<BulletProjectile>().owner = PV.Owner.NickName;
+            currentBullet.GetComponent<BulletProjectile>().account = PlayerPrefs.GetString("Account");
+            Debug.Log("¿ú¥]¦a§}: " + currentBullet.GetComponent<BulletProjectile>().account);
             Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
             rb.AddForce(directionWithSpread[i].normalized * shootForce, ForceMode.Impulse);
         }
