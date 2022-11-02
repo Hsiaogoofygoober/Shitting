@@ -66,29 +66,4 @@ public class PlayerManagers : MonoBehaviourPunCallbacks
     {
         return FindObjectsOfType<PlayerManagers>().SingleOrDefault(x => x.PV.Owner == player);
     }
-
-    //IEnumerator DisconnectAndLoad()
-    //{
-    //    PhotonNetwork.LeaveRoom();
-
-    //    while (PhotonNetwork.InRoom)
-    //        yield return null;
-
-    //    SceneManager.LoadScene("Finish");
-
-
-
-
-    //    if (PhotonNetwork.InRoom)
-    //    {
-    //        PhotonNetwork.AutomaticallySyncScene = false;
-
-    //        PhotonNetwork.LoadLevel("Finish");
-    //        //SceneManager.LoadScene("Finish");
-    //    }
-    //    else
-    //        yield return null;
-
-    //    PhotonNetwork.Disconnect();
-    //}
 }

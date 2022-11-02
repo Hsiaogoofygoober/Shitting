@@ -72,6 +72,7 @@ namespace StarterAssets
         public float BottomClamp = -90.0f;
 
         public string killer = "";
+        public string killerAccount = "";
 
         public PhotonView PV;
 
@@ -490,7 +491,6 @@ namespace StarterAssets
         public void SetSensitivity(float newSensitivity)
         {
             Sensitivity = newSensitivity;
-
         }
 
 
@@ -691,10 +691,12 @@ namespace StarterAssets
 			}*/
 
         }
+
         void readyToPick()
         {
             canPick = true;
         }
+
         void readyToDrop()
         {
             canDrop = true;
@@ -709,6 +711,7 @@ namespace StarterAssets
 
             }
         }
+
         public void TakeDamage(int damage)
         {
             //only victom sends message to everyone
@@ -718,17 +721,11 @@ namespace StarterAssets
                 PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);
                 if (currentHealth <= 0)
                 {
+                    // PV.RPC("RPC_killerInfo", RpcTarget.Others, killerAccount);
+                    PV.RPC("RPC_killerInfo", RpcTarget.Others, killer);
                     Debug.Log(killer + "殺了你!!!");
                     Debug.Log("目前Master Client為: " + PhotonNetwork.LocalPlayer.NickName);
-                    //if (PhotonNetwork.LocalPlayer.IsMasterClient)
-                    //{
-                    //    foreach (Player player in PhotonNetwork.PlayerListOthers)
-                    //    {
-                    //        Debug.Log("玩家名稱 : " + player.NickName);
-                    //        PhotonNetwork.SetMasterClient(player);
-                    //        break;
-                    //    }
-                    //}
+                    //Kill.killAmount = 0;
                     DropKitWhenDie();
                     Die();
                 }
@@ -738,8 +735,8 @@ namespace StarterAssets
                 DamageIndicator indicator = Instantiate(damageText, transform.position + Vector3.up * 2, Quaternion.identity).GetComponent<DamageIndicator>();
                 indicator.SetDamageText(damage);
             }
-
         }
+
         public void PickWeapon(int weaponID)
         {
             PV.RPC("RPC_PickWeapon", RpcTarget.All, weaponID);
@@ -754,6 +751,21 @@ namespace StarterAssets
         {
             PV.RPC("RPC_InactiveKit", RpcTarget.All, ID);
         }
+
+        [PunRPC]
+        void RPC_killerInfo(string str) 
+        {
+            //if (str == PlayerPrefs.GetString("Account"))
+            //    Kill.killAmount++;
+
+            if (str == killer) 
+            {
+                KillAmount.instance.amount++;
+                Kill.killAmount++;
+            }
+                
+        }
+
 
         [PunRPC]
 

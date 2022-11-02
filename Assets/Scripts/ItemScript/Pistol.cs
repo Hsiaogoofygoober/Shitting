@@ -297,6 +297,8 @@ public class Pistol : Gun
         GameObject currentBullet = Instantiate(bullet, attackPoint.position, Quaternion.identity);
         Instantiate(muzzleFlash, attackPoint.position, Quaternion.LookRotation(directionWithSpread));
         currentBullet.transform.forward = directionWithSpread.normalized;
+        currentBullet.GetComponent<BulletProjectile>().account = PlayerPrefs.GetString("Account");
+        Debug.Log("¿ú¥]¦a§}: " + currentBullet.GetComponent<BulletProjectile>().account);
         Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
         rb.AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
 

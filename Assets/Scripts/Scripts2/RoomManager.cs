@@ -34,11 +34,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
 	{
-		if (scene.buildIndex == 2) // We're in the game scene
+		if (scene.buildIndex == 1) // We're in the game scene
 		{
 			PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
 		}
-		else if (scene.buildIndex == 1) {
+		else if (scene.buildIndex == 0) {
 			if(PhotonNetwork.IsConnected)
 				PhotonNetwork.Disconnect();
 		}
@@ -55,6 +55,16 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		}
 	}
 
+	//public override void OnJoinedRoom()
+	//{
+	//	if (PhotonNetwork.IsMasterClient)
+	//	{
+	//		Debug.LogFormat("我是 Master Client 嗎? {0}",
+	//			PhotonNetwork.IsMasterClient);
+	//		LoadArena();
+	//	}
+	//}
+
 	void LoadArena()
 	{
 		if (!PhotonNetwork.IsMasterClient)
@@ -63,11 +73,11 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		}
 		Debug.LogFormat("載入{0}人的場景",
 			PhotonNetwork.CurrentRoom.PlayerCount);
-		if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+		if (PhotonNetwork.CurrentRoom.PlayerCount == 3)
         {
 			PlayerPrefs.DeleteKey("hasPaid");
 			PhotonNetwork.CurrentRoom.IsOpen = false;
-			PhotonNetwork.LoadLevel(2);
+			PhotonNetwork.LoadLevel("GameScene");
         }
 	}
 }

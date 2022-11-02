@@ -13,6 +13,8 @@ public class BulletProjectile : MonoBehaviour
     public ParticleSystem blood;
     public ParticleSystem HitPartical;
 
+    public string account;
+
     void Start()
     {
         mPrevious = transform.position;
@@ -33,6 +35,7 @@ public class BulletProjectile : MonoBehaviour
                     hits[i].collider.GetComponent<IDamageable>()?.TakeDamage(damage);
                     //PlayerPrefs.SetInt("SlotID", slotID);
                     hits[i].collider.GetComponent<FirstPersonController>().killer = owner;
+                    hits[i].collider.GetComponent<FirstPersonController>().killerAccount = PlayerPrefs.GetString("Account");
                     Instantiate(blood, (transform.position + mPrevious) / 2, Quaternion.LookRotation((transform.position + mPrevious) / 2 - hits[i].transform.position));
                     if (HitPartical != null)
                     {

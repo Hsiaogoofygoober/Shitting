@@ -4380,6 +4380,7 @@ MonoBehaviour:
   TopClamp: 90
   BottomClamp: -90
   killer: 
+  killerAccount: 
   PV: {fileID: 0}
   playerFollowCamera: {fileID: 4327787885690698274}
   aimVirtualCamera: {fileID: 4327787885862135951}
