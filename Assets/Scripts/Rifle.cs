@@ -276,6 +276,7 @@ public class Rifle : Gun
     {
         PV.RPC("RPC_Aim", RpcTarget.All);
     }
+
     [PunRPC]
     void RPC_Shoot(Vector3 directionWithSpread)
     {
@@ -283,6 +284,8 @@ public class Rifle : Gun
         Instantiate(muzzleFlash, attackPoint.position, Quaternion.LookRotation(directionWithSpread));
         currentBullet.transform.forward = directionWithSpread.normalized;
         currentBullet.GetComponent<BulletProjectile>().owner = PV.Owner.NickName;
+        currentBullet.GetComponent<BulletProjectile>().account = PlayerPrefs.GetString("Account");
+        Debug.Log("¿ú¥]¦a§}: " + currentBullet.GetComponent<BulletProjectile>().account);
         Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
         rb.AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
     }

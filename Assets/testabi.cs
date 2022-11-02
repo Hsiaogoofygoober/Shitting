@@ -75,7 +75,7 @@ public class testabi : MonoBehaviour
 		// create data for contract interaction
 		string data = await EVM.CreateContractData(abi, method, args);
 		// send transaction
-		string response = await Web3Wallet.SendTransaction(chainId, contract, "0", data, "", "");
+		string response = await Web3Wallet.SendTransaction(chainId, contract, "0", data, "", ""); 
 		// display response in game
 		print(response);
 

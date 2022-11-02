@@ -25,12 +25,12 @@ public class LeaveRoom : MonoBehaviour
 
         if (StateController.status == 1)
         {
-            my_text.text = "YOU ARE CHAMPION !!!";           
+            my_text.text = "YOU ARE CHAMPION !!! " + KillAmount.instance.amount;           
         }
         else if (StateController.status == 0)
         {
             /*PlayerPrefs.GetInt("Status")*/
-            my_text.text = "GOT KILLED !!!";
+            my_text.text = "GOT KILLED !!! " + KillAmount.instance.amount;
         }
         else 
         {
@@ -45,6 +45,8 @@ public class LeaveRoom : MonoBehaviour
 
     public void GoBackLobby()
     {
+        Destroy(KillAmount.instance.gameObject);
+        Kill.killAmount = 0;
         SceneManager.LoadScene("Launcher");
     }
 
