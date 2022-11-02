@@ -53,8 +53,8 @@ public class testabi : MonoBehaviour
 		// method you want to write to
 		string method = "withdraw";
 		// amount you want to change, in this case we are adding 1 to "addTotal"
-		string winner = "0";
-		string amount = "1";
+		string winner = StateController.status.ToString();
+		string amount = KillAmount.instance.amount.ToString();
 		// array of arguments for contract you can also add a nonce here as optional parameter
 		string[] obj = {winner,amount};
 		string args = JsonConvert.SerializeObject(obj);
