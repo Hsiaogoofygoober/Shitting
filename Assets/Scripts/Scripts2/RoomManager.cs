@@ -55,17 +55,17 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		}
 	}
 
-	//public override void OnJoinedRoom()
-	//{
-	//	if (PhotonNetwork.IsMasterClient)
-	//	{
-	//		Debug.LogFormat("我是 Master Client 嗎? {0}",
-	//			PhotonNetwork.IsMasterClient);
-	//		LoadArena();
-	//	}
-	//}
+    public override void OnJoinedRoom()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Debug.LogFormat("我是 Master Client 嗎? {0}",
+                PhotonNetwork.IsMasterClient);
+            LoadArena();
+        }
+    }
 
-	void LoadArena()
+    void LoadArena()
 	{
 		if (!PhotonNetwork.IsMasterClient)
 		{
@@ -73,7 +73,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		}
 		Debug.LogFormat("載入{0}人的場景",
 			PhotonNetwork.CurrentRoom.PlayerCount);
-		if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
+		if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {;
 			PhotonNetwork.CurrentRoom.IsOpen = false;
 			PhotonNetwork.LoadLevel("GameScene");
