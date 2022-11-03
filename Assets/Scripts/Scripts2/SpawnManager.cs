@@ -159,7 +159,7 @@ public class SpawnManager : MonoBehaviour
         int z = Random.Range(-1000, 1000) % 20;
         int x = Random.Range(-1000, 1000) % 20;
         Vector3 pos = spawnpoints[index].transform.position;
-        pos.y += 5;
+        pos.y += 100;
         pos.z += z;
         pos.x += x;
         spawnpoints[index].transform.position = pos;
