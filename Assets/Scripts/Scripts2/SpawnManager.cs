@@ -156,10 +156,10 @@ public class SpawnManager : MonoBehaviour
 
     void CreateKit(int index)
     {
-        int z = Random.Range(-1000, 1000) % 20;
-        int x = Random.Range(-1000, 1000) % 20;
+        int z = Random.Range(-1000, 1000) % 7;
+        int x = Random.Range(-1000, 1000) % 7;
         Vector3 pos = spawnpoints[index].transform.position;
-        pos.y += 100;
+        pos.y += 3;
         pos.z += z;
         pos.x += x;
         spawnpoints[index].transform.position = pos;

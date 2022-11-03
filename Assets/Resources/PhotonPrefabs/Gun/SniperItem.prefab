@@ -345,7 +345,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: b5742c35cad19b945bc129c719875b2d, type: 3}
   m_PrefabInstance: {fileID: 8939733211737676598}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &1586688688332419019
+--- !u!65 &4411641669898805428
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -356,8 +356,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.43297103, y: 9.029431, z: 2.7344925}
-  m_Center: {x: -0.010603896, y: -0.89936364, z: 0.103628114}
+  m_Size: {x: 0.43297106, y: 9.029432, z: 2.734493}
+  m_Center: {x: -0.010603897, y: -0.89936376, z: 0.10362812}
 --- !u!4 &8939733211737801142 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: b5742c35cad19b945bc129c719875b2d, type: 3}
