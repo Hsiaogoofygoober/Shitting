@@ -29,7 +29,7 @@ public class PlayerManagers : MonoBehaviourPunCallbacks
     void CreateController()
     {
         Debug.Log("Instantiated Player Controller");
-        Vector3 spawnPoint = new Vector3(Random.Range(-200f, 260f), 150f, Random.Range(-130f, 340f));
+        Vector3 spawnPoint = new Vector3(Random.Range(-180f, 140f), 150f, Random.Range(-120f, 300f));
         controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Player"), spawnPoint, Quaternion.identity, 0, new object[] { PV.ViewID });
     }
 
