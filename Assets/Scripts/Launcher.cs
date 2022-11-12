@@ -22,13 +22,16 @@ namespace Com.FPSGaming
         [SerializeField]
         private GameObject controlPanel;
 
-        [Tooltip("顯示/隱藏 連線中 字串")]
-        [SerializeField]
-        private GameObject progressLabel;
+        //[Tooltip("顯示/隱藏 連線中 字串")]
+        //[SerializeField]
+        //private GameObject progressLabel;
 
-        [Tooltip("顯示/隱藏 等待中 字串")]
+        //[Tooltip("顯示/隱藏 等待中 字串")]
+        //[SerializeField]
+        //private GameObject waitingLabel;
+
         [SerializeField]
-        private GameObject waitingLabel;
+        private GameObject waitingQueue;
 
         [Tooltip("顯示/隱藏 線上的人數")]
         [SerializeField]
@@ -53,8 +56,7 @@ namespace Com.FPSGaming
             string account = PlayerPrefs.GetString("Account");
             playerAccount.text = account;
 
-            progressLabel.SetActive(false);
-            waitingLabel.SetActive(false);
+            waitingQueue.SetActive(false);
             controlPanel.SetActive(true);     
         }
 
@@ -93,8 +95,8 @@ namespace Com.FPSGaming
             // send transaction
             try
             {
-                string response = await Web3GL.SendContract(method, abi, contract, args, value, "", "");
-                print("sent contract " + response);
+                //string response = await Web3GL.SendContract(method, abi, contract, args, value, "", "");
+                //print("sent contract " + response);
                 Connect();
             }
             catch (Exception e)
@@ -107,8 +109,7 @@ namespace Com.FPSGaming
         public void Connect()
         {
             //playersOnMaster.SetActive(true);
-            progressLabel.SetActive(true);
-            waitingLabel.SetActive(false);
+            waitingQueue.SetActive(true);
             controlPanel.SetActive(false);
             // 檢查是否與 Photon Cloud 連線
             if (PhotonNetwork.IsConnected)
@@ -142,7 +143,6 @@ namespace Com.FPSGaming
         public override void OnDisconnected(DisconnectCause cause)
         {
             //playersOnMaster.SetActive(true);
-            progressLabel.SetActive(false);
             controlPanel.SetActive(true);
             Debug.LogWarningFormat("PUN 呼叫 OnDisconnected() {0}.", cause);
         }
@@ -163,8 +163,7 @@ namespace Com.FPSGaming
 
         public override void OnJoinedRoom()
         {
-            waitingLabel.SetActive(true);
-            progressLabel.SetActive(false);
+            waitingQueue.SetActive(true);
             Debug.Log("PUN 呼叫 OnJoinedRoom(), 已成功進入遊戲室中." + " " + PhotonNetwork.CurrentRoom.PlayerCount);
             /*if (PhotonNetwork.CurrentRoom.PlayerCount == maxPlayersPerRoom)
             {

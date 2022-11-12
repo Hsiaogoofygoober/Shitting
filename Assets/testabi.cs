@@ -32,9 +32,9 @@ public class testabi : MonoBehaviour
 		string data = await EVM.CreateContractData(abi, method, args);
 		print(data);
 		// send transaction
-		string response = await Web3GL.SendContract(method, abi, contract, args, "0", "", "");
+		//string response = await Web3GL.SendContract(method, abi, contract, args, "0", "", "");
 		// display response in game
-		print(response);
+		//print(response);
 	}
 
 }

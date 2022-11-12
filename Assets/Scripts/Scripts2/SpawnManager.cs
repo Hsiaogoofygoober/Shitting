@@ -156,12 +156,8 @@ public class SpawnManager : MonoBehaviour
 
     void CreateKit(int index)
     {
-        int z = Random.Range(-1000, 1000) % 7;
-        int x = Random.Range(-1000, 1000) % 7;
         Vector3 pos = spawnpoints[index].transform.position;
-        pos.y += 3;
-        pos.z += z;
-        pos.x += x;
+        pos.y += 2;
         spawnpoints[index].transform.position = pos;
         Transform spawnpoint = spawnpoints[index].transform;
         PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs/Kits", "Burger"), spawnpoint.position, spawnpoint.rotation, 0, new object[] { pv.ViewID });
