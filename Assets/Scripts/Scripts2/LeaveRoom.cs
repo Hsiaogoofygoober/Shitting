@@ -22,6 +22,7 @@ public class LeaveRoom : MonoBehaviour
     void Start()
     {
         Cursor.visible = true;
+        my_text.text = "YOU are suck !!!";
 
         if (StateController.status == 1)
         {
@@ -34,7 +35,7 @@ public class LeaveRoom : MonoBehaviour
         }
         else 
         {
-            my_text.text = "·F§A®Q¾÷ÙT !!!";
+            
         }
         Cursor.visible = true;
         Screen.lockCursor = false;
