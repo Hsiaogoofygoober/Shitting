@@ -100,8 +100,6 @@ namespace StarterAssets
 
         // aimming
         public CinemachineVirtualCamera aimVirtualCamera;
-        [SerializeField] private float normalSensitivity;
-        [SerializeField] private float aimSensitivity;
         public GameObject PistolInitPos;
         public GameObject PistolAimPos;
         public GameObject SniperAimPos;
@@ -130,8 +128,6 @@ namespace StarterAssets
 
 
         // pick up and drop down
-        public Rigidbody gunRb;
-        public BoxCollider gunColl;
         public Transform player, fpsCam, itemHolder;
         public Item gunItem;
         public Camera playerCam;
