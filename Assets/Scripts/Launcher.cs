@@ -60,13 +60,6 @@ namespace Com.FPSGaming
             controlPanel.SetActive(true);     
         }
 
-        private void Update()
-        {
-            if (PlayerPrefs.GetInt("hasPayed") != 1)
-            {
-
-            }
-        }
         async public void PayforTicket()
         {
 
@@ -95,8 +88,8 @@ namespace Com.FPSGaming
             // send transaction
             try
             {
-                //string response = await Web3GL.SendContract(method, abi, contract, args, value, "", "");
-                //print("sent contract " + response);
+                string response = await Web3GL.SendContract(method, abi, contract, args, value, "", "");
+                print("sent contract " + response);
                 Connect();
             }
             catch (Exception e)
