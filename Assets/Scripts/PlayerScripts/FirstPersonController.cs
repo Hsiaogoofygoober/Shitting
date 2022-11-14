@@ -165,6 +165,7 @@ namespace StarterAssets
         [SerializeField] private AudioSource walkSoundEffect;
         [SerializeField] private AudioSource sprintSoundEffect;
         [SerializeField] private AudioSource groundSoundEffect;
+        [SerializeField] private AudioSource pickupSoundEffect;
 
         private void Awake()
         {
@@ -624,6 +625,7 @@ namespace StarterAssets
                     if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("weapon") && hit.distance <= pickUpRange && !slotFull)
                     {
                         canPick = false;
+                        pickupSoundEffect.Play();
                         Debug.Log("is weapon");
                         weapon = hit.rigidbody.gameObject;
                         //TakeDamage(10);
@@ -637,6 +639,7 @@ namespace StarterAssets
                     else if(hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("burger") && hit.distance <= pickUpRange && !InventoryManager2.IsBagFull())
                     {
                         canPick = false;
+                        pickupSoundEffect.Play();
                         Tool tool = hit.collider.GetComponent<Tool>();
                         AddNewItem(tool);
                         hit.collider.gameObject.SetActive(false);
@@ -647,6 +650,7 @@ namespace StarterAssets
                     else if(hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("pistolAmmo") && hit.distance <= pickUpRange && !InventoryManager2.IsBagFull())
                     {
                         canPick = false;
+                        pickupSoundEffect.Play();
                         Tool tool = hit.collider.GetComponent<Tool>();
                         AddNewItem(tool);
                         pistolAmmo += tool.toolValue;
@@ -659,6 +663,7 @@ namespace StarterAssets
                     else if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("rifleAmmo") && hit.distance <= pickUpRange && !InventoryManager2.IsBagFull())
                     {
                         canPick = false;
+                        pickupSoundEffect.Play();
                         Tool tool = hit.collider.GetComponent<Tool>();
                         AddNewItem(tool);
                         rifleAmmo += tool.toolValue;
@@ -671,6 +676,7 @@ namespace StarterAssets
                     else if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("shotgunAmmo") && hit.distance <= pickUpRange && !InventoryManager2.IsBagFull())
                     {
                         canPick = false;
+                        pickupSoundEffect.Play();
                         Tool tool = hit.collider.GetComponent<Tool>();
                         AddNewItem(tool);
                         shotgunAmmo += tool.toolValue;

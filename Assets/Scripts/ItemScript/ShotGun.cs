@@ -55,7 +55,11 @@ public class ShotGun : Gun
     public float Sensitivity = 1f;
     public GameObject AimPos;
     public GameObject OriginalPos;
-    
+
+    //audio
+    [SerializeField] private AudioSource shootSoundEffect;
+    [SerializeField] private AudioSource reloadSoundEffect;
+
     private void Awake()
     {
 
@@ -244,6 +248,7 @@ public class ShotGun : Gun
     private void Reload()
     {
         reloading = true;
+        reloadSoundEffect.Play();
         Invoke("ReloadFinished", reloadTime); //Invoke ReloadFinished function with your reloadTime as delay
     }
     private void ReloadFinished()
@@ -264,6 +269,7 @@ public class ShotGun : Gun
     }
     private void ShootRPC(Vector3[] directionWithSpread, Vector3 directionWithoutSpread)
     {
+        shootSoundEffect.Play();
         PV.RPC("RPC_Shoot", RpcTarget.All, directionWithSpread, directionWithoutSpread);
     }
     private void NotAimRPC()
