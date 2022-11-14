@@ -750,7 +750,6 @@ MonoBehaviour:
   controlPanel: {fileID: 659472066}
   waitingQueue: {fileID: 2098621078}
   playersOnMaster: {fileID: 1297348858}
-  playerAccount: {fileID: 0}
 --- !u!1 &971171617
 GameObject:
   m_ObjectHideFlags: 0
@@ -1062,7 +1061,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 873879604}
         m_TargetAssemblyTypeName: Com.FPSGaming.Launcher, Assembly-CSharp
-        m_MethodName: PayforTicket
+        m_MethodName: Connect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

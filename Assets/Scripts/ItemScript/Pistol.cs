@@ -51,6 +51,10 @@ public class Pistol : Gun
     public GameObject AimPos;
     public GameObject OriginalPos;
 
+    //audio
+    [SerializeField] private AudioSource shootSoundEffect;
+    [SerializeField] private AudioSource reloadSoundEffect;
+
     private void Awake()
     {
 
@@ -255,6 +259,7 @@ public class Pistol : Gun
     private void Reload()
     {
         reloading = true;
+        reloadSoundEffect.Play();
         Invoke("ReloadFinished", reloadTime); //Invoke ReloadFinished function with your reloadTime as delay
     }
     private void ReloadFinished()
@@ -275,7 +280,7 @@ public class Pistol : Gun
     }
     private void ShootRPC(Vector3 directionWithoutSpread)
     {
-        
+        shootSoundEffect.Play();
         PV.RPC("RPC_Shoot", RpcTarget.All,directionWithoutSpread);
 
     }
