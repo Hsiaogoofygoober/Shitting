@@ -33,8 +33,8 @@ namespace Com.FPSGaming
         {
             if (string.IsNullOrEmpty(value))
             {
-                Debug.LogError("Player Name is null or empty");
-                return;
+                //Debug.LogError("Player Name is null or empty");
+                //return;
             }
             // 設定遊戲玩家的名稱
             PhotonNetwork.NickName = value;

@@ -50,6 +50,10 @@ public class Sniper : Gun
     public GameObject AimPos;
     public GameObject OriginalPos;
 
+    //audio
+    [SerializeField] private AudioSource shootSoundEffect;
+    [SerializeField] private AudioSource reloadSoundEffect;
+
     private void Awake()
     {
 
@@ -185,11 +189,11 @@ public class Sniper : Gun
         //Add forces to bullet
         if (starterAssetsInputs.aim)
         {
-            ShootWithoutSpread(directionWithoutSpread);
+            Shoot_RPC(directionWithoutSpread);
         }
         else
         {
-            ShootWithSpread(directionWithSpread);
+            Shoot_RPC(directionWithSpread);
         }
 
 
@@ -221,6 +225,7 @@ public class Sniper : Gun
     private void Reload()
     {
         reloading = true;
+        reloadSoundEffect.Play();
         Invoke("ReloadFinished", reloadTime); //Invoke ReloadFinished function with your reloadTime as delay
     }
     private void ReloadFinished()
@@ -238,13 +243,10 @@ public class Sniper : Gun
         }
         reloading = false;
     }
-    private void ShootWithoutSpread(Vector3 directionWithoutSpread)
+    private void Shoot_RPC(Vector3 spread)
     {
-        PV.RPC("RPC_Shoot", RpcTarget.All,directionWithoutSpread);
-    }
-    private void ShootWithSpread(Vector3 directionWithSpread)
-    {
-        PV.RPC("RPC_Shoot", RpcTarget.All,directionWithSpread);
+        shootSoundEffect.Play();
+        PV.RPC("RPC_Shoot", RpcTarget.All,spread);
     }
     private void NotAimRPC()
     {

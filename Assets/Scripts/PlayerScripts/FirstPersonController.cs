@@ -1,18 +1,13 @@
 ﻿using UnityEngine;
 using Cinemachine;
-using System.Collections;
-using System.Collections.Generic;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.Animations.Rigging;
 using Photon.Pun;
 using UnityEngine.UI;
 using Photon.Realtime;
 using System.IO;
-using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-using UnityEngine.InputSystem;
 using TMPro;
 
 #endif
@@ -50,13 +45,13 @@ namespace StarterAssets
         [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
         public float JumpTimeout = 0.1f;
         [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
-        public float FallTimeout = 0.15f;
+        public float FallTimeout = 0.5f;
 
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
         public bool Grounded = true;
         [Tooltip("Useful for rough ground")]
-        public float GroundedOffset = -0.14f;
+        public float GroundedOffset = 0.5f;
         [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
         public float GroundedRadius = 0.5f;
         [Tooltip("What layers the character uses as ground")]
@@ -85,7 +80,8 @@ namespace StarterAssets
         private float _rotationVelocity;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
-        
+        private bool _isGrounded = false;
+
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
@@ -100,8 +96,6 @@ namespace StarterAssets
 
         // aimming
         public CinemachineVirtualCamera aimVirtualCamera;
-        [SerializeField] private float normalSensitivity;
-        [SerializeField] private float aimSensitivity;
         public GameObject PistolInitPos;
         public GameObject PistolAimPos;
         public GameObject SniperAimPos;
@@ -130,8 +124,6 @@ namespace StarterAssets
 
 
         // pick up and drop down
-        public Rigidbody gunRb;
-        public BoxCollider gunColl;
         public Transform player, fpsCam, itemHolder;
         public Item gunItem;
         public Camera playerCam;
@@ -169,12 +161,14 @@ namespace StarterAssets
         public int rifleAmmo = 0;
         public TextMeshProUGUI ammunitionDisplay;
 
+        //audio
+        [SerializeField] private AudioSource walkSoundEffect;
+        [SerializeField] private AudioSource sprintSoundEffect;
+        [SerializeField] private AudioSource groundSoundEffect;
+        [SerializeField] private AudioSource pickupSoundEffect;
+
         private void Awake()
         {
-            //if (instance != null)
-            //    Destroy(this);
-            //instance = this;
-           // Debug.Log("Master Client: " + PhotonNetwork.MasterClient.NickName);
 
             // get a reference to our main camera
             if (_mainCamera == null)
@@ -235,18 +229,23 @@ namespace StarterAssets
             }
             else
             {
-                if (_input.move != Vector2.zero && !_input.sprint)
+                if (_input.move != Vector2.zero && !_input.sprint && Grounded)
                 {
                     _animator.SetFloat("Speed", 0.5f, 0.1f, Time.deltaTime);
+                    walkSoundEffect.enabled = true;
+                    sprintSoundEffect.enabled = false;
                 }
-                else if (_input.sprint && _input.move != Vector2.zero)
+                else if (_input.sprint && _input.move != Vector2.zero && Grounded)
                 {
-
                     _animator.SetFloat("Speed", 1.0f, 0.1f, Time.deltaTime);
+                    sprintSoundEffect.enabled = true;
+                    walkSoundEffect.enabled = false;
                 }
                 else
                 {
                     _animator.SetFloat("Speed", 0);
+                    walkSoundEffect.enabled = false;
+                    sprintSoundEffect.enabled = false;
                 }
 
                 if (scrolling_value < 0 && items[0] != null && items[1] != null)
@@ -324,7 +323,11 @@ namespace StarterAssets
             {
                 return;
             }
-            CameraRotation();
+            if (!_input.openbag)
+            {
+                CameraRotation();
+            }
+            
         }
 
         private void ControllShoot()
@@ -422,9 +425,16 @@ namespace StarterAssets
                 _animator.SetBool("IsJumping", false);
                 _animator.SetBool("IsLoopingUp", false);
                 _animator.SetBool("IsMoving", true);
+
+                
+                if (_isGrounded && _fallTimeoutDelta <= 0.0f)
+                {
+                    groundSoundEffect.Play();
+                    _isGrounded = false;
+                }
+
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
-
                 // stop our velocity dropping infinitely when grounded
                 if (_verticalVelocity < 0.0f)
                 {
@@ -448,6 +458,7 @@ namespace StarterAssets
             }
             else
             {
+                _isGrounded = true;
                 _animator.SetBool("IsLoopingUp", true);
                 _animator.SetBool("IsLoopingDown", false);
                 // reset the jump timeout timer
@@ -614,6 +625,7 @@ namespace StarterAssets
                     if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("weapon") && hit.distance <= pickUpRange && !slotFull)
                     {
                         canPick = false;
+                        pickupSoundEffect.Play();
                         Debug.Log("is weapon");
                         weapon = hit.rigidbody.gameObject;
                         //TakeDamage(10);
@@ -627,6 +639,7 @@ namespace StarterAssets
                     else if(hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("burger") && hit.distance <= pickUpRange && !InventoryManager2.IsBagFull())
                     {
                         canPick = false;
+                        pickupSoundEffect.Play();
                         Tool tool = hit.collider.GetComponent<Tool>();
                         AddNewItem(tool);
                         hit.collider.gameObject.SetActive(false);
@@ -637,6 +650,7 @@ namespace StarterAssets
                     else if(hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("pistolAmmo") && hit.distance <= pickUpRange && !InventoryManager2.IsBagFull())
                     {
                         canPick = false;
+                        pickupSoundEffect.Play();
                         Tool tool = hit.collider.GetComponent<Tool>();
                         AddNewItem(tool);
                         pistolAmmo += tool.toolValue;
@@ -649,6 +663,7 @@ namespace StarterAssets
                     else if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("rifleAmmo") && hit.distance <= pickUpRange && !InventoryManager2.IsBagFull())
                     {
                         canPick = false;
+                        pickupSoundEffect.Play();
                         Tool tool = hit.collider.GetComponent<Tool>();
                         AddNewItem(tool);
                         rifleAmmo += tool.toolValue;
@@ -661,6 +676,7 @@ namespace StarterAssets
                     else if (hit.rigidbody != null && hit.rigidbody.gameObject.CompareTag("shotgunAmmo") && hit.distance <= pickUpRange && !InventoryManager2.IsBagFull())
                     {
                         canPick = false;
+                        pickupSoundEffect.Play();
                         Tool tool = hit.collider.GetComponent<Tool>();
                         AddNewItem(tool);
                         shotgunAmmo += tool.toolValue;
