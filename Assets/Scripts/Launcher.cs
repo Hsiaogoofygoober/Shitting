@@ -22,14 +22,6 @@ namespace Com.FPSGaming
         [SerializeField]
         private GameObject controlPanel;
 
-        //[Tooltip("顯示/隱藏 連線中 字串")]
-        //[SerializeField]
-        //private GameObject progressLabel;
-
-        //[Tooltip("顯示/隱藏 等待中 字串")]
-        //[SerializeField]
-        //private GameObject waitingLabel;
-
         [SerializeField]
         private GameObject waitingQueue;
 
@@ -42,6 +34,7 @@ namespace Com.FPSGaming
         bool isConnecting = false;
         static int playerNumber = 0;
 
+
         void Awake()
         {
             instance = this;
@@ -53,7 +46,7 @@ namespace Com.FPSGaming
             PhotonNetwork.ConnectUsingSettings();
 
             waitingQueue.SetActive(false);
-            controlPanel.SetActive(true);     
+            controlPanel.SetActive(true);
         }
 
         async public void PayforTicket()
