@@ -169,10 +169,6 @@ namespace StarterAssets
 
         private void Awake()
         {
-            //if (instance != null)
-            //    Destroy(this);
-            //instance = this;
-           // Debug.Log("Master Client: " + PhotonNetwork.MasterClient.NickName);
 
             // get a reference to our main camera
             if (_mainCamera == null)
@@ -327,7 +323,11 @@ namespace StarterAssets
             {
                 return;
             }
-            CameraRotation();
+            if (!_input.openbag)
+            {
+                CameraRotation();
+            }
+            
         }
 
         private void ControllShoot()

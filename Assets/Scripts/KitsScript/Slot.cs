@@ -16,6 +16,9 @@ public class Slot : MonoBehaviour
     [SerializeField] private float decreasingRate = 2;
     private FirstPersonController player;
     public GameObject toolOnSlot;
+    //audio
+    [SerializeField] private AudioSource eatingSound;
+    [SerializeField] private AudioSource burpSound;
 
     public void ItemOnClicked() 
     {   
@@ -27,8 +30,10 @@ public class Slot : MonoBehaviour
             switch (slotName)
             {
                 case "Burger":
+                    
                     if (player.currentHealth < 100)
                     {
+                        eatingSound.Play();
                         UsingBurger();
                         Invoke("AfterUsingBurger", 4);
                         slotImage.sprite = null;
@@ -92,7 +97,7 @@ public class Slot : MonoBehaviour
         {
             player.currentHealth += slotValue;
         }
-        
+        burpSound.Play();
         player.MoveSpeed *= decreasingRate;
         player.SprintSpeed *= decreasingRate;
         player.canUse = true;
