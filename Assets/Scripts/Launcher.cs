@@ -77,8 +77,8 @@ namespace Com.FPSGaming
             // send transaction
             try
             {
-                string response = await Web3GL.SendContract(method, abi, contract, args, value, "", "");
-                print("sent contract " + response);
+                //string response = await Web3GL.SendContract(method, abi, contract, args, value, "", "");
+                //print("sent contract " + response);
                 Connect();
             }
             catch (Exception e)
