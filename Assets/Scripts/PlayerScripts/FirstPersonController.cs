@@ -108,6 +108,7 @@ namespace StarterAssets
         [SerializeField] GameObject ui;
         const float maxHealth = 100f;
         public float currentHealth = maxHealth;
+        private float lerpSpeed;
 
         // item
         [SerializeField] Item[] items;
@@ -278,18 +279,19 @@ namespace StarterAssets
                 JumpAndGravity();
                 GroundedCheck();
                 Move();
-                healthbarImage.fillAmount = currentHealth / maxHealth;
+                ControlHealthBar();
 
-                //if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-                //{
-                //    PlayerPrefs.SetInt("Winner", 1);
-                //    playerManagers.Win();
-                //}
-                //InventoryManager.RefreshTool();
-                //Aimming();
+
             }
         }
 
+        private void ControlHealthBar()
+        {
+            lerpSpeed = 3f * Time.deltaTime;
+            healthbarImage.fillAmount = Mathf.Lerp(healthbarImage.fillAmount, currentHealth / maxHealth, lerpSpeed);
+            Color healthColor = Color.Lerp(Color.red, Color.green, (currentHealth / maxHealth));
+            healthbarImage.color = healthColor;
+        }
 
         private void AddNewItem(Tool thisTool)
         {
