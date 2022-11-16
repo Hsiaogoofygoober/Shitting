@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using System.IO;
+using StarterAssets;
 
 public class InventoryManager2 : MonoBehaviour
 {
@@ -29,6 +30,13 @@ public class InventoryManager2 : MonoBehaviour
     private Stack<int> pistolAmmoStack = new Stack<int> ();
     private Stack<int> rifleAmmoStack = new Stack<int>();
     private Stack<int> shotgunAmmoStack = new Stack<int>();
+    private FirstPersonController player;
+    public int rifleAmmoPerBox;
+    public int pistolAmmoPerBox;
+    public int shotgunAmmoPerBox;
+    private int rifleCount;
+    private int pistolCount;
+    private int shotgunCount;
     private void Awake()
     {
         if (PV == null)
@@ -38,7 +46,7 @@ public class InventoryManager2 : MonoBehaviour
             //Debug.Log("slot ID ��: " + GetComponentInChildren<Slot>().slotID);
         }
         toolList = inventorySystem.toolList;
-
+        player = GetComponentInParent<FirstPersonController>();
         GameObject grid = GameObject.Find("grid");
         Debug.Log("grid 個數為: " + grid.transform.childCount);
         //foreach (Transform slot in grid.GetChildCount)
@@ -89,30 +97,65 @@ public class InventoryManager2 : MonoBehaviour
 
         if (PlayerPrefs.GetInt("RefreshBag") == 1) 
         {
-            Debug.Log("pop id >> " + PlayerPrefs.GetInt("SlotID"));
-            int popId = pistolAmmoStack.Pop();
-            Debug.Log("pop id >> " + popId);
-            inventorySystem.toolList[popId] = null;
-            RefreshTool();
-            PlayerPrefs.DeleteAll();
+            if(player.pistolAmmo % pistolAmmoPerBox == 0)
+            {
+                pistolCount = player.pistolAmmo / pistolAmmoPerBox;
+            }
+            else
+            {
+                pistolCount = player.pistolAmmo / pistolAmmoPerBox+1;
+            }
+            if (pistolAmmoStack.Count > pistolCount)
+            {
+                Debug.Log("pop id >> " + PlayerPrefs.GetInt("SlotID"));
+                int popId = pistolAmmoStack.Pop();
+                Debug.Log("pop id >> " + popId);
+                inventorySystem.toolList[popId] = null;
+                RefreshTool();
+                PlayerPrefs.DeleteAll();
+            }
+            
         }
         else if(PlayerPrefs.GetInt("RefreshBag") == 2)
         {
-            Debug.Log("pop id >> " + PlayerPrefs.GetInt("SlotID"));
-            int popId = rifleAmmoStack.Pop();
-            Debug.Log("pop id >> " + popId);
-            inventorySystem.toolList[popId] = null;
-            RefreshTool();
-            PlayerPrefs.DeleteAll();
+            if (player.rifleAmmo % rifleAmmoPerBox == 0)
+            {
+                rifleCount = player.rifleAmmo / rifleAmmoPerBox;
+            }
+            else
+            {
+                rifleCount = player.rifleAmmo / rifleAmmoPerBox + 1;
+            }
+            if (rifleAmmoStack.Count > rifleCount)
+            {
+                Debug.Log("pop id >> " + PlayerPrefs.GetInt("SlotID"));
+                int popId = rifleAmmoStack.Pop();
+                Debug.Log("pop id >> " + popId);
+                inventorySystem.toolList[popId] = null;
+                RefreshTool();
+                PlayerPrefs.DeleteAll();
+            }   
         }
         else if (PlayerPrefs.GetInt("RefreshBag") == 3)
         {
-            Debug.Log("pop id >> " + PlayerPrefs.GetInt("SlotID"));
-            int popId = shotgunAmmoStack.Pop();
-            Debug.Log("pop id >> " + popId);
-            inventorySystem.toolList[popId] = null;
-            RefreshTool();
-            PlayerPrefs.DeleteAll();
+            if (player.shotgunAmmo % shotgunAmmoPerBox == 0)
+            {
+                shotgunCount = player.shotgunAmmo / shotgunAmmoPerBox;
+            }
+            else
+            {
+                shotgunCount = player.shotgunAmmo / shotgunAmmoPerBox + 1;
+            }
+            if (shotgunAmmoStack.Count > shotgunCount)
+            {
+                Debug.Log("pop id >> " + PlayerPrefs.GetInt("SlotID"));
+                int popId = shotgunAmmoStack.Pop();
+                Debug.Log("pop id >> " + popId);
+                inventorySystem.toolList[popId] = null;
+                RefreshTool();
+                PlayerPrefs.DeleteAll();
+            }
+            
         }
     }
 

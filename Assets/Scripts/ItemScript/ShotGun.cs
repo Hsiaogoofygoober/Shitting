@@ -22,9 +22,6 @@ public class ShotGun : Gun
     public int magazineSize, bulletsPerTap;
     public bool allowButtonHold;
     public int ShotgunBulletPerTap;
-    public int ammoPerBox;
-    public int ammoInBag = 0;
-    public int preAmmoInBag = 0;
 
     int bulletsLeft, bulletsShot;
 
@@ -217,25 +214,7 @@ public class ShotGun : Gun
     }
     private void CheckAmmoInBag()
     {
-        if (GetComponentInParent<FirstPersonController>().shotgunAmmo % ammoPerBox != 0)
-        {
-            ammoInBag = GetComponentInParent<FirstPersonController>().shotgunAmmo / ammoPerBox + 1;
-
-        }
-        else
-        {
-            ammoInBag = GetComponentInParent<FirstPersonController>().shotgunAmmo / ammoPerBox;
-        }
-        Debug.Log("ammo In Bag : " + ammoInBag);
-        Debug.Log("ammo In pre Bag : " + preAmmoInBag);
-        if (ammoInBag < preAmmoInBag)
-        {
-            Debug.Log("ammo In two Bag : " + ammoInBag + " , " + preAmmoInBag);
-            PlayerPrefs.SetInt("RefreshBag", 3);
-        }
-
-        preAmmoInBag = ammoInBag;
-
+        PlayerPrefs.SetInt("RefreshBag", 3);
     }
 
     private void ResetShot()

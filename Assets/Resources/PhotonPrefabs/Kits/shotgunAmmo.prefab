@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toolName: ShotgunAmmo
-  toolImage: {fileID: 21300000, guid: 841eef334eca01849ae7153b7b4c3aa2, type: 3}
+  toolImage: {fileID: 21300000, guid: f3d98a7fc0e3c3148985932833fc0c8c, type: 3}
   toolValue: 10
   toolInfo: shotgun ammo
 --- !u!114 &-3881942585247874837

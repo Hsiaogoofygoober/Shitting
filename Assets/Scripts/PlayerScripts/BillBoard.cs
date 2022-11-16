@@ -11,7 +11,7 @@ public class BillBoard : MonoBehaviour
 
     private void Update()
     {
-        if (transform != null)
+        if (mainCameraTransform != null)
         {
             transform.LookAt(transform.position + mainCameraTransform.rotation * Vector3.forward
                 + mainCameraTransform.rotation * Vector3.up);
