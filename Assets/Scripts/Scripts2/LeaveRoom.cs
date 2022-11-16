@@ -26,12 +26,12 @@ public class LeaveRoom : MonoBehaviour
 
         if (StateController.status == 1)
         {
-            my_text.text = "YOU ARE CHAMPION !!! " + KillAmount.instance.amount;           
+            my_text.text = "YOU ARE CHAMPION !!! ";           
         }
         else if (StateController.status == 0)
         {
             /*PlayerPrefs.GetInt("Status")*/
-            my_text.text = "GOT KILLED !!! " + KillAmount.instance.amount;
+            my_text.text = "GOT KILLED !!! ";
         }
         else 
         {
