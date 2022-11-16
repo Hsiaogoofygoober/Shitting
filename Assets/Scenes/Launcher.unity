@@ -1159,7 +1159,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 873879604}
         m_TargetAssemblyTypeName: Com.FPSGaming.Launcher, Assembly-CSharp
-        m_MethodName: Connect
+        m_MethodName: PayforTicket
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
