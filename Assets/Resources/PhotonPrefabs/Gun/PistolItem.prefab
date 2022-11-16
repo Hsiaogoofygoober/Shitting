@@ -88,9 +88,6 @@ MonoBehaviour:
   itemInfo: {fileID: 11400000, guid: 840e3dc9489248d4cba5341d01c3683c, type: 2}
   itemGameObject: {fileID: 7781825948141880994}
   bullet: {fileID: 3581836571591767565, guid: 3f5788115bf9d4041a4c41b6de903f72, type: 3}
-  ammoPerBox: 20
-  ammoInBag: 0
-  preAmmoInBag: 0
   shootForce: 500
   upwardForce: 0
   timeBetweenShooting: 0.8

@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toolName: RifleAmmo
-  toolImage: {fileID: 21300000, guid: a37f8504edf912e448c10c4742c8fffc, type: 3}
+  toolImage: {fileID: 21300000, guid: fafa61463c5036e448874b4e02aa1844, type: 3}
   toolValue: 60
   toolInfo: rifle ammo
 --- !u!54 &8949792662491683680

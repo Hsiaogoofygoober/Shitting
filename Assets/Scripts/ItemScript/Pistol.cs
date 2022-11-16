@@ -12,9 +12,6 @@ public class Pistol : Gun
     private StarterAssetsInputs starterAssetsInputs;
     //bullet 
     public GameObject bullet;
-    public int ammoPerBox;
-    public int ammoInBag = 0;
-    public int preAmmoInBag = 0;
     //public float damage = 10;
     //bullet force
     public float shootForce, upwardForce;
@@ -228,25 +225,7 @@ public class Pistol : Gun
 
     private void CheckAmmoInBag()
     {
-        if (GetComponentInParent<FirstPersonController>().pistolAmmo % ammoPerBox != 0)
-        {
-            ammoInBag = GetComponentInParent<FirstPersonController>().pistolAmmo / ammoPerBox + 1;
-            
-        }
-        else
-        {
-            ammoInBag = GetComponentInParent<FirstPersonController>().pistolAmmo / ammoPerBox;
-        }
-        Debug.Log("ammo In Bag : " + ammoInBag);
-        Debug.Log("ammo In pre Bag : " + preAmmoInBag);
-        if (ammoInBag < preAmmoInBag)
-        {
-            Debug.Log("ammo In two Bag : " + ammoInBag + " , " + preAmmoInBag);
-            PlayerPrefs.SetInt("RefreshBag", 1);
-        }
-
-        preAmmoInBag = ammoInBag;
-
+        PlayerPrefs.SetInt("RefreshBag", 1);
     }
 
     private void ResetShot()

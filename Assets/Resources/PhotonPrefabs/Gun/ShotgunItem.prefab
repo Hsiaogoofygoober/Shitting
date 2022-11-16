@@ -128,9 +128,6 @@ MonoBehaviour:
   bulletsPerTap: 1
   allowButtonHold: 1
   ShotgunBulletPerTap: 10
-  ammoPerBox: 10
-  ammoInBag: 0
-  preAmmoInBag: 0
   recoilForce: 0
   fpsCam: {fileID: 0}
   attackPoint: {fileID: 2693723018236411215}

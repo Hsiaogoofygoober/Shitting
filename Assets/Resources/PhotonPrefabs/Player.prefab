@@ -1631,6 +1631,9 @@ MonoBehaviour:
   slots: []
   PV: {fileID: 0}
   toolList: []
+  rifleAmmoPerBox: 60
+  pistolAmmoPerBox: 20
+  shotgunAmmoPerBox: 10
 --- !u!1 &843858266430234140
 GameObject:
   m_ObjectHideFlags: 0
@@ -4367,7 +4370,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.0355412, y: 1}
+    m_SensorSize: {x: 1.4458599, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -7901,7 +7904,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.0355412, y: 1}
+    m_SensorSize: {x: 1.4458599, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -7972,7 +7975,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.0355412, y: 1}
+    m_SensorSize: {x: 1.4458599, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0

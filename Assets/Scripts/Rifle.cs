@@ -12,10 +12,6 @@ public class Rifle : Gun
     private StarterAssetsInputs starterAssetsInputs;
     //bullet 
     public GameObject bullet;
-    public int ammoPerBox;
-    public int ammoInBag = 0;
-    public int preAmmoInBag = 0;
-    //public float damage = 10;
     //bullet force
     public float shootForce, upwardForce;
 
@@ -192,7 +188,6 @@ public class Rifle : Gun
 
         bulletsLeft--;
         bulletsShot++;
-
         //Invoke resetShot function (if not already invoked), with your timeBetweenShooting
         if (allowInvoke)
         {
@@ -209,24 +204,7 @@ public class Rifle : Gun
     }
     private void CheckAmmoInBag()
     {
-        if (GetComponentInParent<FirstPersonController>().rifleAmmo % ammoPerBox != 0)
-        {
-            ammoInBag = GetComponentInParent<FirstPersonController>().rifleAmmo / ammoPerBox + 1;
-
-        }
-        else
-        {
-            ammoInBag = GetComponentInParent<FirstPersonController>().rifleAmmo / ammoPerBox;
-        }
-        Debug.Log("ammo In Bag : " + ammoInBag);
-        Debug.Log("ammo In pre Bag : " + preAmmoInBag);
-        if (ammoInBag < preAmmoInBag)
-        {
-            Debug.Log("ammo In two Bag : " + ammoInBag + " , " + preAmmoInBag);
-            PlayerPrefs.SetInt("RefreshBag", 2);
-        }
-
-        preAmmoInBag = ammoInBag;
+        PlayerPrefs.SetInt("RefreshBag", 2);
 
     }
 
@@ -256,8 +234,8 @@ public class Rifle : Gun
             bulletsLeft = GetComponentInParent<FirstPersonController>().rifleAmmo;
             GetComponentInParent<FirstPersonController>().rifleAmmo = 0;
         }
-        CheckAmmoInBag();
         reloading = false;
+        CheckAmmoInBag();
     }
     private void ShootRPC(Vector3 spread)
     {
