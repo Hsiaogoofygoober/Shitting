@@ -81,7 +81,7 @@ namespace StarterAssets
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
         private bool _isGrounded = false;
-
+        [SerializeField] private float decreasingRate = 1.5f;
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
@@ -108,6 +108,7 @@ namespace StarterAssets
         [SerializeField] GameObject ui;
         const float maxHealth = 100f;
         public float currentHealth = maxHealth;
+        private float lerpSpeed;
 
         // item
         [SerializeField] Item[] items;
@@ -278,18 +279,19 @@ namespace StarterAssets
                 JumpAndGravity();
                 GroundedCheck();
                 Move();
-                healthbarImage.fillAmount = currentHealth / maxHealth;
+                ControlHealthBar();
 
-                //if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-                //{
-                //    PlayerPrefs.SetInt("Winner", 1);
-                //    playerManagers.Win();
-                //}
-                //InventoryManager.RefreshTool();
-                //Aimming();
+
             }
         }
 
+        private void ControlHealthBar()
+        {
+            lerpSpeed = 3f * Time.deltaTime;
+            healthbarImage.fillAmount = Mathf.Lerp(healthbarImage.fillAmount, currentHealth / maxHealth, lerpSpeed);
+            Color healthColor = Color.Lerp(Color.red, Color.green, (currentHealth / maxHealth));
+            healthbarImage.color = healthColor;
+        }
 
         private void AddNewItem(Tool thisTool)
         {
@@ -431,6 +433,8 @@ namespace StarterAssets
                 {
                     groundSoundEffect.Play();
                     _isGrounded = false;
+                    SlowDown();
+                    Invoke("RecoverSpeed", 1);
                 }
 
                 // reset the fall timeout timer
@@ -751,6 +755,19 @@ namespace StarterAssets
                 DamageIndicator indicator = Instantiate(damageText, transform.position + Vector3.up * 2, Quaternion.identity).GetComponent<DamageIndicator>();
                 indicator.SetDamageText(damage);
             }
+            SlowDown();
+            Invoke("RecoverSpeed", 1);
+        }
+
+        public void SlowDown() 
+        {
+            MoveSpeed /= decreasingRate;
+            SprintSpeed /= decreasingRate;
+        }
+        public void RecoverSpeed() 
+        {
+            MoveSpeed *= decreasingRate;
+            SprintSpeed *= decreasingRate;
         }
 
         public void PickWeapon(int weaponID)
@@ -872,8 +889,7 @@ namespace StarterAssets
         void RPC_TakeDameage(int damage)
         {
             currentHealth -= damage;
-
-            Debug.Log("TakeDamage");
+            
 
         }
 
