@@ -177,7 +177,7 @@ public class Rifle : Gun
         //Add forces to bullet
         if (starterAssetsInputs.aim)
         {
-            ShootRPC(directionWithoutSpread);
+            AimShootRPC(targetPoint, attackPoint.position);
         }
         else
         {
@@ -242,6 +242,12 @@ public class Rifle : Gun
         shootSoundEffect.Play();
         PV.RPC("RPC_Shoot", RpcTarget.All,spread);
     }
+    private void AimShootRPC(Vector3 target, Vector3 attackPoint)
+    {
+        shootSoundEffect.Play();
+        PV.RPC("RPC_AimShoot", RpcTarget.All, target, attackPoint);
+
+    }
     private void NotAimRPC()
     {
         PV.RPC("RPC_NotAim", RpcTarget.All);
@@ -262,6 +268,18 @@ public class Rifle : Gun
         Debug.Log("¿ú¥]¦a§}: " + currentBullet.GetComponent<BulletProjectile>().account);
         Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
         rb.AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
+    }
+    [PunRPC]
+    void RPC_AimShoot(Vector3 target, Vector3 attackPoint)
+    {
+        Vector3 directionWithoutSpread = target - attackPoint;
+        GameObject currentBullet = Instantiate(bullet, attackPoint, Quaternion.identity);
+        Instantiate(muzzleFlash, attackPoint, Quaternion.LookRotation(directionWithoutSpread));
+        currentBullet.transform.forward = directionWithoutSpread.normalized;
+        currentBullet.GetComponent<BulletProjectile>().account = PlayerPrefs.GetString("Account");
+        Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
+        rb.AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
+
     }
     [PunRPC]
 

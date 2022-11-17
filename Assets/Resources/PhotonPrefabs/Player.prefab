@@ -6408,6 +6408,7 @@ MonoBehaviour:
   killer: 
   killerAccount: 
   PV: {fileID: 0}
+  decreasingRate: 1.5
   playerFollowCamera: {fileID: 4327787885690698274}
   aimVirtualCamera: {fileID: 4327787885862135951}
   PistolInitPos: {fileID: 3826743265841834552}

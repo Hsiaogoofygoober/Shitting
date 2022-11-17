@@ -177,20 +177,11 @@ public class ShotGun : Gun
             directionWithSpread[i] = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last direction
         }
 
-        Vector3[] directionWithlittleSpread = new Vector3[ShotgunBulletPerTap];
-        for (int i = 0; i < ShotgunBulletPerTap; i++)
-        {
-            float x = Random.Range(-spread/2, spread/2);
-            float y = Random.Range(-spread/2, spread/2);
-            directionWithlittleSpread[i] = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last direction
-        }
-
-
         int[] bulletID = new int[ShotgunBulletPerTap];
         //Add forces to bullet
         if (starterAssetsInputs.aim)
         {
-           ShootRPC(directionWithlittleSpread, directionWithoutSpread);           
+            AimShootRPC(ray.GetPoint(75), attackPoint.position);
         }
         else
         {
@@ -251,6 +242,12 @@ public class ShotGun : Gun
         shootSoundEffect.Play();
         PV.RPC("RPC_Shoot", RpcTarget.All, directionWithSpread, directionWithoutSpread);
     }
+    private void AimShootRPC(Vector3 target, Vector3 attackPoint)
+    {
+        shootSoundEffect.Play();
+        PV.RPC("RPC_AimShoot", RpcTarget.All, target, attackPoint);
+
+    }
     private void NotAimRPC()
     {
         PV.RPC("RPC_NotAim", RpcTarget.All);
@@ -270,10 +267,34 @@ public class ShotGun : Gun
             currentBullet.transform.forward = directionWithSpread[i].normalized;
             currentBullet.GetComponent<BulletProjectile>().owner = PV.Owner.NickName;
             currentBullet.GetComponent<BulletProjectile>().account = PlayerPrefs.GetString("Account");
-            Debug.Log("¿ú¥]¦a§}: " + currentBullet.GetComponent<BulletProjectile>().account);
             Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
             rb.AddForce(directionWithSpread[i].normalized * shootForce, ForceMode.Impulse);
         }
+    }
+    [PunRPC]
+    void RPC_AimShoot(Vector3 target, Vector3 attackPoint)
+    {
+        Vector3 directionWithoutSpread = target - attackPoint;
+        Vector3[] directionWithlittleSpread = new Vector3[ShotgunBulletPerTap];
+        //calculate spread bullet
+        for (int i = 0; i < ShotgunBulletPerTap; i++)
+        {
+            float x = Random.Range(-spread / 2, spread / 2);
+            float y = Random.Range(-spread / 2, spread / 2);
+            directionWithlittleSpread[i] = directionWithoutSpread + new Vector3(x, y, 0); //Just add spread to last direction
+        }
+        //fire
+        Instantiate(muzzleFlash, attackPoint, Quaternion.LookRotation(directionWithoutSpread));
+        for (int i = 0; i < ShotgunBulletPerTap; i++)
+        {
+            GameObject currentBullet = Instantiate(bullet, attackPoint, Quaternion.identity);
+            currentBullet.transform.forward = directionWithlittleSpread[i].normalized;
+            currentBullet.GetComponent<BulletProjectile>().owner = PV.Owner.NickName;
+            currentBullet.GetComponent<BulletProjectile>().account = PlayerPrefs.GetString("Account");
+            Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
+            rb.AddForce(directionWithlittleSpread[i].normalized * shootForce, ForceMode.Impulse);
+        }
+
     }
 
     [PunRPC]
