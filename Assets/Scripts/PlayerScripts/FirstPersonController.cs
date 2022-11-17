@@ -647,7 +647,7 @@ namespace StarterAssets
                         Tool tool = hit.collider.GetComponent<Tool>();
                         AddNewItem(tool);
                         hit.collider.gameObject.SetActive(false);
-                        //Destroy(hit.collider.gameObject); 
+                        InactiveKit(hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
                         Invoke("readyToPick", 0.1f);
                     }
                     //pick pistol ammo
@@ -659,8 +659,6 @@ namespace StarterAssets
                         AddNewItem(tool);
                         pistolAmmo += tool.toolValue;
                         InactiveKit(hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
-                        //hit.collider.gameObject.SetActive(false);
-                        //Destroy(hit.collider.gameObject);
                         Invoke("readyToPick", 0.1f);
                     }
                     //pick rifle ammo
@@ -672,8 +670,6 @@ namespace StarterAssets
                         AddNewItem(tool);
                         rifleAmmo += tool.toolValue;
                         InactiveKit(hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
-                        //hit.collider.gameObject.SetActive(false);
-                        //Destroy(hit.collider.gameObject);
                         Invoke("readyToPick", 0.1f);
                     }
                     //pick shotgun ammo
@@ -685,8 +681,6 @@ namespace StarterAssets
                         AddNewItem(tool);
                         shotgunAmmo += tool.toolValue;
                         InactiveKit(hit.collider.gameObject.GetComponent<PhotonView>().ViewID);
-                        //hit.collider.gameObject.SetActive(false);
-                        //Destroy(hit.collider.gameObject);
                         Invoke("readyToPick", 0.1f);
                     }
 

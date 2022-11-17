@@ -33,7 +33,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
 	{
-		if (scene.buildIndex == 2) // We're in the game scene
+		if (scene.buildIndex == 1) // We're in the game scene
 		{
 			PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
 		}
@@ -72,7 +72,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
 		}
 		Debug.LogFormat("載入{0}人的場景",
 			PhotonNetwork.CurrentRoom.PlayerCount);
-		if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+		if (PhotonNetwork.CurrentRoom.PlayerCount == 2)
         {;
 			PhotonNetwork.CurrentRoom.IsOpen = false;
 			PhotonNetwork.LoadLevel("GameScene");

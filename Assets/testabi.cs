@@ -31,10 +31,12 @@ public class testabi : MonoBehaviour
 		// create data for contract interaction
 		string data = await EVM.CreateContractData(abi, method, args);
 		print(data);
+#if UNITY_WEBGL
 		// send transaction
 		string response = await Web3GL.SendContract(method, abi, contract, args, "0", "", "");
 		// display response in game
 		print(response);
+#endif
 	}
 
 }
