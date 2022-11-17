@@ -104,8 +104,8 @@ MonoBehaviour:
   ammunitionDisplay: {fileID: 0}
   allowInvoke: 1
   aimVirtualCamera: {fileID: 0}
-  normalSensitivity: 0.8
-  aimSensitivity: 0.5
+  normalSensitivity: 0.5
+  aimSensitivity: 0.25
   AimPos: {fileID: 7093289278672156926}
   OriginalPos: {fileID: 2760844689239566837}
   shootSoundEffect: {fileID: 4768922691347544448}
