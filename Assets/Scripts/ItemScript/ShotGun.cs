@@ -22,7 +22,6 @@ public class ShotGun : Gun
     public int magazineSize, bulletsPerTap;
     public bool allowButtonHold;
     public int ShotgunBulletPerTap;
-
     int bulletsLeft, bulletsShot;
 
     //Recoil
@@ -277,6 +276,7 @@ public class ShotGun : Gun
         Vector3 directionWithoutSpread = target - attackPoint;
         Vector3[] directionWithlittleSpread = new Vector3[ShotgunBulletPerTap];
         //calculate spread bullet
+        Random.InitState(42);
         for (int i = 0; i < ShotgunBulletPerTap; i++)
         {
             float x = Random.Range(-spread / 2, spread / 2);
