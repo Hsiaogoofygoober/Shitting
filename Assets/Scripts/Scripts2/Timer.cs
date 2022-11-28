@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Timer : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class Timer : MonoBehaviour
     public int m_min;              //ノ砞﹚计璸だ牧
     public int m_sec;              //ノ砞﹚计璸计
 
-    public Text m_timer;           //砞﹚礶计璸ゅ
+    public TextMeshProUGUI m_timer;           //砞﹚礶计璸ゅ
     public GameObject m_gameOver;  //砞﹚ GAME OVER ン
 
     void Start()
