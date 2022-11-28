@@ -42,9 +42,9 @@ public class Timer : MonoBehaviour
             }
             m_timer.text = string.Format("{0}:{1}", m_min.ToString("00"), m_sec.ToString("00"));
         }
-
+        PlayerPrefs.SetInt("outOfOxygen", 1);
         yield return new WaitForSeconds(1);   //時間結束時，顯示 00:00 停留一秒
-        m_gameOver.SetActive(true);           //時間結束時，畫面出現 GAME OVER
-        Time.timeScale = 0;                   //時間結束時，控制遊戲暫停無法操作
+        //m_gameOver.SetActive(true);           //時間結束時，畫面出現 GAME OVER
+        //Time.timeScale = 0;                   //時間結束時，控制遊戲暫停無法操作
     }
 }

@@ -141,7 +141,7 @@ namespace StarterAssets
 
         //damage text
         public GameObject damageText;
-
+        private bool damageTime = true;
 
         //public List<Tool> toolList = new List<Tool>(18);
 
@@ -282,6 +282,7 @@ namespace StarterAssets
                 GroundedCheck();
                 Move();
                 ControlHealthBar();
+                OutOfOxygen();
 
 
             }
@@ -603,8 +604,28 @@ namespace StarterAssets
 
         }
 
-
-
+        private void OutOfOxygen()
+        {
+            if (PlayerPrefs.GetInt("outOfOxygen") == 1 && damageTime == true)
+            {
+                damageTime = false;
+                Invoke("SetDamageTime", 1);
+                OutOfOxygenDamage();
+                if (currentHealth <= 0)
+                {
+                    DropKitWhenDie();
+                    Die();
+                }
+            }
+        }
+        private void OutOfOxygenDamage()
+        {
+            currentHealth -= 10;
+        }
+        private void SetDamageTime()
+        {
+            damageTime = true;
+        }
         private void ControllPickAndDrop()
         {
             Ray ray = playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //Just a ray through the middle of your current view

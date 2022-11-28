@@ -70,24 +70,24 @@ public class InventoryManager2 : MonoBehaviour
             {
                 pistolAmmoStack.Push(PlayerPrefs.GetInt("SlotID"));
                 Debug.Log("push id >> " + PlayerPrefs.GetInt("SlotID"));
-                PlayerPrefs.DeleteAll();
+                PlayerPrefs.DeleteKey("SlotID");
             }
             else if(inventorySystem.toolList[PlayerPrefs.GetInt("SlotID")].toolName == "RifleAmmo")
             {
                 rifleAmmoStack.Push(PlayerPrefs.GetInt("SlotID"));
                 Debug.Log("push id >> " + PlayerPrefs.GetInt("SlotID"));
-                PlayerPrefs.DeleteAll();
+                PlayerPrefs.DeleteKey("SlotID");
             }
             else if (inventorySystem.toolList[PlayerPrefs.GetInt("SlotID")].toolName == "ShotgunAmmo")
             {
                 shotgunAmmoStack.Push(PlayerPrefs.GetInt("SlotID"));
                 Debug.Log("push id >> " + PlayerPrefs.GetInt("SlotID"));
-                PlayerPrefs.DeleteAll();
+                PlayerPrefs.DeleteKey("SlotID");
             }
             else
             {
                 inventorySystem.toolList[PlayerPrefs.GetInt("SlotID")] = null;
-                PlayerPrefs.DeleteAll();
+                PlayerPrefs.DeleteKey("SlotID");
             }
             Debug.Log("Slot id >> " + PlayerPrefs.GetInt("SlotID"));
             /*inventorySystem.toolList[PlayerPrefs.GetInt("SlotID")] = null;
