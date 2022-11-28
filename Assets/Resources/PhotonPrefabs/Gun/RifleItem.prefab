@@ -119,7 +119,7 @@ MonoBehaviour:
   itemInfo: {fileID: 11400000, guid: 90a6f496d1ec6284fa8ee20959fadbf7, type: 2}
   itemGameObject: {fileID: 3530434826739937031}
   bullet: {fileID: 1485420261758061438, guid: f9be764a91ffb1a4fb34ed38cf12f1a9, type: 3}
-  shootForce: 500
+  shootForce: 1000
   upwardForce: 0
   timeBetweenShooting: 0.1
   spread: 5
@@ -135,8 +135,8 @@ MonoBehaviour:
   ammunitionDisplay: {fileID: 0}
   allowInvoke: 1
   aimVirtualCamera: {fileID: 0}
-  normalSensitivity: 0.8
-  aimSensitivity: 0.5
+  normalSensitivity: 0.5
+  aimSensitivity: 0.25
   AimPos: {fileID: 0}
   OriginalPos: {fileID: 8424576049076171468}
   shootSoundEffect: {fileID: -4243148599253798372}

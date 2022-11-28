@@ -118,7 +118,7 @@ MonoBehaviour:
   itemInfo: {fileID: 11400000, guid: 5794e843bcae2874c9f68676c1b217df, type: 2}
   itemGameObject: {fileID: 8643754355124716531}
   bullet: {fileID: 7854024766286042895, guid: 8752971b8ecb2d7428659b1d728d7551, type: 3}
-  shootForce: 200
+  shootForce: 400
   upwardForce: 10
   timeBetweenShooting: 1
   spread: 5
@@ -135,8 +135,8 @@ MonoBehaviour:
   ammunitionDisplay: {fileID: 0}
   allowInvoke: 1
   aimVirtualCamera: {fileID: 0}
-  normalSensitivity: 0.8
-  aimSensitivity: 0.5
+  normalSensitivity: 0.5
+  aimSensitivity: 0.25
   Sensitivity: 1
   AimPos: {fileID: 0}
   OriginalPos: {fileID: 2005031139884303782}

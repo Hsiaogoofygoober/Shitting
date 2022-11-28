@@ -13,7 +13,6 @@ public class Slot : MonoBehaviour
     public string slotInfo;
     public int slotValue;
     public string slotName;
-    [SerializeField] private float decreasingRate = 2;
     private FirstPersonController player;
     public GameObject toolOnSlot;
     //audio
@@ -24,7 +23,8 @@ public class Slot : MonoBehaviour
     {   
         Debug.Log(slotName + " ¹CÀ¸ + µ²§ô " + slotID + " + ¥i¼¦ + " + slotInfo);
         player = GetComponentInParent<FirstPersonController>();
-
+        eatingSound = player.eatingSoundEffect;
+        burpSound = player.burpSoundEffect;
         if (player.canUse)
         {
             switch (slotName)
@@ -82,8 +82,8 @@ public class Slot : MonoBehaviour
     }
     public void UsingBurger()
     {
-        player.MoveSpeed /= decreasingRate;
-        player.SprintSpeed /= decreasingRate;
+        player.MoveSpeed /= player.eatDecreaceRate;
+        player.SprintSpeed /= player.eatDecreaceRate;
         player.canUse = false;
        
     }
@@ -98,8 +98,8 @@ public class Slot : MonoBehaviour
             player.currentHealth += slotValue;
         }
         burpSound.Play();
-        player.MoveSpeed *= decreasingRate;
-        player.SprintSpeed *= decreasingRate;
+        player.MoveSpeed *= player.eatDecreaceRate;
+        player.SprintSpeed *= player.eatDecreaceRate;
         player.canUse = true;
     }
 }

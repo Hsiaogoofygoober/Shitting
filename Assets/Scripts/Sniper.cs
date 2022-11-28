@@ -245,12 +245,10 @@ public class Sniper : Gun
     }
     private void Shoot_RPC(Vector3 spread)
     {
-        shootSoundEffect.Play();
         PV.RPC("RPC_Shoot", RpcTarget.All,spread);
     }
     private void AimShootRPC(Vector3 target, Vector3 attackPoint)
     {
-        shootSoundEffect.Play();
         PV.RPC("RPC_AimShoot", RpcTarget.All, target, attackPoint);
 
     }
@@ -274,7 +272,7 @@ public class Sniper : Gun
         currentBullet.GetComponent<BulletProjectile>().account = PlayerPrefs.GetString("Account");
         Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
         rb.AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
-
+        shootSoundEffect.Play();
     }
     [PunRPC]
 
@@ -288,7 +286,7 @@ public class Sniper : Gun
         Debug.Log("¿ú¥]¦a§}: " + currentBullet.GetComponent<BulletProjectile>().account);
         Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
         rb.AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
-        //PhotonView.Find(BulletID).GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
+        shootSoundEffect.Play();
     }
     [PunRPC]
 

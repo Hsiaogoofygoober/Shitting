@@ -81,7 +81,7 @@ namespace StarterAssets
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
         private bool _isGrounded = false;
-        [SerializeField] private float decreasingRate = 1.5f;
+        [SerializeField] private float decreasingRate = 2f;
 
         // timeout deltatime
         private float _jumpTimeoutDelta;
@@ -109,6 +109,7 @@ namespace StarterAssets
         const float maxHealth = 100f;
         public float currentHealth = maxHealth;
         private float lerpSpeed;
+        public float eatDecreaceRate;
 
         // item
         [SerializeField] Item[] items;
@@ -167,7 +168,8 @@ namespace StarterAssets
         [SerializeField] private AudioSource sprintSoundEffect;
         [SerializeField] private AudioSource groundSoundEffect;
         [SerializeField] private AudioSource pickupSoundEffect;
-
+        [SerializeField] public AudioSource eatingSoundEffect;
+        [SerializeField] public AudioSource burpSoundEffect;
         private void Awake()
         {
 
@@ -434,7 +436,7 @@ namespace StarterAssets
                     groundSoundEffect.Play();
                     _isGrounded = false;
                     SlowDown();
-                    Invoke("RecoverSpeed", 1);
+                    Invoke("RecoverSpeed", 2);
                 }
 
                 // reset the fall timeout timer
@@ -750,7 +752,7 @@ namespace StarterAssets
                 indicator.SetDamageText(damage);
             }
             SlowDown();
-            Invoke("RecoverSpeed", 1);
+            Invoke("RecoverSpeed", 2);
         }
 
         public void SlowDown() 
