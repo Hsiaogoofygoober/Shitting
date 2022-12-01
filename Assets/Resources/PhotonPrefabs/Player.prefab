@@ -4265,6 +4265,7 @@ MonoBehaviour:
   killer: 
   killerAccount: 
   PV: {fileID: 0}
+  inputDirection: {x: 0, y: 0, z: 0}
   decreasingRate: 1.5
   playerFollowCamera: {fileID: 4327787885690698274}
   aimVirtualCamera: {fileID: 4327787885862135951}
@@ -11193,8 +11194,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_seconds: 0
-  m_min: 0
-  m_sec: 10
+  m_min: 8
+  m_sec: 0
   m_timer: {fileID: 6988315527627980942}
   m_gameOver: {fileID: 0}
 --- !u!1 &8474528484446785572

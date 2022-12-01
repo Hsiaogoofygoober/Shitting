@@ -90,8 +90,6 @@ public class InventoryManager2 : MonoBehaviour
                 PlayerPrefs.DeleteKey("SlotID");
             }
             Debug.Log("Slot id >> " + PlayerPrefs.GetInt("SlotID"));
-            /*inventorySystem.toolList[PlayerPrefs.GetInt("SlotID")] = null;
-            PlayerPrefs.DeleteAll();*/
 
         }
 
@@ -107,12 +105,10 @@ public class InventoryManager2 : MonoBehaviour
             }
             if (pistolAmmoStack.Count > pistolCount)
             {
-                Debug.Log("pop id >> " + PlayerPrefs.GetInt("SlotID"));
                 int popId = pistolAmmoStack.Pop();
                 Debug.Log("pop id >> " + popId);
                 inventorySystem.toolList[popId] = null;
                 RefreshTool();
-                PlayerPrefs.DeleteAll();
             }
             
         }
@@ -128,12 +124,12 @@ public class InventoryManager2 : MonoBehaviour
             }
             if (rifleAmmoStack.Count > rifleCount)
             {
-                Debug.Log("pop id >> " + PlayerPrefs.GetInt("SlotID"));
+                //Debug.Log("pop id >> " + PlayerPrefs.GetInt("SlotID"));
                 int popId = rifleAmmoStack.Pop();
                 Debug.Log("pop id >> " + popId);
                 inventorySystem.toolList[popId] = null;
                 RefreshTool();
-                PlayerPrefs.DeleteAll();
+                //PlayerPrefs.DeleteAll();
             }   
         }
         else if (PlayerPrefs.GetInt("RefreshBag") == 3)
@@ -148,12 +144,12 @@ public class InventoryManager2 : MonoBehaviour
             }
             if (shotgunAmmoStack.Count > shotgunCount)
             {
-                Debug.Log("pop id >> " + PlayerPrefs.GetInt("SlotID"));
+                //Debug.Log("pop id >> " + PlayerPrefs.GetInt("SlotID"));
                 int popId = shotgunAmmoStack.Pop();
                 Debug.Log("pop id >> " + popId);
                 inventorySystem.toolList[popId] = null;
                 RefreshTool();
-                PlayerPrefs.DeleteAll();
+               // PlayerPrefs.DeleteAll();
             }
             
         }
