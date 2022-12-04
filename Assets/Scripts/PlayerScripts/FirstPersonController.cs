@@ -27,9 +27,9 @@ namespace StarterAssets
 
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
-        public float MoveSpeed = 4.0f;
+        public float MoveSpeed = 200.0f;
         [Tooltip("Sprint speed of the character in m/s")]
-        public float SprintSpeed = 6.0f;
+        public float SprintSpeed = 100.0f;
         [Tooltip("Rotation speed of the character")]
         public float RotationSpeed = 1.0f;
         [Tooltip("Acceleration and deceleration")]
@@ -67,7 +67,7 @@ namespace StarterAssets
         public float BottomClamp = -90.0f;
 
         public string killer = "";
-        public string killerAccount = "";
+        public string killerAccount;
 
         public PhotonView PV;
 
@@ -164,6 +164,9 @@ namespace StarterAssets
         public int rifleAmmo = 0;
         public TextMeshProUGUI ammunitionDisplay;
 
+        public int Pid;
+        public int KillerPid;
+
         //audio
         [SerializeField] private AudioSource walkSoundEffect;
         [SerializeField] private AudioSource sprintSoundEffect;
@@ -195,7 +198,8 @@ namespace StarterAssets
             constraint = GetComponentInChildren<TwoBoneIKConstraint>();
             if (PV.IsMine)
             {
-
+                Pid = Random.Range(0, 1000000000);
+                PlayerPrefs.SetInt("pid", Pid);
             }
             else
             {
@@ -782,12 +786,15 @@ namespace StarterAssets
                 if (currentHealth <= 0)
                 {
                     // PV.RPC("RPC_killerInfo", RpcTarget.Others, killerAccount);
-                    PV.RPC("RPC_killerInfo", RpcTarget.Others, killer);
-                    Debug.Log(killer + "殺了你!!!");
+                    PV.RPC("RPC_killerInfo", RpcTarget.Others, KillerPid);
+                    //Debug.Log(killer + "殺了你!!!");
+                    Debug.Log("Pid = " + Pid);
+                    Debug.Log("KillerPid = " + KillerPid);
                     Debug.Log("目前Master Client為: " + PhotonNetwork.LocalPlayer.NickName);
-                    //Kill.killAmount = 0;
                     DropKitWhenDie();
-                    Die();
+                    PlayerPrefs.SetInt("killAmount", GetComponentInChildren<Kill>().killAmount);
+                    Invoke("Die", 5);
+                    //Die();
                 }
             }
             else
@@ -825,18 +832,32 @@ namespace StarterAssets
             PV.RPC("RPC_InactiveKit", RpcTarget.All, ID);
         }
 
+        public int temp = 0;
         [PunRPC]
-        void RPC_killerInfo(string str) 
+        void RPC_killerInfo(int id)
         {
-            //if (str == PlayerPrefs.GetString("Account"))
-            //    Kill.killAmount++;
-
-            if (str == killer) 
+            if (id == Pid)
             {
-                KillAmount.instance.amount++;
-                Kill.killAmount++;
+                PV.GetComponentInChildren<Kill>().killAmount++;
+                temp++;
             }
-                
+            Debug.Log("id = " + KillerPid);
+            Debug.Log("Pid = " + Pid);
+            Debug.Log("Killer amount = " + GetComponentInChildren<Kill>().killAmount);
+        }
+
+        [PunRPC]
+        void RPC_killerInfo2(string str)
+        {
+            if (str == PlayerPrefs.GetString("Account"))
+            {
+                PV.GetComponentInChildren<Kill>().killAmount++;
+                temp++;
+            }
+            //else if (str == null) 
+            //{
+            //    KillAmount.instance.amount--;
+            //}
         }
 
 
@@ -942,17 +963,30 @@ namespace StarterAssets
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
             base.OnPlayerLeftRoom(otherPlayer);
+
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {
+                Debug.Log("殺人數量 = " + temp);
+
+                Record.record = GetComponentInChildren<Kill>().killAmount;
+                PlayerPrefs.SetInt("killAmount", temp);
                 StateController.status = 1;
                 //PlayerPrefs.SetInt("Winner", 1);
                 playerManagers.Win();
             }
         }
 
+        public void wait() 
+        {
+            return;
+        }
+
+
         void Die()
         {
             StateController.status = 0;
+            Record.record = GetComponentInChildren<Kill>().killAmount;
+
             Debug.Log("玩家目前人數 : " + PhotonNetwork.CurrentRoom.PlayerCount);
             Debug.Log("AutoCleanUP : " + PhotonNetwork.CurrentRoom.AutoCleanUp);
 
