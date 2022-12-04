@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Kill : MonoBehaviour
+public class Record
 {
-    public int killAmount;
+    public static int record;
 }

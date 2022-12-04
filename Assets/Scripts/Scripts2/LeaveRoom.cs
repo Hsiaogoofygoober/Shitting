@@ -23,33 +23,26 @@ public class LeaveRoom : MonoBehaviour
     void Start()
     {
         Cursor.visible = true;
-        my_text.text = "YOU are suck !!!";
 
         if (StateController.status == 1)
         {
-            my_text.text = "YOU ARE CHAMPION !!! ";           
-        }
-        else if (StateController.status == 0)
-        {
-            /*PlayerPrefs.GetInt("Status")*/
-            my_text.text = "GOT KILLED !!! ";
+            my_text.text = "YOU ARE CHAMPION !!! " + PlayerPrefs.GetInt("killAmount")/*Record.record*/;/*;*/           
         }
         else 
         {
-            
+            my_text.text = "GOT KILLED " + PlayerPrefs.GetInt("killAmount")/*Record.record*/ +  " !!! ";
         }
+
         Cursor.visible = true;
         Screen.lockCursor = false;
-        PlayerPrefs.DeleteAll();
     }
 
 
 
     public void GoBackLobby()
     {
-        Destroy(KillAmount.instance.gameObject);
-        Kill.killAmount = 0;
         withdraw();
+        Destroy(KillAmount.instance.gameObject);
         SceneManager.LoadScene("Launcher");
     }
 
@@ -91,12 +84,12 @@ public class LeaveRoom : MonoBehaviour
         // create data for contract interaction
         string data = await EVM.CreateContractData(abi, method, args);
         print(data);
-#if UNITY_WEBGL
-        // send transaction
-        string response = await Web3GL.SendContract(method, abi, contract, args, "0", "", "");
-        // display response in game
-        print(response);
-#endif
+//#if UNITY_WEBGL
+//        // send transaction
+//        string response = await Web3GL.SendContract(method, abi, contract, args, "0", "", "");
+//        // display response in game
+//        print(response);
+//#endif
     }
 
     public void Open() 
