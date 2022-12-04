@@ -14,7 +14,7 @@ public class BulletProjectile : MonoBehaviour
     public ParticleSystem HitPartical;
 
     public string account;
-
+    public int pid;
     void Start()
     {
         mPrevious = transform.position;
@@ -26,6 +26,7 @@ public class BulletProjectile : MonoBehaviour
         RaycastHit[] hits = Physics.RaycastAll(new Ray(mPrevious, (transform.position - mPrevious).normalized), (transform.position - mPrevious).magnitude);
         for(int i = 0; i < hits.Length; i++)
         {
+            Debug.Log(" *************  " + PlayerPrefs.GetInt("pid"));
             //Debug.DrawLine(mPrevious,transform.position);
             if (hits[i].collider != null && !hits[i].collider.CompareTag("bullet"))
             {
@@ -33,9 +34,9 @@ public class BulletProjectile : MonoBehaviour
                 {
                     Debug.Log("hit => " + hits[i].point);
                     hits[i].collider.GetComponent<IDamageable>()?.TakeDamage(damage);
-                    //PlayerPrefs.SetInt("SlotID", slotID);
-                    hits[i].collider.GetComponent<FirstPersonController>().killer = owner;
+                    //hits[i].collider.GetComponent<FirstPersonController>().killer = owner;
                     hits[i].collider.GetComponent<FirstPersonController>().killerAccount = PlayerPrefs.GetString("Account");
+                    hits[i].collider.GetComponent<FirstPersonController>().KillerPid = pid;
                     Instantiate(blood, (transform.position + mPrevious) / 2, Quaternion.LookRotation((transform.position + mPrevious) / 2 - hits[i].transform.position));
                     if (HitPartical != null)
                     {

@@ -52,6 +52,7 @@ MonoBehaviour:
   - RPC_DropKitWhenDie
   - RPC_killerInfo
   - RPC_AimShoot
+  - RPC_killerInfo2
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

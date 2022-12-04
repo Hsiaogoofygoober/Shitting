@@ -42,10 +42,15 @@ public class PlayerManagers : MonoBehaviourPunCallbacks
 
     public void Win()
     {
-        PhotonNetwork.Destroy(controller);
+        Invoke("wait", 5);
+        
         //Destroy(RoomManager.instance.gameObject);
-        Debug.Log("I am winner !!!");
         DisconnectPlayer();
+    }
+
+    public void wait() 
+    {
+        PhotonNetwork.Destroy(controller);;
     }
 
     public void DisconnectPlayer()
@@ -59,7 +64,6 @@ public class PlayerManagers : MonoBehaviourPunCallbacks
         Debug.Log("直接消失");
         Destroy(RoomManager.instance.gameObject);
         SceneManager.LoadScene("Finish");
-        //StartCoroutine(DisconnectAndLoad());
     }
 
     public static PlayerManagers Find(Player player)
