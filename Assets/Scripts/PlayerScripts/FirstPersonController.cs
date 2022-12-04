@@ -81,6 +81,7 @@ namespace StarterAssets
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
         private bool _isGrounded = false;
+        public Vector3 inputDirection;
         [SerializeField] private float decreasingRate = 2f;
 
         // timeout deltatime
@@ -141,7 +142,7 @@ namespace StarterAssets
 
         //damage text
         public GameObject damageText;
-
+        private bool damageTime = true;
 
         //public List<Tool> toolList = new List<Tool>(18);
 
@@ -232,7 +233,8 @@ namespace StarterAssets
 
             if (!PV.IsMine)
             {
-                return;
+                _controller.Move(inputDirection.normalized * (_speed * lag) + new Vector3(0.0f, _verticalVelocity, 0.0f) * lag);
+                transform.Rotate(Vector3.up * rotationLag);
             }
             else
             {
@@ -286,6 +288,7 @@ namespace StarterAssets
                 GroundedCheck();
                 Move();
                 ControlHealthBar();
+                OutOfOxygen();
 
 
             }
@@ -324,6 +327,27 @@ namespace StarterAssets
 
             }
         }
+        float lag;
+        float rotationLag;
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting)
+            {
+                stream.SendNext(inputDirection);
+                stream.SendNext(_speed);
+                stream.SendNext(transform.rotation);
+            }
+            else
+            {
+                inputDirection = (Vector3)stream.ReceiveNext();
+                _speed = (float)stream.ReceiveNext();
+                //networkRotation = (Quaternion)stream.ReceiveNext();
+
+                lag = Mathf.Abs((float)(PhotonNetwork.Time - info.timestamp));
+                rotationLag = _input.look.x * RotationSpeed * lag * Sensitivity;
+            }
+        }
+
 
         private void LateUpdate()
         {
@@ -411,7 +435,7 @@ namespace StarterAssets
             }
 
             // normalise input direction
-            Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+            inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
 
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
@@ -607,8 +631,28 @@ namespace StarterAssets
 
         }
 
-
-
+        private void OutOfOxygen()
+        {
+            if (PlayerPrefs.GetInt("outOfOxygen") == 1 && damageTime == true)
+            {
+                damageTime = false;
+                Invoke("SetDamageTime", 1);
+                OutOfOxygenDamage();
+                if (currentHealth <= 0)
+                {
+                    DropKitWhenDie();
+                    Die();
+                }
+            }
+        }
+        private void OutOfOxygenDamage()
+        {
+            currentHealth -= 10;
+        }
+        private void SetDamageTime()
+        {
+            damageTime = true;
+        }
         private void ControllPickAndDrop()
         {
             Ray ray = playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); //Just a ray through the middle of your current view
