@@ -174,6 +174,9 @@ namespace StarterAssets
         [SerializeField] private AudioSource pickupSoundEffect;
         [SerializeField] public AudioSource eatingSoundEffect;
         [SerializeField] public AudioSource burpSoundEffect;
+
+        //kill amount
+        public KillAmount playerKill;
         private void Awake()
         {
 
@@ -196,10 +199,11 @@ namespace StarterAssets
         private void Start()
         {
             constraint = GetComponentInChildren<TwoBoneIKConstraint>();
+            Pid = PV.ViewID;
             if (PV.IsMine)
             {
-                Pid = Random.Range(0, 1000000000);
-                PlayerPrefs.SetInt("pid", Pid);
+                
+                //PlayerPrefs.SetInt("pid", Pid);
             }
             else
             {
@@ -209,7 +213,8 @@ namespace StarterAssets
                 Destroy(ui);
                 //ui.SetActive(false);
             }
-
+            playerKill = GameObject.Find("KillAmount").GetComponent<KillAmount>();
+            playerKill.PlayerKillAmount.Add(Pid, 0);
 
 
             _controller = GetComponent<CharacterController>();
@@ -779,10 +784,20 @@ namespace StarterAssets
         public void TakeDamage(int damage)
         {
             //only victom sends message to everyone
-            
+            if (currentHealth <= 0)
+            {
+                PV.RPC("RPC_killerInfo", RpcTarget.Others, KillerPid);
+                print("kill id: " + KillerPid);
+                foreach (var kvp in playerKill.PlayerKillAmount)
+                {
+                    print(kvp.Key + ": " + kvp.Value);
+                }
+            }
             if (PV.IsMine)
             {
                 PV.RPC("RPC_TakeDameage", RpcTarget.All, damage);
+                Debug.Log("Pid = " + Pid);
+               
                 if (currentHealth <= 0)
                 {
                     // PV.RPC("RPC_killerInfo", RpcTarget.Others, killerAccount);
@@ -792,16 +807,20 @@ namespace StarterAssets
                     Debug.Log("KillerPid = " + KillerPid);
                     Debug.Log("目前Master Client為: " + PhotonNetwork.LocalPlayer.NickName);
                     DropKitWhenDie();
-                    PlayerPrefs.SetInt("killAmount", GetComponentInChildren<Kill>().killAmount);
-                    Invoke("Die", 5);
-                    //Die();
+                    PlayerPrefs.SetInt("killAmount", temp);
+                    print("killamount: " + temp);
+                    //Invoke("Die", 5);
+                    Die();
                 }
             }
             else
             {
+                
                 DamageIndicator indicator = Instantiate(damageText, transform.position + Vector3.up * 2, Quaternion.identity).GetComponent<DamageIndicator>();
                 indicator.SetDamageText(damage);
             }
+            
+            
             SlowDown();
             Invoke("RecoverSpeed", 2);
         }
@@ -836,14 +855,13 @@ namespace StarterAssets
         [PunRPC]
         void RPC_killerInfo(int id)
         {
-            if (id == Pid)
+            if(id != 0)
             {
-                PV.GetComponentInChildren<Kill>().killAmount++;
-                temp++;
+                playerKill.PlayerKillAmount[id] += 1;
+                playerKill.test = 1;
             }
-            Debug.Log("id = " + KillerPid);
-            Debug.Log("Pid = " + Pid);
-            Debug.Log("Killer amount = " + GetComponentInChildren<Kill>().killAmount);
+            
+           
         }
 
         [PunRPC]
@@ -966,10 +984,10 @@ namespace StarterAssets
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
             {
-                Debug.Log("殺人數量 = " + temp);
+                Debug.Log("殺人數量 = " + playerKill.PlayerKillAmount[Pid]);
 
-                Record.record = GetComponentInChildren<Kill>().killAmount;
-                PlayerPrefs.SetInt("killAmount", temp);
+                //Record.record = GetComponentInChildren<Kill>().killAmount;
+                PlayerPrefs.SetInt("killAmount", playerKill.PlayerKillAmount[Pid]);
                 StateController.status = 1;
                 //PlayerPrefs.SetInt("Winner", 1);
                 playerManagers.Win();
@@ -985,7 +1003,7 @@ namespace StarterAssets
         void Die()
         {
             StateController.status = 0;
-            Record.record = GetComponentInChildren<Kill>().killAmount;
+            //Record.record = GetComponentInChildren<Kill>().killAmount;
 
             Debug.Log("玩家目前人數 : " + PhotonNetwork.CurrentRoom.PlayerCount);
             Debug.Log("AutoCleanUP : " + PhotonNetwork.CurrentRoom.AutoCleanUp);

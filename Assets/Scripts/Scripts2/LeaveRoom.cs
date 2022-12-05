@@ -42,7 +42,7 @@ public class LeaveRoom : MonoBehaviour
     public void GoBackLobby()
     {
         withdraw();
-        Destroy(KillAmount.instance.gameObject);
+        //Destroy(KillAmount.instance.gameObject);
         SceneManager.LoadScene("Launcher");
     }
 
@@ -65,7 +65,7 @@ public class LeaveRoom : MonoBehaviour
         string method = "withdraw";
         // amount you want to change, in this case we are adding 1 to "addTotal"
         int winner = StateController.status;
-        int amount = KillAmount.instance.amount;
+        int amount = PlayerPrefs.GetInt("killAmount");//KillAmount.instance.amount;
         int money;
         //string gasPrice = await EVM.GasPrice(chain, network, rpc);
         int gasUsed = 21000;

@@ -4243,7 +4243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55919ac34a26952479f3fc91f777b2fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 7
+  MoveSpeed: 30
   SprintSpeed: 12
   RotationSpeed: 1
   SpeedChangeRate: 5
@@ -4306,12 +4306,16 @@ MonoBehaviour:
   shotgunAmmo: 0
   rifleAmmo: 0
   ammunitionDisplay: {fileID: 5014336599252029986}
+  Pid: 0
+  KillerPid: 0
   walkSoundEffect: {fileID: 4606316290575251714}
   sprintSoundEffect: {fileID: 3258848180318438006}
   groundSoundEffect: {fileID: 8788531713182542723}
   pickupSoundEffect: {fileID: 5567204963469656838}
   eatingSoundEffect: {fileID: 4685394718634884439}
   burpSoundEffect: {fileID: 1578431926705572948}
+  playerKill: {fileID: 0}
+  temp: 0
 --- !u!114 &6837152431155922379
 MonoBehaviour:
   m_ObjectHideFlags: 0
