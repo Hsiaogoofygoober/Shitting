@@ -19,18 +19,22 @@ public class LeaveRoom : MonoBehaviour
 
     [SerializeField]
     private TMP_Text my_text;
-    int unitMoney = 6*(int)Mathf.Pow(10,14);
+    long unitMoney = 1000000000000000000;
     void Start()
     {
         Cursor.visible = true;
 
         if (StateController.status == 1)
         {
-            my_text.text = "YOU ARE CHAMPION !!! " + PlayerPrefs.GetInt("killAmount")/*Record.record*/;/*;*/           
+            my_text.text = "YOU ARE CHAMPION !!! \n\n" + 
+                "Total amount you kill: "+
+                PlayerPrefs.GetInt("killAmount")/*Record.record*/;         
         }
         else 
         {
-            my_text.text = "GOT KILLED " + PlayerPrefs.GetInt("killAmount")/*Record.record*/ +  " !!! ";
+            my_text.text = "YOU DIED\n\n" +
+                "Total amount you kill: " +
+                PlayerPrefs.GetInt("killAmount")/*Record.record*/;
         }
 
         Cursor.visible = true;
@@ -50,23 +54,21 @@ public class LeaveRoom : MonoBehaviour
     async public void withdraw()
     {
         // set chain
-        string chain = "ethereum";
+        string chain = "polygon";
         // set network
-        string network = "goerli";
-        //set rpc
-        string rpc = "https://goerli.infura.io/v3/";
+        string network = "mainnet";
         // set chainID, here we use the networkID for goerli
-        string chainId = "5";
+        string chainId = "137";
         // abi in json format
         string abi = "[{\"inputs\":[],\"stateMutability\":\"payable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"text\",\"type\":\"string\"}],\"name\":\"error\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"_sig\",\"type\":\"bytes\"}],\"name\":\"addPlayer\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"ownerWithdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_ethSignedMassageHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"_sig\",\"type\":\"bytes\"}],\"name\":\"recover\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"money\",\"type\":\"uint256\"}],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}]";
         // address of contract
-        string contract = "0x897140C25ACf4fAE02980624769bD815aFcB2319";
+        string contract = "0x5c99D774519Dd8d601F438ceF2B541E5B6793Fb2";
         // method you want to write to
         string method = "withdraw";
         // amount you want to change, in this case we are adding 1 to "addTotal"
         int winner = StateController.status;
-        int amount = PlayerPrefs.GetInt("killAmount");//KillAmount.instance.amount;
-        int money;
+        int amount = PlayerPrefs.GetInt("killAmount");
+        long money;
         //string gasPrice = await EVM.GasPrice(chain, network, rpc);
         int gasUsed = 21000;
         if (winner == 1)
@@ -84,12 +86,12 @@ public class LeaveRoom : MonoBehaviour
         // create data for contract interaction
         string data = await EVM.CreateContractData(abi, method, args);
         print(data);
-//#if UNITY_WEBGL
-//        // send transaction
-//        string response = await Web3GL.SendContract(method, abi, contract, args, "0", "", "");
-//        // display response in game
-//        print(response);
-//#endif
+#if UNITY_WEBGL
+        // send transaction
+        string response = await Web3GL.SendContract(method, abi, contract, args, "0", "", "");
+        // display response in game
+        print(response);
+#endif
     }
 
     public void Open() 

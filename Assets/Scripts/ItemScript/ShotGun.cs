@@ -266,6 +266,7 @@ public class ShotGun : Gun
             currentBullet.transform.forward = directionWithSpread[i].normalized;
             currentBullet.GetComponent<BulletProjectile>().owner = PV.Owner.NickName;
             currentBullet.GetComponent<BulletProjectile>().account = PlayerPrefs.GetString("Account");
+            currentBullet.GetComponent<BulletProjectile>().pid = PV.GetComponentInParent<FirstPersonController>().Pid;
             Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
             rb.AddForce(directionWithSpread[i].normalized * shootForce, ForceMode.Impulse);
         }
@@ -291,6 +292,7 @@ public class ShotGun : Gun
             currentBullet.transform.forward = directionWithlittleSpread[i].normalized;
             currentBullet.GetComponent<BulletProjectile>().owner = PV.Owner.NickName;
             currentBullet.GetComponent<BulletProjectile>().account = PlayerPrefs.GetString("Account");
+            currentBullet.GetComponent<BulletProjectile>().pid = PV.GetComponentInParent<FirstPersonController>().Pid;
             Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
             rb.AddForce(directionWithlittleSpread[i].normalized * shootForce, ForceMode.Impulse);
         }

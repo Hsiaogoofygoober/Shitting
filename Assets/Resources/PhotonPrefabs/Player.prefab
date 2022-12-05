@@ -4243,8 +4243,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55919ac34a26952479f3fc91f777b2fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 30
-  SprintSpeed: 12
+  MoveSpeed: 7
+  SprintSpeed: 13
   RotationSpeed: 1
   SpeedChangeRate: 5
   Sensitivity: 0.5

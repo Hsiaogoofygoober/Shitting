@@ -6,5 +6,4 @@ using UnityEngine;
 public class KillAmount : MonoBehaviour
 {
     public Dictionary<int, int> PlayerKillAmount = new Dictionary<int, int>() { };
-    public int test = 0;
 }

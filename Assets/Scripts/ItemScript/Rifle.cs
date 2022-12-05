@@ -265,6 +265,7 @@ public class Rifle : Gun
         currentBullet.transform.forward = directionWithSpread.normalized;
         currentBullet.GetComponent<BulletProjectile>().owner = PV.Owner.NickName;
         currentBullet.GetComponent<BulletProjectile>().account = PlayerPrefs.GetString("Account");
+        currentBullet.GetComponent<BulletProjectile>().pid = PV.GetComponentInParent<FirstPersonController>().Pid;
         Debug.Log("¿ú¥]¦a§}: " + currentBullet.GetComponent<BulletProjectile>().account);
         Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
         rb.AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
@@ -277,6 +278,7 @@ public class Rifle : Gun
         Instantiate(muzzleFlash, attackPoint, Quaternion.LookRotation(directionWithoutSpread));
         currentBullet.transform.forward = directionWithoutSpread.normalized;
         currentBullet.GetComponent<BulletProjectile>().account = PlayerPrefs.GetString("Account");
+        currentBullet.GetComponent<BulletProjectile>().pid = PV.GetComponentInParent<FirstPersonController>().Pid;
         Rigidbody rb = currentBullet.GetComponent<Rigidbody>();
         rb.AddForce(directionWithoutSpread.normalized * shootForce, ForceMode.Impulse);
 

@@ -809,7 +809,6 @@ namespace StarterAssets
                     DropKitWhenDie();
                     PlayerPrefs.SetInt("killAmount", temp);
                     print("killamount: " + temp);
-                    //Invoke("Die", 5);
                     Die();
                 }
             }
@@ -858,24 +857,9 @@ namespace StarterAssets
             if(id != 0)
             {
                 playerKill.PlayerKillAmount[id] += 1;
-                playerKill.test = 1;
             }
             
            
-        }
-
-        [PunRPC]
-        void RPC_killerInfo2(string str)
-        {
-            if (str == PlayerPrefs.GetString("Account"))
-            {
-                PV.GetComponentInChildren<Kill>().killAmount++;
-                temp++;
-            }
-            //else if (str == null) 
-            //{
-            //    KillAmount.instance.amount--;
-            //}
         }
 
 
@@ -1007,7 +991,7 @@ namespace StarterAssets
 
             Debug.Log("玩家目前人數 : " + PhotonNetwork.CurrentRoom.PlayerCount);
             Debug.Log("AutoCleanUP : " + PhotonNetwork.CurrentRoom.AutoCleanUp);
-
+            PlayerPrefs.SetInt("killAmount", playerKill.PlayerKillAmount[Pid]); 
             playerManagers.Die();
         }
         void DropKitWhenDie()
